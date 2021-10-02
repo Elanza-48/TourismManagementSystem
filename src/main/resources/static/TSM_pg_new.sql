@@ -155,7 +155,7 @@ ALTER SEQUENCE tourism_management_system.tour_Package_id_seq
 
 
 ---------- ENTITY 6 ----------
-CREATE TABLE tourism_management_system.Package_destination_map(
+CREATE TABLE tourism_management_system.package_destination_map(
     PKG_ID BIGINT NOT NULL ,
     D_ID BIGINT NOT NULL ,
 
@@ -235,6 +235,7 @@ ALTER SEQUENCE tourism_management_system.booking_Info_id_seq
 ---------- ENTITY 9 ----------
 CREATE TABLE tourism_management_system.booking_transport_ticket(
 	TICKET_ID VARCHAR ,
+	SEAT_NO VARCHAR,
     B_ID BIGINT NOT NULL ,
     T_ID BIGINT NOT NULL,
     
@@ -354,7 +355,6 @@ CREATE SEQUENCE tourism_management_system.enquiry_id_seq
 CREATE TABLE tourism_management_system.enquiry(
     ENQ_ID bigint,
     B_ID bigint not null ,
-    P_ID BIGINT NOT NULL ,
     T_ID BIGINT NOT NULL,
     ENQ_SUBJECT varchar not null,
     ENQ_BODY text,
@@ -363,10 +363,6 @@ CREATE TABLE tourism_management_system.enquiry(
     CONSTRAINT enquiry_pk PRIMARY KEY (ENQ_ID),
     CONSTRAINT enquiry_bInfo_bId FOREIGN KEY (B_ID)
         REFERENCES tourism_management_system.booking_Info(B_ID)
-                        ON DELETE SET NULL ON UPDATE CASCADE,
-
-    CONSTRAINT enquiry_pInfo_pId FOREIGN KEY (P_ID)
-        REFERENCES tourism_management_system.payment_Info(P_ID)
                         ON DELETE SET NULL ON UPDATE CASCADE,
 
     CONSTRAINT enquiry_tInfo_tId FOREIGN KEY (T_ID)
