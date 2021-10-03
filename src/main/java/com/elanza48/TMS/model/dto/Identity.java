@@ -20,6 +20,18 @@ abstract class Identity {
 	@Column(updatable = false)
 	@Type(type = "pg-uuid")
 	protected UUID id;
+	
+	public Identity() {}
+	public Identity(UUID id) {
+		super();
+		this.id = id;
+	}
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 }
 
 @MappedSuperclass
@@ -28,4 +40,16 @@ abstract class IdentityName extends Identity{
 	@Column
 	@NotNull
 	protected String name;
+	
+	public IdentityName(){}
+	public IdentityName(@NotNull String name) {
+		super();
+		this.name = name;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 }

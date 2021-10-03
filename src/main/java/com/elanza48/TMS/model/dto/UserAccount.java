@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -16,7 +18,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "user_Account")
 @OnDelete(action = OnDeleteAction.CASCADE)
-public class UserAccount extends IdentityNameContact{
+public class UserAccount extends Contact{
 	
 	public enum UserRole{
 		USER,
@@ -37,7 +39,17 @@ public class UserAccount extends IdentityNameContact{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
 	Set<Booking> bookings;
 	
-	public UserAccount() {}
+	public UserAccount() {
+		super();
+	}
+	
+	public UserAccount(@NotNull String name, @NotNull @Email String email,
+			@NotNull @Size(min = 10, max = 10) long mobileNo, @NotNull Address address,
+			@NotNull String password, @NotNull UserRole role) {
+		super(name, email, mobileNo, address);
+		this.password = password;
+		this.role = role;
+	}
 
 	public String getPassword() {
 		return password;
@@ -62,7 +74,45 @@ public class UserAccount extends IdentityNameContact{
 	public void setBookings(Set<Booking> bookings) {
 		this.bookings = bookings;
 	}
-	
-	
+
+	@Override
+	public String getEmail() {
+		return super.getEmail();
+	}
+
+	@Override
+	public void setEmail(String email) {
+		super.setEmail(email);
+	}
+
+	@Override
+	public long getMobileNo() {
+		return super.getMobileNo();
+	}
+
+	@Override
+	public void setMobileNo(long mobileNo) {
+		super.setMobileNo(mobileNo);
+	}
+
+	@Override
+	public Address getAddress() {
+		return super.getAddress();
+	}
+
+	@Override
+	public void setAddress(Address address) {
+		super.setAddress(address);
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+	}
 
 }

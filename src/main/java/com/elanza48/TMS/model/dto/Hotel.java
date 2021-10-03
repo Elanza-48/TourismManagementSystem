@@ -18,7 +18,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "hotel_Info")
 @OnDelete(action = OnDeleteAction.CASCADE)
-public class Hotel extends IdentityNameContact{
+public class Hotel extends Contact{
 	
 	public enum HotelType{
 		STANDARD,
