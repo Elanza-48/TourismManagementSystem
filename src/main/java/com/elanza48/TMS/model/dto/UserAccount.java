@@ -1,26 +1,22 @@
 package com.elanza48.TMS.model.dto;
 
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "user_Account")
-public class UserAccount {
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class UserAccount extends IdentityNameContact{
 	
 	public enum UserRole{
 		USER,
@@ -28,43 +24,10 @@ public class UserAccount {
 		ADMIN
 	}
 	
-	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(updatable = false)
-	@Type(type = "pg-uuid")
-	private UUID id;
-	
-	@Column
-	@NotNull
-	private String name;
-	
 	@Column
 	@NotNull
 	private String password;
 	
-	@Column
-	@NotNull
-	private String address1;
-	
-	@Column
-	private String address2;
-	
-	@Column
-	@NotNull
-	private String district;
-	
-	@Column
-	@NotNull
-	private String state;
-	
-	@Column
-	@NotNull
-	@Size(min=6, max = 6)
-	private int zip;
-	
-	@Embedded
-	private Contact contact;
 	
 	@Column
 	@NotNull
@@ -73,5 +36,33 @@ public class UserAccount {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
 	Set<Booking> bookings;
+	
+	public UserAccount() {}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
+	}
+	
+	
 
 }

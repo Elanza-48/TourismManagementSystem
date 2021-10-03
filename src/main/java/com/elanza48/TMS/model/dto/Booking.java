@@ -2,14 +2,11 @@ package com.elanza48.TMS.model.dto;
 
 import java.sql.Date;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,13 +15,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
 @Table(name = "booking_Info")
-public class Booking {
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class Booking  extends Identity{
 	
 	public enum RoomType{
 	    STANDARD,
@@ -37,13 +35,6 @@ public class Booking {
 	    CANCELLED,
 	    COMPLETE
 	}
-	
-	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(updatable = false)
-	@Type(type = "pg-uuid")
-	private UUID id;
 	
 	@Column
 	@NotNull

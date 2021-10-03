@@ -1,38 +1,24 @@
 package com.elanza48.TMS.model.dto;
 
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
-
-import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "tour_Package")
-public class Package {
-
-	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(updatable = false)
-	@Type(type = "pg-uuid")
-	private UUID id;
-	
-	@Column
-	@NotNull
-	private String name;
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class Package extends IdentityName{
 	
 	@Column
 	@Type(type = "text")

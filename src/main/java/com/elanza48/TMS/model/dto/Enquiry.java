@@ -1,29 +1,21 @@
 package com.elanza48.TMS.model.dto;
 
-import java.util.UUID;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
-import com.sun.istack.NotNull;
 
 @Entity
-public class Enquiry {
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class Enquiry extends Identity{
 
-	@Id
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	@Column(updatable = false)
-	@Type(type = "pg-uuid")
-	private UUID id;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id",referencedColumnName = "id")
