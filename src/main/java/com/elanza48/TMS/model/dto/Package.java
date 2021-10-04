@@ -10,14 +10,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "tour_Package")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Package extends IdentityName{
 	
 	@Column
@@ -46,5 +44,81 @@ public class Package extends IdentityName{
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
 	private Set<Booking> bookings;
+	
+	public Package() {
+		super();
+	}
+
+	public Package(@NotNull String name, String description, String activities, String events) {
+		super(name);
+		this.description = description;
+		this.activities = activities;
+		this.events = events;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getActivities() {
+		return activities;
+	}
+
+	public void setActivities(String activities) {
+		this.activities = activities;
+	}
+
+	public String getEvents() {
+		return events;
+	}
+
+	public void setEvents(String events) {
+		this.events = events;
+	}
+
+	public Set<Destination> getDestinations() {
+		return destinations;
+	}
+
+	public void setDestinations(Set<Destination> destinations) {
+		this.destinations = destinations;
+	}
+
+	public Set<Transport> getTransports() {
+		return transports;
+	}
+
+	public void setTransports(Set<Transport> transports) {
+		this.transports = transports;
+	}
+
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+	}
+
+	@Override
+	public String toString() {
+		return "Package [description=" + description + ", activities=" + activities + ", events=" + events
+				+ ", destinations=" + destinations + ", transports=" + transports + ", bookings=" + bookings + ", name="
+				+ name + ", id=" + id + "]";
+	}
 
 }

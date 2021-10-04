@@ -12,12 +12,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Entity
 @Table(name = "user_Account")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class UserAccount extends Contact{
 	
 	public enum UserRole{
@@ -113,6 +109,12 @@ public class UserAccount extends Contact{
 	@Override
 	public void setName(String name) {
 		super.setName(name);
+	}
+
+	@Override
+	public String toString() {
+		return "UserAccount [role=" + role + ", bookings=" + bookings + ", email=" + email + ", mobileNo=" + mobileNo
+				+ ", address=" + address + ", name=" + name + ", id=" + id + "]";
 	}
 
 }

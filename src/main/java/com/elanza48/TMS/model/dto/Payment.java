@@ -9,12 +9,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "payment_Info")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Payment extends Identity{
 	
 	public enum PaymentMode{
@@ -49,7 +46,7 @@ public class Payment extends Identity{
 	
 	@Column
 	@NotNull
-	private int gst=0; //less than net charge.
+	private int gst=0;
 	
 	@Column(name = "txn_id")
 	@NotNull
@@ -60,4 +57,83 @@ public class Payment extends Identity{
 	@Enumerated
 	private PaymentStatus status;
 	
+	public Payment() {
+		super();
+	}
+
+	public Payment(Booking bookingId, @NotNull PaymentMode mode, short discount, @NotNull int netCharge,
+			@NotNull int gst, @NotNull String transactionId, @NotNull PaymentStatus status) {
+		super();
+		this.bookingId = bookingId;
+		this.mode = mode;
+		this.discount = discount;
+		this.netCharge = netCharge;
+		this.gst = gst;
+		this.transactionId = transactionId;
+		this.status = status;
+	}
+
+	public Booking getBookingId() {
+		return bookingId;
+	}
+
+	public void setBookingId(Booking bookingId) {
+		this.bookingId = bookingId;
+	}
+
+	public PaymentMode getMode() {
+		return mode;
+	}
+
+	public void setMode(PaymentMode mode) {
+		this.mode = mode;
+	}
+
+	public short getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(short discount) {
+		this.discount = discount;
+	}
+
+	public int getNetCharge() {
+		return netCharge;
+	}
+
+	public void setNetCharge(int netCharge) {
+		this.netCharge = netCharge;
+	}
+
+	public int getGst() {
+		return gst;
+	}
+
+	public void setGst(int gst) {
+		if(gst>netCharge) throw new IllegalArgumentException("GST greater than net Charges !");
+		this.gst = gst;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public PaymentStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(PaymentStatus status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Payment [bookingId=" + bookingId + ", mode=" + mode + ", discount=" + discount + ", netCharge="
+				+ netCharge + ", gst=" + gst + ", transactionId=" + transactionId + ", status=" + status + ", id=" + id
+				+ "]";
+	}
 }

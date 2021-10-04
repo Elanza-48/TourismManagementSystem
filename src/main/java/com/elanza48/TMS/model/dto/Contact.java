@@ -69,7 +69,5 @@ abstract class Contact extends IdentityName {
 	public void setName(String name) {
 		super.setName(name);
 	}
-	
-	
-	
+
 }

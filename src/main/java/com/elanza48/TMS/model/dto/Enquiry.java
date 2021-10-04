@@ -7,13 +7,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 
 @Entity
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Enquiry extends Identity{
 
 	
@@ -37,5 +34,63 @@ public class Enquiry extends Identity{
 	@NotNull
 	private boolean isOpen= true;
 	
-	
+	public Enquiry() {
+		super();
+	}
+
+	public Enquiry(Booking bookingId, Transport transportId, @NotNull String subject, String body,
+			@NotNull boolean isOpen) {
+		super();
+		this.bookingId = bookingId;
+		this.transportId = transportId;
+		this.subject = subject;
+		this.body = body;
+		this.isOpen = isOpen;
+	}
+
+	public Booking getBookingId() {
+		return bookingId;
+	}
+
+	public void setBookingId(Booking bookingId) {
+		this.bookingId = bookingId;
+	}
+
+	public Transport getTransportId() {
+		return transportId;
+	}
+
+	public void setTransportId(Transport transportId) {
+		this.transportId = transportId;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	@Override
+	public String toString() {
+		return "Enquiry [bookingId=" + bookingId + ", transportId=" + transportId + ", subject=" + subject + ", body="
+				+ body + ", isOpen=" + isOpen + ", id=" + id + "]";
+	}
 }

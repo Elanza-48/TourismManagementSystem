@@ -15,13 +15,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 
 @Entity
 @Table(name = "booking_Info")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Booking  extends Identity{
 	
 	public enum RoomType{
@@ -86,4 +82,135 @@ public class Booking  extends Identity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
 	private Set<Enquiry> enquiries;
 	
+	public Booking() {
+		super();
+	}
+
+	public Booking(@NotNull Date date, Package packageId, @NotNull Date tourDate, UserAccount userId,
+			@NotNull @Size(min = 1, max = 12) short passengerCount, @NotNull RoomType roomType, @NotNull int price,
+			@NotNull BookingStatus status, Payment paymentInfo) {
+		this.date = date;
+		this.packageId = packageId;
+		this.tourDate = tourDate;
+		this.userId = userId;
+		this.passengerCount = passengerCount;
+		this.roomType = roomType;
+		this.price = price;
+		this.status = status;
+		this.paymentInfo = paymentInfo;
+	}
+
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Package getPackageId() {
+		return packageId;
+	}
+
+	public void setPackageId(Package packageId) {
+		this.packageId = packageId;
+	}
+
+	public Date getTourDate() {
+		return tourDate;
+	}
+
+	public void setTourDate(Date tourDate) {
+		this.tourDate = tourDate;
+	}
+
+	public UserAccount getUserId() {
+		return userId;
+	}
+
+	public void setUserId(UserAccount userId) {
+		this.userId = userId;
+	}
+
+	public short getPassengerCount() {
+		return passengerCount;
+	}
+
+	public void setPassengerCount(short passengerCount) {
+		this.passengerCount = passengerCount;
+	}
+
+	public RoomType getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(RoomType roomType) {
+		this.roomType = roomType;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public BookingStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BookingStatus status) {
+		this.status = status;
+	}
+
+	public Set<Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(Set<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+	public Set<DestinationReview> getDestinationReviews() {
+		return destinationReviews;
+	}
+
+	public void setDestinationReviews(Set<DestinationReview> destinationReviews) {
+		this.destinationReviews = destinationReviews;
+	}
+
+	public Set<HotelReview> getHotelReviews() {
+		return hotelReviews;
+	}
+
+	public void setHotelReviews(Set<HotelReview> hotelReviews) {
+		this.hotelReviews = hotelReviews;
+	}
+
+	public Payment getPaymentInfo() {
+		return paymentInfo;
+	}
+
+	public void setPaymentInfo(Payment paymentInfo) {
+		this.paymentInfo = paymentInfo;
+	}
+
+	public Set<Enquiry> getEnquiries() {
+		return enquiries;
+	}
+
+	public void setEnquiries(Set<Enquiry> enquiries) {
+		this.enquiries = enquiries;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Booking [date=" + date + ", packageId=" + packageId + ", tourDate=" + tourDate + ", userId=" + userId
+				+ ", passengerCount=" + passengerCount + ", roomType=" + roomType + ", price=" + price + ", status="
+				+ status + ", tickets=" + tickets + ", destinationReviews=" + destinationReviews + ", hotelReviews="
+				+ hotelReviews + ", paymentInfo=" + paymentInfo + ", enquiries=" + enquiries + ", id=" + id + "]";
+	}
 }

@@ -10,14 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "hotel_Info")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Hotel extends Contact{
 	
 	public enum HotelType{
@@ -43,4 +41,95 @@ public class Hotel extends Contact{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
 	private Set<HotelReview> reviews;
 	
+	public Hotel(){
+		super();
+	}
+
+	public Hotel(@NotNull String name, @NotNull @Email String email, @NotNull @Size(min = 10, max = 10) long mobileNo,
+			@NotNull Address address, @NotNull HotelType type, @NotNull int basePrice,
+			Destination destinationId) {
+		super(name, email, mobileNo, address);
+		this.type = type;
+		this.basePrice = basePrice;
+		this.destinationId = destinationId;
+	}
+
+	public HotelType getType() {
+		return type;
+	}
+
+	public void setType(HotelType type) {
+		this.type = type;
+	}
+
+	public int getBasePrice() {
+		return basePrice;
+	}
+
+	public void setBasePrice(int basePrice) {
+		this.basePrice = basePrice;
+	}
+
+	public Destination getDestinationId() {
+		return destinationId;
+	}
+
+	public void setDestinationId(Destination destinationId) {
+		this.destinationId = destinationId;
+	}
+
+	public Set<HotelReview> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<HotelReview> reviews) {
+		this.reviews = reviews;
+	}
+
+	@Override
+	public String getEmail() {
+		return super.getEmail();
+	}
+
+	@Override
+	public void setEmail(String email) {
+		super.setEmail(email);
+	}
+
+	@Override
+	public long getMobileNo() {
+		return super.getMobileNo();
+	}
+
+	@Override
+	public void setMobileNo(long mobileNo) {
+		super.setMobileNo(mobileNo);
+	}
+
+	@Override
+	public Address getAddress() {
+		return super.getAddress();
+	}
+
+	@Override
+	public void setAddress(Address address) {
+		super.setAddress(address);
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+	}
+
+	@Override
+	public String toString() {
+		return "Hotel [type=" + type + ", basePrice=" + basePrice + ", destinationId=" + destinationId + ", reviews="
+				+ reviews + ", email=" + email + ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name
+				+ ", id=" + id + "]";
+	}
 }

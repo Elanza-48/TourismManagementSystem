@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  spring:
+  
+    deploy:
+        resources:
+          limits:
+            memory: 1g
+    
+    labels:
+      com.elanza48.description: "Elanza-48 Personal Portfolio"
+      org.opencontainers.image.authors: "Rajarshi Kundu <elanza48@outlook.com>"
+    
+    image: elanza48/tsm:private
+    container_name: tsm
+    
+  postgres:
+  
