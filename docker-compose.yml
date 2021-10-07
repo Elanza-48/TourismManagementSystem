@@ -2,18 +2,36 @@ version: "3.9"
 
 services:
   spring:
+    image: elanza48/spring-boot-tsm:private
+    container_name: spring-tsm
   
-    deploy:
-        resources:
-          limits:
-            memory: 1g
+    build:
+      context: .
+      
+    depends_on:
+      db:
+        condition: service_healthy
+        
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tsm-postgres:5432/tsm-db
+      - SPRING_DATASOURCE_USERNAME=elanza48
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     
     labels:
       com.elanza48.description: "Elanza-48 Personal Portfolio"
       org.opencontainers.image.authors: "Rajarshi Kundu <elanza48@outlook.com>"
     
-    image: elanza48/tsm:private
-    container_name: tsm
+  db:
+    image: postgres:14-alpine
+    container_name: tsm-postgres
     
-  postgres:
+    environment:
+      - POSTGRES_USER=elanza48
+      - POSTGRES_DB=tsm-db
+      
+    healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U postgres"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
   
