@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.elanza48.TMS.model.dto.UserAccount;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserAccount, Long> {
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
 	public UserAccount findByEmailEquals(String email);
 }

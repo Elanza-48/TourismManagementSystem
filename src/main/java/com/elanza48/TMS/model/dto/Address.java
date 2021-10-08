@@ -3,7 +3,7 @@ package com.elanza48.TMS.model.dto;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 @Embeddable
 public class Address {
@@ -19,14 +19,14 @@ public class Address {
 	@NotNull
 	private String state;
 	
-	@Column
+	@Column(length = 6)
 	@NotNull
-	@Size(min=6, max = 6)
+	@Pattern(regexp="(^$|[0-9]{6})")
 	private int zip;
 	
 	public Address(){}
 	public Address(@NotNull String street, @NotNull String district, @NotNull String state,
-			@NotNull @Size(min = 6, max = 6) int zip) {
+			@NotNull @Pattern(regexp="(^$|[0-9]{6})") int zip) {
 		this.street = street;
 		this.district = district;
 		this.state = state;

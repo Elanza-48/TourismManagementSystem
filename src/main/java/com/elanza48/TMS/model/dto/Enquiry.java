@@ -1,5 +1,7 @@
 package com.elanza48.TMS.model.dto;
 
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +26,10 @@ public class Enquiry extends Identity{
 	
 	@Column
 	@NotNull
+	private Date date;
+	
+	@Column
+	@NotNull
 	private String subject;
 	
 	@Column
@@ -38,11 +44,11 @@ public class Enquiry extends Identity{
 		super();
 	}
 
-	public Enquiry(Booking bookingId, Transport transportId, @NotNull String subject, String body,
+	public Enquiry(Booking bookingId, Transport transportId, @NotNull Date date, @NotNull String subject, String body,
 			@NotNull boolean isOpen) {
-		super();
 		this.bookingId = bookingId;
 		this.transportId = transportId;
+		this.date=date;
 		this.subject = subject;
 		this.body = body;
 		this.isOpen = isOpen;
@@ -62,6 +68,14 @@ public class Enquiry extends Identity{
 
 	public void setTransportId(Transport transportId) {
 		this.transportId = transportId;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public String getSubject() {
@@ -90,7 +104,7 @@ public class Enquiry extends Identity{
 
 	@Override
 	public String toString() {
-		return "Enquiry [bookingId=" + bookingId + ", transportId=" + transportId + ", subject=" + subject + ", body="
-				+ body + ", isOpen=" + isOpen + ", id=" + id + "]";
+		return "Enquiry [bookingId=" + bookingId + ", transportId=" + transportId + ", date=" + date + ", subject="
+				+ subject + ", body=" + body + ", isOpen=" + isOpen + ", id=" + id + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package com.elanza48.TMS.controller;
+package com.elanza48.TMS.controller.mapper;
 
 import java.util.List;
 
@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elanza48.TMS.controller.service.UserService;
-import com.elanza48.TMS.model.dao.UserRepository;
+import com.elanza48.TMS.controller.service.UserAccountService;
 import com.elanza48.TMS.model.dto.UserAccount;
 
 @RestController
@@ -19,7 +18,7 @@ import com.elanza48.TMS.model.dto.UserAccount;
 public class UserController {
 	
 	@Autowired
-	UserService userService;
+	UserAccountService userService;
 	
 	@PostMapping
 	public UserAccount getUserByEmail(@RequestBody UserAccount user) {

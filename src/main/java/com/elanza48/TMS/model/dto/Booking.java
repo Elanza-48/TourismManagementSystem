@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 
 
 @Entity
@@ -48,14 +50,14 @@ public class Booking  extends Identity{
 	@JoinColumn(name = "usr_id", referencedColumnName = "id")
 	private UserAccount userId;
 	
-	@Column(name = "PASSENGER_COUNT")
+	@Column(name = "PASSENGER_COUNT", length = 2)
 	@NotNull
-	@Size(min=1, max=12)
+	@Range(min=1, max=12)
 	private short passengerCount=1;
 	
 	@Column(name = "R_TYPE")
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private RoomType roomType= RoomType.STANDARD;
 	
 	@Column
@@ -64,7 +66,7 @@ public class Booking  extends Identity{
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private BookingStatus status = BookingStatus.ACTIVE;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
@@ -87,7 +89,7 @@ public class Booking  extends Identity{
 	}
 
 	public Booking(@NotNull Date date, Package packageId, @NotNull Date tourDate, UserAccount userId,
-			@NotNull @Size(min = 1, max = 12) short passengerCount, @NotNull RoomType roomType, @NotNull int price,
+			@NotNull @Range(min = 1, max = 12) short passengerCount, @NotNull RoomType roomType, @NotNull int price,
 			@NotNull BookingStatus status, Payment paymentInfo) {
 		this.date = date;
 		this.packageId = packageId;

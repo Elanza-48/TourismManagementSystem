@@ -28,6 +28,10 @@ public class Package extends IdentityName{
 	@Column
 	private String events;
 	
+	@Column
+	@NotNull
+	private boolean isActive=true;
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "package_destination_map",
 		joinColumns = {@JoinColumn(name="pkg_id")},
@@ -80,6 +84,14 @@ public class Package extends IdentityName{
 		this.events = events;
 	}
 
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	public Set<Destination> getDestinations() {
 		return destinations;
 	}
@@ -117,8 +129,8 @@ public class Package extends IdentityName{
 	@Override
 	public String toString() {
 		return "Package [description=" + description + ", activities=" + activities + ", events=" + events
-				+ ", destinations=" + destinations + ", transports=" + transports + ", bookings=" + bookings + ", name="
-				+ name + ", id=" + id + "]";
+				+ ", isActive=" + isActive + ", destinations=" + destinations + ", transports=" + transports
+				+ ", bookings=" + bookings + ", name=" + name + ", id=" + id + "]";
 	}
 
 }

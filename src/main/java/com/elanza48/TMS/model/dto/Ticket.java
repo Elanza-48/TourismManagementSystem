@@ -1,11 +1,14 @@
 package com.elanza48.TMS.model.dto;
 
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "booking_transport_ticket")
@@ -13,6 +16,10 @@ public class Ticket extends Identity{
 	
 	@Column(name = "seat_no")
 	private String seatNumber;
+	
+	@Column
+	@NotNull
+	private Date date;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
@@ -26,9 +33,10 @@ public class Ticket extends Identity{
 		super();
 	}
 
-	public Ticket(String seatNumber, Booking bookingId, Transport transportId) {
+	public Ticket(String seatNumber, @NotNull Date date, Booking bookingId, Transport transportId) {
 		super();
 		this.seatNumber = seatNumber;
+		this.date=date;
 		this.bookingId = bookingId;
 		this.transportId = transportId;
 	}
@@ -39,6 +47,14 @@ public class Ticket extends Identity{
 
 	public void setSeatNumber(String seatNumber) {
 		this.seatNumber = seatNumber;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public Booking getBookingId() {
@@ -59,7 +75,7 @@ public class Ticket extends Identity{
 
 	@Override
 	public String toString() {
-		return "Ticket [seatNumber=" + seatNumber + ", bookingId=" + bookingId + ", transportId=" + transportId
-				+ ", id=" + id + "]";
+		return "Ticket [seatNumber=" + seatNumber + ", date=" + date + ", bookingId=" + bookingId + ", transportId="
+				+ transportId + ", id=" + id + "]";
 	}
 }

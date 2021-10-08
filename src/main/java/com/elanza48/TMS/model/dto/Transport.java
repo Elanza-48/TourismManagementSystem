@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -35,12 +36,12 @@ public class Transport extends IdentityName{
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private TransportMode mode = TransportMode.CAR;
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private TransportEntity entity= TransportEntity.PRIVATE;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")

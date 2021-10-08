@@ -5,12 +5,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +27,13 @@ public class UserAccount extends Contact{
 		ADMIN
 	}
 	
+	public enum UserAccountStatus{
+		ACTIVE,
+		SUSPENDED,
+		INACTIVE,
+		CLOSED
+	}
+	
 	@Column
 	@NotNull
 	private String password;
@@ -33,8 +41,13 @@ public class UserAccount extends Contact{
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private UserRole role= UserRole.USER;
+	
+	@Column
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private UserAccountStatus status=UserAccountStatus.ACTIVE;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
 	Set<Booking> bookings;
@@ -44,11 +57,10 @@ public class UserAccount extends Contact{
 	}
 	
 	public UserAccount(@NotNull String name, @NotNull @Email String email,
-			@NotNull @Size(min = 10, max = 10) long mobileNo, @NotNull Address address,
-			@NotNull String password, @NotNull UserRole role) {
+			@NotNull @Pattern(regexp="(^$|[0-9]{10})") long mobileNo, @NotNull Address address,
+			@NotNull String password) {
 		super(name, email, mobileNo, address);
 		this.password = password;
-		this.role = role;
 	}
 
 	@JsonIgnore
@@ -67,6 +79,14 @@ public class UserAccount extends Contact{
 
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+
+	public UserAccountStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserAccountStatus status) {
+		this.status = status;
 	}
 
 	public Set<Booking> getBookings() {
@@ -119,8 +139,8 @@ public class UserAccount extends Contact{
 
 	@Override
 	public String toString() {
-		return "UserAccount [role=" + role + ", bookings=" + bookings + ", email=" + email + ", mobileNo=" + mobileNo
-				+ ", address=" + address + ", name=" + name + ", id=" + id + "]";
+		return "UserAccount [role=" + role + ", status=" + status + ", bookings=" + bookings + ", email=" + email
+				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + ", id=" + id + "]";
 	}
 
 }

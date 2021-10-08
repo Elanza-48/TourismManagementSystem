@@ -9,9 +9,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "destination_Info")
@@ -25,10 +25,10 @@ public class Destination extends IdentityName{
 	@Type(type = "text")
 	private String description;
 	
-	@Column(name = "MAX_STAY_DURATION")
-	@Size(min = 1, max=2)
+	@Column(name = "MAX_STAY_DURATION", length = 2)
+	@Range(min = 1, max=10)
 	@NotNull
-	private int stayDuration=1;
+	private short stayDuration=1;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
 	private Set<Hotel> hotels;
@@ -42,7 +42,7 @@ public class Destination extends IdentityName{
 	public Destination() {
 		super();
 	}
-	public Destination(@NotNull String name, @NotNull String province, String description, @Size(min = 1, max = 2) @NotNull int stayDuration) {
+	public Destination(@NotNull String name, @NotNull String province, String description, @Range(min = 1, max = 13) @NotNull short stayDuration) {
 		super(name);
 		this.province = province;
 		this.description = description;
@@ -69,7 +69,7 @@ public class Destination extends IdentityName{
 		return stayDuration;
 	}
 
-	public void setStayDuration(int stayDuration) {
+	public void setStayDuration(short stayDuration) {
 		this.stayDuration = stayDuration;
 	}
 

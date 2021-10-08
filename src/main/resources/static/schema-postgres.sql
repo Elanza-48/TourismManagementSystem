@@ -2,21 +2,24 @@ CREATE SCHEMA IF NOT EXISTS tourism_management_system;
 
 
 ---------- ENTITY 1 ----------
-CREATE SEQUENCE tourism_management_system.user_Account_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TYPE tourism_management_system.uAcc_role_enum AS ENUM (
     'USER',
     'MANAGER',
     'ADMIN'
 );
 
+CREATE TYPE tourism_management_system.uAcc_status_enum AS ENUM (
+    'ACTIVE',
+    'SUSPENDED',
+    'INACTIVE',
+    'CLOSED'
+);
+
 CREATE TABLE tourism_management_system.user_Account(
-  U_ID      BIGINT ,
+  ID    UUID ,
   PASSWORD  VARCHAR NOT NULL ,
-  U_NAME    VARCHAR(30) NOT NULL ,
+  NAME    VARCHAR NOT NULL ,
   U_ADDRESS_1 VARCHAR NOT NULL ,
-  U_ADDRESS_2 VARCHAR,
   DISTRICT varchar NOT NULL ,
   STATE VARCHAR(20) NOT NULL ,
   ZIP NUMERIC(6) NOT NULL,
@@ -35,16 +38,10 @@ COMMENT ON COLUMN tourism_management_system.user_Account.ROLE IS
 CREATE UNIQUE INDEX uAc_index
     ON tourism_management_system.user_Account (U_EMAIL ASC, U_MOB ASC);
 
-ALTER SEQUENCE tourism_management_system.user_Account_id_seq
-    OWNED BY tourism_management_system.user_Account.U_ID;
-
 
 ---------- ENTITY 2 ----------
-CREATE SEQUENCE tourism_management_system.destination_Info_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TABLE tourism_management_system.destination_Info(
-    D_ID BIGINT,
+    D_ID UUID,
     D_NAME VARCHAR NOT NULL ,
     D_PROVINCE VARCHAR(20) NOT NULL ,
     DESCRIPTION VARCHAR,
@@ -53,22 +50,16 @@ CREATE TABLE tourism_management_system.destination_Info(
     CONSTRAINT dInfo_pk PRIMARY KEY (D_ID)
 );
 
-ALTER SEQUENCE tourism_management_system.destination_Info_id_seq
-    OWNED BY tourism_management_system.destination_Info.D_ID;
-
 
 ---------- ENTITY 3 ----------
-CREATE SEQUENCE tourism_management_system.hotel_Info_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TYPE  tourism_management_system.hotel_Info_h_type_enum AS ENUM (
     'STANDARD',
     'PRIME',
-    'ROYALE'
+    'ROYAL'
 );
 
 CREATE TABLE tourism_management_system.hotel_Info(
-  H_ID BIGINT ,
+  H_ID UUID ,
   H_NAME VARCHAR(30) NOT NULL ,
   H_ADDRESS varchar,
   ZIP numeric(6) not null,
@@ -94,14 +85,8 @@ COMMENT ON COLUMN tourism_management_system.hotel_Info.H_TYPE IS
 CREATE UNIQUE INDEX hInfo_index
     ON tourism_management_system.hotel_Info (H_EMAIL);
 
-ALTER SEQUENCE tourism_management_system.hotel_Info_id_seq
-    OWNED BY tourism_management_system.hotel_Info.H_ID;
-
 
 ---------- ENTITY 4 ----------
-CREATE SEQUENCE tourism_management_system.transport_info_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE ;
-
 CREATE TYPE  tourism_management_system.tInfo_t_mode_enum AS ENUM (
     'BUS',
     'CAR',
@@ -117,7 +102,7 @@ CREATE TYPE  tourism_management_system.tInfo_t_entity_enum AS ENUM (
 );
 
 CREATE TABLE tourism_management_system.transport_info(
-    T_ID bigint,
+    T_ID UUID,
     T_MODE tourism_management_system.tInfo_t_mode_enum
         not null default 'CAR',
     T_ENTITY tourism_management_system.tInfo_t_entity_enum
@@ -132,16 +117,10 @@ COMMENT ON COLUMN tourism_management_system.transport_info.T_MODE IS
 COMMENT ON COLUMN tourism_management_system.transport_info.T_ENTITY IS
     '[0:PRIVATE | 1:PUBLIC]';
 
-ALTER SEQUENCE  tourism_management_system.transport_info_id_seq
-    OWNED BY tourism_management_system.transport_info.T_ID;
-
 
 ---------- ENTITY 5 ----------
-CREATE SEQUENCE tourism_management_system.tour_Package_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TABLE tourism_management_system.tour_Package(
-    PKG_ID BIGINT ,
+    PKG_ID UUID ,
     PKG_NAME VARCHAR NOT NULL,
     DESCRIPTION TEXT,
     ACTIVITIES VARCHAR,
@@ -149,9 +128,6 @@ CREATE TABLE tourism_management_system.tour_Package(
 
     CONSTRAINT tPackage_pk PRIMARY KEY (PKG_ID)
 );
-
-ALTER SEQUENCE tourism_management_system.tour_Package_id_seq
-    OWNED BY tourism_management_system.tour_Package.PKG_ID;
 
 
 ---------- ENTITY 6 ----------
@@ -185,9 +161,6 @@ CREATE TABLE tourism_management_system.package_transport_map(
 
 
 ---------- ENTITY 8 ----------
-CREATE SEQUENCE tourism_management_system.booking_Info_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TYPE  tourism_management_system.booking_Info_r_type_enum AS ENUM (
     'STANDARD',
     'SUPERIOR',
@@ -201,7 +174,7 @@ CREATE TYPE  tourism_management_system.booking_Info_b_status_enum AS ENUM (
 );
 
 CREATE TABLE tourism_management_system.booking_Info(
-  B_ID BIGINT ,
+  B_ID UUID ,
   B_DATE DATE NOT NULL ,
   PKG_ID BIGINT NOT NULL ,
   T_DATE DATE NOT NULL ,
@@ -228,9 +201,6 @@ COMMENT ON COLUMN tourism_management_system.booking_Info.R_TYPE IS
 COMMENT ON COLUMN tourism_management_system.booking_Info.B_STATUS IS
     '[0:Active | 1:Cancelled | 2:Complete]';
 
-ALTER SEQUENCE tourism_management_system.booking_Info_id_seq
-    OWNED BY tourism_management_system.booking_Info.B_ID;
-
 
 ---------- ENTITY 9 ----------
 CREATE TABLE tourism_management_system.booking_transport_ticket(
@@ -251,9 +221,6 @@ CREATE TABLE tourism_management_system.booking_transport_ticket(
 );
 
 ---------- ENTITY 10 ----------
-CREATE SEQUENCE tourism_management_system.destination_review_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TABLE tourism_management_system.destination_review(
     D_REV_ID bigint,
     D_ID bigint not null ,
@@ -272,14 +239,8 @@ CREATE TABLE tourism_management_system.destination_review(
                         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER SEQUENCE tourism_management_system.destination_review_id_seq
-    OWNED BY tourism_management_system.destination_review.D_REV_ID;
-
 
 ---------- ENTITY 11 ----------
-CREATE SEQUENCE tourism_management_system.hotel_review_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TABLE tourism_management_system.hotel_review(
     H_REV_ID bigint,
     H_ID bigint not null ,
@@ -298,14 +259,8 @@ CREATE TABLE tourism_management_system.hotel_review(
                         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER SEQUENCE tourism_management_system.hotel_review_id_seq
-    OWNED BY tourism_management_system.hotel_review.H_REV_ID;
-
 
 ---------- ENTITY 12 ----------
-CREATE SEQUENCE tourism_management_system.payment_info_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TYPE  tourism_management_system.payment_info_mode_enum AS ENUM (
     'CARD',
     'UPI',
@@ -344,14 +299,8 @@ COMMENT ON COLUMN tourism_management_system.payment_Info.MODE IS
 COMMENT ON COLUMN tourism_management_system.payment_Info.MODE IS
     '[1:SUCCESS | 2:PENDING | 3:FAILED]';
 
-ALTER SEQUENCE tourism_management_system.payment_info_id_seq
-    OWNED BY tourism_management_system.payment_Info.P_ID;
-
 
 ---------- ENTITY 13 ----------
-CREATE SEQUENCE tourism_management_system.enquiry_id_seq
-    AS INTEGER MINVALUE 1 NO CYCLE;
-
 CREATE TABLE tourism_management_system.enquiry(
     ENQ_ID bigint,
     B_ID bigint not null ,
@@ -369,7 +318,3 @@ CREATE TABLE tourism_management_system.enquiry(
         REFERENCES tourism_management_system.transport_info(T_ID)
                         ON DELETE SET NULL ON UPDATE CASCADE
 );
-
-ALTER SEQUENCE tourism_management_system.enquiry_id_seq
-    OWNED BY tourism_management_system.enquiry.ENQ_ID;
-

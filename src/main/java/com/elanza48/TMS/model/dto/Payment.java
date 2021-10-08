@@ -1,17 +1,23 @@
 package com.elanza48.TMS.model.dto;
 
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Check;
+
 
 @Entity
 @Table(name = "payment_Info")
+@Check( constraints = "gst < net_charge")
 public class Payment extends Identity{
 	
 	public enum PaymentMode{
@@ -34,7 +40,7 @@ public class Payment extends Identity{
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private PaymentMode mode= PaymentMode.CARD;
 	
 	@Column
@@ -54,7 +60,11 @@ public class Payment extends Identity{
 	
 	@Column
 	@NotNull
-	@Enumerated
+	private Date date;
+	
+	@Column
+	@NotNull
+	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
 	
 	public Payment() {
@@ -62,7 +72,7 @@ public class Payment extends Identity{
 	}
 
 	public Payment(Booking bookingId, @NotNull PaymentMode mode, short discount, @NotNull int netCharge,
-			@NotNull int gst, @NotNull String transactionId, @NotNull PaymentStatus status) {
+			@NotNull int gst, @NotNull String transactionId, @NotNull Date date, @NotNull PaymentStatus status) {
 		super();
 		this.bookingId = bookingId;
 		this.mode = mode;
@@ -70,6 +80,7 @@ public class Payment extends Identity{
 		this.netCharge = netCharge;
 		this.gst = gst;
 		this.transactionId = transactionId;
+		this.date=date;
 		this.status = status;
 	}
 
@@ -122,6 +133,14 @@ public class Payment extends Identity{
 		this.transactionId = transactionId;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public PaymentStatus getStatus() {
 		return status;
 	}
@@ -133,7 +152,7 @@ public class Payment extends Identity{
 	@Override
 	public String toString() {
 		return "Payment [bookingId=" + bookingId + ", mode=" + mode + ", discount=" + discount + ", netCharge="
-				+ netCharge + ", gst=" + gst + ", transactionId=" + transactionId + ", status=" + status + ", id=" + id
-				+ "]";
+				+ netCharge + ", gst=" + gst + ", transactionId=" + transactionId + ", date=" + date + ", status="
+				+ status + ", id=" + id + "]";
 	}
 }

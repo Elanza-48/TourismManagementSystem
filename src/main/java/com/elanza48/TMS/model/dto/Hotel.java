@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "hotel_Info")
@@ -21,12 +22,12 @@ public class Hotel extends Contact{
 	public enum HotelType{
 		STANDARD,
 	    PRIME,
-	    ROYALE
+	    ROYAL
 	}
 	
 	@Column
 	@NotNull
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private HotelType type = HotelType.STANDARD;
 	
 	@Column(name = "base_price")
@@ -45,7 +46,7 @@ public class Hotel extends Contact{
 		super();
 	}
 
-	public Hotel(@NotNull String name, @NotNull @Email String email, @NotNull @Size(min = 10, max = 10) long mobileNo,
+	public Hotel(@NotNull String name, @NotNull @Email String email, @NotNull @Pattern(regexp="(^$|[0-9]{10})") long mobileNo,
 			@NotNull Address address, @NotNull HotelType type, @NotNull int basePrice,
 			Destination destinationId) {
 		super(name, email, mobileNo, address);
