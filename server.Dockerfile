@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-11 AS base
+FROM openjdk:11-slim
 LABEL maintainer="elanza48"
 
 ENV TZ=Asia/Kolkata \

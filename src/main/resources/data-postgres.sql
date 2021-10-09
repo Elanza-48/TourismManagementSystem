@@ -1,0 +1,1 @@
+insert into main.user_account(id, name, district, state, street, zip, email, mobile_no, password, role, status) values ((select uuid_generate_v4()),'Rajarshi Kundu', 'Ghatal', 'West Bengal', 'Ward no 16, Konnagar',721212, 'elanza48@outlook.com', 9674652083, 'dhd465h4a6465dt7y4kjes', 'ADMIN', 'ACTIVE');
