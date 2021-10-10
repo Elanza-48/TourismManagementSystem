@@ -1,5 +1,8 @@
 version: "3.9"
 
+# docker-compose down  -v --rmi all
+# docker-compose up --build
+
 services:
   spring_tms:
     image: spring-boot-tms
