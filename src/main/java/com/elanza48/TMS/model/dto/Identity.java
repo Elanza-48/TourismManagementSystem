@@ -18,7 +18,7 @@ abstract class Identity {
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@Column(updatable = false)
-	@Type(type = "pg-uuid")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	protected UUID id;
 	
 	public Identity() {}
