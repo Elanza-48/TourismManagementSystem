@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping
 public class GenericController {
 
-  @Autowired
-  AuthenticationManager authenticationManager;
+  // @Autowired
+  // AuthenticationManager authenticationManager;
 
   @GetMapping(produces = {"application/hal+json"})
   public Map<String, String> getMethodName() {
@@ -36,20 +36,20 @@ public class GenericController {
     return map;
   }
 
-  @PostMapping(value="/authenticate")
-  public ResponseEntity<?> generateAuthToken(@RequestBody AuthenticationRequest request) throws Exception {
+  // @PostMapping(value="/authenticate")
+  // public ResponseEntity<?> generateAuthToken(@RequestBody AuthenticationRequest request) throws Exception {
 
-    try{
-      authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-      );
-    }catch(BadCredentialsException e){
-      throw new Exception("Bad credentials !",e);
-    }
-    //TODO: implement method.
-    return new ResponseEntity<String>("json.web.tokwn",HttpStatus.CREATED);
+  //   try{
+  //     authenticationManager.authenticate(
+  //       new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+  //     );
+  //   }catch(BadCredentialsException e){
+  //     throw new Exception("Bad credentials !",e);
+  //   }
+  //   //TODO: implement method.
+  //   return new ResponseEntity<String>("json.web.tokwn",HttpStatus.CREATED);
       
-  }
+  // }
   
   
 }

@@ -2,7 +2,7 @@
 
 *under development*
 
-Generate ECDSA P-521 key value pairs under `resources` diarectory:
+Generate ECDSA P-521 key value pairs under `resources` directory:
 ```
 $ openssl ecparam -genkey -name secp521r1 -out private.pem
 $ openssl ec -in private.pem -pubout -out public.pem
