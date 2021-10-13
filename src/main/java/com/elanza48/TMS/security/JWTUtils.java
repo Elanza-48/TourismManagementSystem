@@ -11,11 +11,15 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.elanza48.TMS.model.dto.UserAccount;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class JWTUtils {
 
   private ECPublicKey publicKey=null;
@@ -78,11 +82,20 @@ public class JWTUtils {
   public boolean validateToken(String token, UserAccount user){
     Date issuedAt = verifyJWToken(token).get("iat").asDate();
     String email = verifyJWToken(token).get("email").asString();
-    int duration = (int) TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()-issuedAt.getTime())%60;
+    String role = verifyJWToken(token).get("role").asString();
+    int duration = (int) TimeUnit.MILLISECONDS.toMinutes(new Date().getTime()-issuedAt.getTime())%60;
 
-    if(user.getEmail().equals(email) && duration<=5) return true;
+    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=5) return true;
     else return false; 
-    
+  }
+
+  public String extractEmail(String jwt){
+    try{
+      return JWT.decode(jwt).getClaim("email").asString();
+    }catch(JWTDecodeException e){
+      e.printStackTrace();
+      return null;
+    }
   }
   
 }

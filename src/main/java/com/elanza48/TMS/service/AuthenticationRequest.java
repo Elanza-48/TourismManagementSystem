@@ -1,4 +1,4 @@
-package com.elanza48.TMS.controller.service;
+package com.elanza48.TMS.service;
 
 import org.springframework.stereotype.Service;
 

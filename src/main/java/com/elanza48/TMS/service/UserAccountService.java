@@ -1,4 +1,4 @@
-package com.elanza48.TMS.controller.service;
+package com.elanza48.TMS.service;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +25,8 @@ public class UserAccountService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 
 		UserAccount userAccount= findUser(email);
-		if(userAccount==null || userAccount.getEmail().equals(email))
-			new UsernameNotFoundException(email+ " not found !");
+		if(userAccount==null || !userAccount.getEmail().equals(email))
+			throw new UsernameNotFoundException(email+ " not found !");
 		return new UserCredentialDetails(findUser(email));
 	};
 

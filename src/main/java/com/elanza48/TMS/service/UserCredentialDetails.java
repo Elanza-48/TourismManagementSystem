@@ -1,4 +1,4 @@
-package com.elanza48.TMS.controller.service;
+package com.elanza48.TMS.service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +17,6 @@ public class UserCredentialDetails implements UserDetails{
 
   public UserCredentialDetails(UserAccount user){
     this.user=user;
-    System.out.println(user);
   }
 
   @Override
