@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.elanza48.TMS.security.JWTUtils;
-import com.elanza48.TMS.service.AuthenticationRequest;
-import com.elanza48.TMS.service.AuthenticationResponse;
 import com.elanza48.TMS.service.UserAccountService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping
-public class GenericController {
+public class SecurityController {
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -36,35 +35,54 @@ public class GenericController {
   private JWTUtils jwtTokenUtils;
 
   @GetMapping(produces = {"application/hal+json"})
-  public Map<String, String> getMethodName() {
+  public ResponseEntity<?> getMethodName() {
 
     Map<String, String> map = new HashMap<>();
     map.put("message:", "Welcome to the Tour Company !");
     map.put("link", "./authenticate");
     map.put("link", "./user");
-    return map;
+    return ResponseEntity.ok(map);
   }
 
+  /**
+   * provides the authentication body format to the client.
+   * @return {@link ResponseEntity}
+   */
   @GetMapping(value="/authenticate")
-  public AuthenticationRequest authBodyFormat(){
-    return new AuthenticationRequest();
+  public ResponseEntity<?> authBodyFormat(){
+    Map<String, String> map = new HashMap<>();
+    map.put("email", null);
+    map.put("password", null);
+    return ResponseEntity.ok(map);
   }
 
+  /**
+   * Gets authentication credentials from the user
+   * authentcates user and returns JWT
+   * valid for 5 minutes.
+   * 
+   * @param request
+   * @return {@link ResponseEntity}
+   * @throws Exception
+   */
   @PostMapping(value="/authenticate")
-  public ResponseEntity<?> generateAuthToken(@RequestBody AuthenticationRequest request) throws Exception {
+  public ResponseEntity<?> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
+    String emailPattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+    Map<String, String> token = new HashMap<>();
 
     try{
+      if(!Pattern.compile(emailPattern).matcher(request.get("email")).matches())
+        throw new BadCredentialsException("Malformed Email id !");
+
       authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        new UsernamePasswordAuthenticationToken(request.get("email"), request.get("password"))
       );
     }catch(BadCredentialsException e){
       throw new Exception("Incorrect credentials !", e);
     }
-    
-    return ResponseEntity.ok(new AuthenticationResponse(
-      jwtTokenUtils.genrateToken(
-        userAccountService.findUser(request.getEmail())
-      )
-    ));   
+    token.put("jwt", jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get()));
+    token.put("validity", "5 min");
+
+    return ResponseEntity.ok(token);   
   }
 }

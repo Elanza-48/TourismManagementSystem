@@ -5,7 +5,6 @@ import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @MappedSuperclass
 abstract class Contact extends IdentityName {
@@ -17,7 +16,6 @@ abstract class Contact extends IdentityName {
 	
 	@Column(name = "mobile_no",length = 10, unique = true)
 	@NotNull
-	@Pattern(regexp="(^$|[0-9]{10})")
 	protected long mobileNo;
 	
 	@Embedded
@@ -28,7 +26,7 @@ abstract class Contact extends IdentityName {
 		super();
 	}
 
-	public Contact(@NotNull String name, @NotNull @Email String email, @NotNull @Pattern(regexp="(^$|[0-9]{10})") long mobileNo,
+	public Contact(@NotNull String name, @NotNull @Email String email, @NotNull long mobileNo,
 			@NotNull Address address) {
 		super(name);
 		this.email = email;
