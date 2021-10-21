@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "transport_info")
@@ -45,13 +47,12 @@ public class Transport extends IdentityName{
 	private TransportEntity entity= TransportEntity.PRIVATE;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")
+	@JsonManagedReference
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
+	@JsonManagedReference
 	private Set<Ticket> tickets;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
-	private Set<Enquiry> enquiries;
 	
 	public Transport() {
 		super();
@@ -104,14 +105,6 @@ public class Transport extends IdentityName{
 		this.tickets = tickets;
 	}
 
-	public Set<Enquiry> getEnquiries() {
-		return enquiries;
-	}
-
-	public void setEnquiries(Set<Enquiry> enquiries) {
-		this.enquiries = enquiries;
-	}
-
 	@Override
 	public String getName() {
 		return super.getName();
@@ -125,7 +118,7 @@ public class Transport extends IdentityName{
 	@Override
 	public String toString() {
 		return "Transport [description=" + description + ", mode=" + mode + ", entity=" + entity + ", packages="
-				+ packages + ", tickets=" + tickets + ", enquiries=" + enquiries + ", name=" + name + ", id=" + id
+				+ packages + ", tickets=" + tickets + ", name=" + name + ", id=" + id
 				+ "]";
 	}
 	

@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "booking_transport_ticket")
 public class Ticket extends Identity{
@@ -23,10 +25,12 @@ public class Ticket extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Booking bookingId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "transport_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Transport transportId;
 	
 	public Ticket() {

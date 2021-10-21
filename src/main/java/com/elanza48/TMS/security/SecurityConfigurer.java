@@ -46,7 +46,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 					UserAccount.UserRole.ADMIN.toString())
 			.antMatchers("/authenticate").permitAll()
 			.antMatchers(HttpMethod.POST, "/user").permitAll()
-			.antMatchers(HttpMethod.GET, "/user").hasAuthority(
+			.antMatchers(HttpMethod.GET, "/user","/user/*").hasAuthority(
 				UserAccount.UserRole.ADMIN.toString())
 			.antMatchers("/").permitAll()
 			.and().sessionManagement()

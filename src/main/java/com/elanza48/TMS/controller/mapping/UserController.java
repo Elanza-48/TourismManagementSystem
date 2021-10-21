@@ -2,10 +2,13 @@ package com.elanza48.TMS.controller.mapping;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +27,17 @@ public class UserController {
 	
 	@Autowired
 	UserAccountService userService;
+
+	private void checkUser(String email){
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		
+		for (GrantedAuthority a : auth.getAuthorities()){
+			if(a.toString().equals("ADMIN")) return;
+		}
+		if(!auth.getPrincipal().toString().equals(email)){
+			throw new AccessDeniedException("explicit user access attempt !");
+		}
+	}	
 	
 	@PostMapping
 	public UserAccount getUserByEmail(@RequestBody UserAccount user) {
@@ -32,32 +46,31 @@ public class UserController {
 	
 	@GetMapping("/email/{email}")
 	public UserAccount getUserByEmail(@PathVariable String email) {
+		checkUser(email);
 		return userService.findUser(email).get();
 	}
 
-	@GetMapping("/id/{id}")
-	public UserAccount getUserById(@PathVariable UUID id) {
-		return userService.findUser(id).get();
+	@GetMapping("/email/{email}/address")
+	public ResponseEntity<?> getUserAddress(@PathVariable String email) {
+		checkUser(email);
+		return ResponseEntity.ok(userService.findUser(email).get().getAddress());
 	}
 
-	@PatchMapping("/id/{id}")
-	public UserAccount updateUserbyId(@PathVariable UUID id, @RequestBody Map<String , Object> body){
-		UserAccount user = userService.updateUserById(id, body);
-		return user;
+	@GetMapping("/email/{email}/bookings")
+	public ResponseEntity<?> getUserBooking(@PathVariable String email) {
+		checkUser(email);
+		return ResponseEntity.ok(userService.findUser(email).get().getBookings());
 	}
 
 	@PatchMapping("/email/{email}")
 	public ResponseEntity<?> updateUserbyId(@PathVariable String email, @RequestBody Map<String , Object> body){
+		checkUser(email);
 		return ResponseEntity.ok(userService.updateUserByEmail(email, body));
-	}
-
-	@DeleteMapping("/id/{id}")
-	public void deleteUserByID(@PathVariable UUID id){
-		userService.deleteUser(id);
 	}
 
 	@DeleteMapping("/email/{email}")
 	public void deleteUserByEmail(@PathVariable String email){
+		checkUser(email);
 		userService.deleteUser(email);
 	}
 	

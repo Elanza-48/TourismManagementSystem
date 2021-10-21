@@ -85,7 +85,7 @@ public class JWTUtils {
     String role = verifyJWToken(token).get("role").asString();
     int duration = (int) TimeUnit.MILLISECONDS.toMinutes(new Date().getTime()-issuedAt.getTime())%60;
 
-    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=5) return true;
+    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=30) return true;
     else return false; 
   }
 

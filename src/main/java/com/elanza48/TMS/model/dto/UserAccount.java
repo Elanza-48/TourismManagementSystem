@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,15 +12,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "user_Account")
 public class UserAccount extends Contact{
+
+	public enum UserGender{
+		MALE,
+		FEMALE
+	}
 	
 	public enum UserRole{
 		USER,
@@ -38,6 +44,14 @@ public class UserAccount extends Contact{
 	@NotNull
 	private String password;
 	
+	@Column
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private UserGender gender;
+
+	@Column
+	@NotNull
+	private Date dob;
 	
 	@Column
 	@NotNull
@@ -50,6 +64,7 @@ public class UserAccount extends Contact{
 	private UserAccountStatus status=UserAccountStatus.ACTIVE;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+	@JsonManagedReference
 	Set<Booking> bookings;
 	
 	public UserAccount() {
@@ -57,10 +72,12 @@ public class UserAccount extends Contact{
 	}
 	
 	public UserAccount(@NotNull String name, @NotNull @Email String email,
-			@NotNull @Pattern(regexp="(^$|[0-9]{10})") long mobileNo, @NotNull Address address,
-			@NotNull String password) {
+			@NotNull long mobileNo, @NotNull Address address,
+			@NotNull String password, @NotNull Date dob, @NotNull UserGender gender) {
 		super(name, email, mobileNo, address);
 		this.password = password;
+		this.gender=gender;
+		this.dob=dob;
 	}
 
 	@JsonIgnore
@@ -71,6 +88,22 @@ public class UserAccount extends Contact{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserGender getGender() {
+		return gender;
+	}
+
+	public void setGender(UserGender gender) {
+		this.gender = gender;
+	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 
 	public UserRole getRole() {
@@ -139,8 +172,8 @@ public class UserAccount extends Contact{
 
 	@Override
 	public String toString() {
-		return "UserAccount [role=" + role + ", status=" + status + ", bookings=" + bookings + ", email=" + email
-				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + ", id=" + id + "]";
+		return "UserAccount [role=" + role + ", status=" + status + ", dob=" + dob + ", bookings=" + bookings + ", email=" + email
+				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + "gender=" + gender + ", id=" + id + "]";
 	}
 
 }

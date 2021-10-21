@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.Check;
 
 
@@ -36,6 +38,7 @@ public class Payment extends Identity{
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Booking bookingId;
 	
 	@Column

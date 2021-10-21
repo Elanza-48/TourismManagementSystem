@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.Type;
 
 
@@ -18,11 +20,8 @@ public class Enquiry extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id",referencedColumnName = "id")
+	@JsonBackReference
 	private Booking bookingId;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "transport_id",referencedColumnName = "id")
-	private Transport transportId;
 	
 	@Column
 	@NotNull
@@ -44,10 +43,9 @@ public class Enquiry extends Identity{
 		super();
 	}
 
-	public Enquiry(Booking bookingId, Transport transportId, @NotNull Date date, @NotNull String subject, String body,
+	public Enquiry(Booking bookingId, @NotNull Date date, @NotNull String subject, String body,
 			@NotNull boolean isOpen) {
 		this.bookingId = bookingId;
-		this.transportId = transportId;
 		this.date=date;
 		this.subject = subject;
 		this.body = body;
@@ -60,14 +58,6 @@ public class Enquiry extends Identity{
 
 	public void setBookingId(Booking bookingId) {
 		this.bookingId = bookingId;
-	}
-
-	public Transport getTransportId() {
-		return transportId;
-	}
-
-	public void setTransportId(Transport transportId) {
-		this.transportId = transportId;
 	}
 
 	public Date getDate() {
@@ -104,7 +94,7 @@ public class Enquiry extends Identity{
 
 	@Override
 	public String toString() {
-		return "Enquiry [bookingId=" + bookingId + ", transportId=" + transportId + ", date=" + date + ", subject="
+		return "Enquiry [bookingId=" + bookingId +  ", date=" + date + ", subject="
 				+ subject + ", body=" + body + ", isOpen=" + isOpen + ", id=" + id + "]";
 	}
 }

@@ -1,24 +1,19 @@
 package com.elanza48.TMS.service;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.elanza48.TMS.model.dao.UserAccountRepository;
 import com.elanza48.TMS.model.dto.UserAccount;
-import com.elanza48.TMS.model.dto.UserAccount.UserAccountStatus;
-import com.elanza48.TMS.model.dto.UserAccount.UserRole;
 
 @Service
 @Transactional
@@ -40,10 +35,12 @@ public class UserAccountService implements UserDetailsService{
 		return userRepo.save(user);
 	}
 	
+	@Transactional(readOnly = true)
 	public  Optional<UserAccount> findUser(String email) {
 		return userRepo.findByEmailEquals(email);
 	}
 	
+	@Transactional(readOnly = true)
 	public Optional<UserAccount> findUser(UUID id) {
 		return userRepo.findById(id);
 	}
@@ -91,6 +88,7 @@ public class UserAccountService implements UserDetailsService{
 		userRepo.deleteById(findUser(email).get().getId());
 	}
 	
+	@Transactional(readOnly = true)
 	public List<UserAccount> getAllUser() {
 		return userRepo.findAll();
 	}

@@ -81,7 +81,7 @@ public class SecurityController {
       throw new Exception("Incorrect credentials !", e);
     }
     token.put("jwt", jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get()));
-    token.put("validity", "5 min");
+    token.put("validity", "30 min");
 
     return ResponseEntity.ok(token);   
   }

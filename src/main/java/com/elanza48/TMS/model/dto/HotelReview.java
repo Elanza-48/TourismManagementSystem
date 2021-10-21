@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Range;
 
@@ -19,10 +21,12 @@ public class HotelReview extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Hotel hotelId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Booking bookingId;
 	
 	@Column
