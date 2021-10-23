@@ -40,7 +40,7 @@ public class UserController {
 	}	
 	
 	@PostMapping
-	public UserAccount getUserByEmail(@RequestBody UserAccount user) {
+	public UserAccount createUser(@RequestBody UserAccount user) {
 		return userService.createUser(user);
 	}
 	

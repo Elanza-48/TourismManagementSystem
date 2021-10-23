@@ -13,14 +13,14 @@ select main.truncate_tables('elanza48', 'main');
 
 ---- Insert data ----
 insert into main.user_account(id, name, gender,dob, district, state, street, zip, email, mobile_no, password, role, status) values
-    ((select uuid_generate_v4()),'Rajarshi Kundu','MALE', to_date('19920316','YYYYMMDD'), 'Ghatal', 'West Bengal', 'Ward no 22, Konnagar',721214, 'elanza48@outlook.com', 9645520836, 'password_a1', 'ADMIN', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Rishav lahiri','MALE' , to_date('19950910','YYYYMMDD'),  'Kolkata', 'West Bengal', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, 'password_m1', 'MANAGER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Ronit Chakraborty','MALE' , to_date('19971022','YYYYMMDD'), 'Kolkata', 'West Bengal', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, 'password_m2', 'MANAGER', 'INACTIVE'),
-    ((select uuid_generate_v4()),'Sohaib Akram' ,'MALE' , to_date('19870808','YYYYMMDD'), 'North Delhi', 'Delhi', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, 'password_u1', 'USER', 'CLOSED'),
-    ((select uuid_generate_v4()),'Gunjan Amrapalli' ,'MALE' , to_date('19810725','YYYYMMDD'), 'Mangalore', 'Karnataka', 'Mangalore H.O',575001, 'gunjana93@hotmail.com', 7986554746, 'password_u2', 'USER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Avinash Yadav' ,'MALE' , to_date('19791231','YYYYMMDD'), 'Aligarh', 'Uttar Pradesh', 'Aligarh City',202001, 'yadavji82@outlook.com', 9756954756, 'password_u3', 'USER', 'SUSPENDED'),
-    ((select uuid_generate_v4()),'Sheha Patel' ,'FEMALE' , to_date('19900911','YYYYMMDD'), 'Aurangabad', 'Bihar', 'Chandel Niwas, Maharajganj Road',824101, 'mesheha46@yahoo.com', 7563554663, 'password_u4', 'USER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Kamalpreet Kaur' ,'FEMALE', to_date('19960703','YYYYMMDD'), 'Ludhiana', 'Punjab', 'Ferozepur Road',141001, 'kpkaur98@hotmail.com', 8657454743, 'password_u5', 'USER', 'INACTIVE');
+    ((select uuid_generate_v4()),'Rajarshi Kundu','MALE', to_date('19920316','YYYYMMDD'), 'Ghatal', 'West Bengal', 'Ward no 22, Konnagar',721214, 'elanza48@outlook.com', 9645520836, '{noop}password_a1', 'ADMIN', 'ACTIVE'),
+    ((select uuid_generate_v4()),'Rishav lahiri','MALE' , to_date('19950910','YYYYMMDD'),  'Kolkata', 'West Bengal', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, '{noop}password_m1', 'MANAGER', 'ACTIVE'),
+    ((select uuid_generate_v4()),'Ronit Chakraborty','MALE' , to_date('19971022','YYYYMMDD'), 'Kolkata', 'West Bengal', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', 'MANAGER', 'INACTIVE'),
+    ((select uuid_generate_v4()),'Sohaib Akram' ,'MALE' , to_date('19870808','YYYYMMDD'), 'North Delhi', 'Delhi', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, '{noop}password_u1', 'USER', 'CLOSED'),
+    ((select uuid_generate_v4()),'Gunjan Amrapalli' ,'MALE' , to_date('19810725','YYYYMMDD'), 'Mangalore', 'Karnataka', 'Mangalore H.O',575001, 'gunjana93@hotmail.com', 7986554746, '{noop}password_u2', 'USER', 'ACTIVE'),
+    ((select uuid_generate_v4()),'Avinash Yadav' ,'MALE' , to_date('19791231','YYYYMMDD'), 'Aligarh', 'Uttar Pradesh', 'Aligarh City',202001, 'yadavji82@outlook.com', 9756954756, '{noop}password_u3', 'USER', 'SUSPENDED'),
+    ((select uuid_generate_v4()),'Sheha Patel' ,'FEMALE' , to_date('19900911','YYYYMMDD'), 'Aurangabad', 'Bihar', 'Chandel Niwas, Maharajganj Road',824101, 'mesheha46@yahoo.com', 7563554663, '{noop}password_u4', 'USER', 'ACTIVE'),
+    ((select uuid_generate_v4()),'Kamalpreet Kaur' ,'FEMALE', to_date('19960703','YYYYMMDD'), 'Ludhiana', 'Punjab', 'Ferozepur Road',141001, 'kpkaur98@hotmail.com', 8657454743, '{noop}password_u5', 'USER', 'INACTIVE');
 
 insert into main.destination_info(id, name, description, province, max_stay_duration) values
     ((select uuid_generate_v4()), 'Manali', 'Himachal Pradesh', 'Manali', 7),

@@ -25,12 +25,12 @@ public class Ticket extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("bookingTickets")
 	private Booking bookingId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "transport_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("transportTkt")
 	private Transport transportId;
 	
 	public Ticket() {

@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Type;
@@ -40,7 +39,6 @@ public class Package extends IdentityName{
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="dest_id")}
 	)
-	@JsonBackReference
 	private Set<Destination> destinations;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -48,11 +46,10 @@ public class Package extends IdentityName{
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="transport_id")}
 	)
-	@JsonBackReference
 	private Set<Transport> transports;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
-	@JsonManagedReference
+	@JsonManagedReference("packageBooking")
 	private Set<Booking> bookings;
 	
 	public Package() {

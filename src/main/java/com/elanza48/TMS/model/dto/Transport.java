@@ -47,11 +47,10 @@ public class Transport extends IdentityName{
 	private TransportEntity entity= TransportEntity.PRIVATE;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")
-	@JsonManagedReference
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
-	@JsonManagedReference
+	@JsonManagedReference("transportTkt")
 	private Set<Ticket> tickets;
 	
 	public Transport() {

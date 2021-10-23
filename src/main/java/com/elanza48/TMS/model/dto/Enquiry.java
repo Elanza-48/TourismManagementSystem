@@ -20,7 +20,7 @@ public class Enquiry extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id",referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("bookingEnqRvw")
 	private Booking bookingId;
 	
 	@Column

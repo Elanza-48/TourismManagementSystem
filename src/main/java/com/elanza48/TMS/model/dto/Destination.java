@@ -33,15 +33,14 @@ public class Destination extends IdentityName{
 	private short stayDuration=1;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
-	@JsonManagedReference
+	@JsonManagedReference("destHotels")
 	private Set<Hotel> hotels;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "destinations")
-	@JsonManagedReference
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
-	@JsonManagedReference
+	@JsonManagedReference("destRvw")
 	private Set<DestinationReview> reviews;
 	
 	public Destination() {

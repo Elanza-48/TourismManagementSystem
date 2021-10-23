@@ -64,7 +64,7 @@ public class UserAccount extends Contact{
 	private UserAccountStatus status=UserAccountStatus.ACTIVE;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-	@JsonManagedReference
+	@JsonManagedReference(value = "userBooking")
 	Set<Booking> bookings;
 	
 	public UserAccount() {

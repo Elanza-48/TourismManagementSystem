@@ -38,7 +38,7 @@ public class Payment extends Identity{
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("bookingPay")
 	private Booking bookingId;
 	
 	@Column

@@ -1,9 +1,5 @@
 package com.elanza48.TMS.security;
 
-import java.security.SecureRandom;
-
-import javax.annotation.security.PermitAll;
-
 import com.elanza48.TMS.controller.filter.JwtRequestFilter;
 import com.elanza48.TMS.model.dto.UserAccount;
 
@@ -17,8 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -38,17 +33,74 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.csrf().disable()
-			.authorizeRequests()
-			.antMatchers("/user/*/*").hasAnyAuthority(
-					UserAccount.UserRole.USER.toString(),
-					UserAccount.UserRole.MANAGER.toString(),
-					UserAccount.UserRole.ADMIN.toString())
-			.antMatchers("/authenticate").permitAll()
-			.antMatchers(HttpMethod.POST, "/user").permitAll()
-			.antMatchers(HttpMethod.GET, "/user","/user/*").hasAuthority(
-				UserAccount.UserRole.ADMIN.toString())
-			.antMatchers("/").permitAll()
+				.authorizeRequests()
+					.antMatchers("/user/*/*").hasAnyAuthority(
+							UserAccount.UserRole.USER.toString(),
+							UserAccount.UserRole.MANAGER.toString(),
+							UserAccount.UserRole.ADMIN.toString())
+					.antMatchers(HttpMethod.POST, "/user").permitAll()
+					.antMatchers(HttpMethod.GET, "/user","/user/*").hasAuthority(
+						UserAccount.UserRole.ADMIN.toString())
+			.and()
+				.authorizeRequests()
+					.antMatchers(HttpMethod.GET, "/tourPackages").permitAll()
+					.antMatchers(HttpMethod.POST,"/tourPackages").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PUT,"/tourPackages/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PATCH,"/tourPackages/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.DELETE,"/tourPackages/*").hasAnyAuthority(
+						UserAccount.UserRole.ADMIN.toString()
+					)
+			.and()
+				.authorizeRequests()
+					.antMatchers(HttpMethod.GET, "/destination").permitAll()
+					.antMatchers(HttpMethod.POST,"/destination").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PUT,"/destination/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PATCH,"/destination/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.DELETE,"/destination/*").hasAnyAuthority(
+						UserAccount.UserRole.ADMIN.toString()
+					)
+			.and()
+				.authorizeRequests()
+					.antMatchers(HttpMethod.GET, "/hotel").permitAll()
+					.antMatchers(HttpMethod.POST,"/hotel").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PUT,"/hotel/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.PATCH,"/hotel/*").hasAnyAuthority(
+						UserAccount.UserRole.MANAGER.toString(),
+						UserAccount.UserRole.ADMIN.toString()
+					)
+					.antMatchers(HttpMethod.DELETE,"/hotel/*").hasAnyAuthority(
+						UserAccount.UserRole.ADMIN.toString()
+					)
+			.and()
+				.authorizeRequests()
+					.antMatchers("/authenticate").permitAll()
+					.antMatchers("/").permitAll()
 			.and().sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
@@ -62,13 +114,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder(){
-		return NoOpPasswordEncoder.getInstance();
-	}
-
-	public BCryptPasswordEncoder bcPasswordEncoder(String plainText){
-		BCryptPasswordEncoder encoder= new  BCryptPasswordEncoder(10,new SecureRandom());
-		return encoder;
+	public PasswordEncoder delegatePasswordEncoder(){
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 }

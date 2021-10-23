@@ -39,11 +39,11 @@ public class Hotel extends Contact{
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dest_id",referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("destHotels")
 	private Destination destinationId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
-	@JsonManagedReference
+	@JsonManagedReference("hotelsRvw")
 	private Set<HotelReview> reviews;
 	
 	public Hotel(){

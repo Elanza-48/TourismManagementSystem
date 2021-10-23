@@ -21,12 +21,12 @@ public class DestinationReview extends Identity{
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dest_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("destRvw")
 	private Destination destinationId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference("bookingDestRvw")
 	private Booking bookingId;
 	
 	@Column
