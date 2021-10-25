@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.elanza48.TMS.model.dao.PackageRepository;
-import com.elanza48.TMS.model.dto.Package;
+import com.elanza48.TMS.model.entity.Package;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

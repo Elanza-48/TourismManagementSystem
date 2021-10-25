@@ -15,7 +15,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.elanza48.TMS.model.dto.UserAccount;
+import com.elanza48.TMS.model.entity.UserAccount;
 
 import org.springframework.stereotype.Service;
 

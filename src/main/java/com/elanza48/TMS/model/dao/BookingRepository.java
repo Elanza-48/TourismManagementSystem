@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.elanza48.TMS.model.dto.Booking;
+import com.elanza48.TMS.model.entity.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, UUID> {

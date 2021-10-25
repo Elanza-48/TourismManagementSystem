@@ -1,7 +1,7 @@
 package com.elanza48.TMS.security;
 
 import com.elanza48.TMS.controller.filter.JwtRequestFilter;
-import com.elanza48.TMS.model.dto.UserAccount;
+import com.elanza48.TMS.model.entity.UserAccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

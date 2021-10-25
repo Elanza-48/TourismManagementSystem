@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elanza48.TMS.model.dto.UserAccount;
+import com.elanza48.TMS.model.entity.UserAccount;
 import com.elanza48.TMS.service.UserAccountService;
 
 @RestController

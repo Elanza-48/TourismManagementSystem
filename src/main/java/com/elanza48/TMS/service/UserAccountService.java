@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elanza48.TMS.model.dao.UserAccountRepository;
-import com.elanza48.TMS.model.dto.UserAccount;
+import com.elanza48.TMS.model.entity.UserAccount;
 
 @Service
 @Transactional

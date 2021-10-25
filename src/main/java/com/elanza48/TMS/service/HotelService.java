@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.elanza48.TMS.model.dao.HotelRepository;
-import com.elanza48.TMS.model.dto.Hotel;
+import com.elanza48.TMS.model.entity.Hotel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

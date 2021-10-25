@@ -3,7 +3,7 @@ package com.elanza48.TMS.controller.mapping;
 import java.util.List;
 import java.util.UUID;
 
-import com.elanza48.TMS.model.dto.Destination;
+import com.elanza48.TMS.model.entity.Destination;
 import com.elanza48.TMS.service.DestinationService;
 
 import org.springframework.beans.factory.annotation.Autowired;

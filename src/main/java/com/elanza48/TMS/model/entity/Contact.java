@@ -1,4 +1,4 @@
-package com.elanza48.TMS.model.dto;
+package com.elanza48.TMS.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

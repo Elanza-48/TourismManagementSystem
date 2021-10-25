@@ -3,7 +3,7 @@ package com.elanza48.TMS.service;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.elanza48.TMS.model.dto.UserAccount;
+import com.elanza48.TMS.model.entity.UserAccount;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
