@@ -1,6 +1,12 @@
 # A Spring boot Application
 
-*under development*
+
+This is a project that replicates tourism management system.
+This is a server side REST api provider.
+
+This project uses ```Java Lombok``` for boilerplate generator.
+
+Use appropriate ```Lombok Plugin``` for IDE used accordingly.
 
 Generate ECDSA P-521 key value pairs under `resources` directory:
 ```

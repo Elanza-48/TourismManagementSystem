@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.UserAccount;
+import com.elanza48.TMS.model.mapper.UserAccountMapper;
 import com.elanza48.TMS.service.UserAccountService;
 
 @RestController
@@ -27,6 +29,9 @@ public class UserController {
 	
 	@Autowired
 	UserAccountService userService;
+
+	@Autowired
+	UserAccountMapper userAccountMapper;
 
 	private void checkUser(String email){
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
@@ -45,9 +50,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/email/{email}")
-	public UserAccount getUserByEmail(@PathVariable String email) {
+	public UserAccountDTO getUserByEmail(@PathVariable String email) {
 		checkUser(email);
-		return userService.findUser(email).get();
+		return  userAccountMapper.userAccountModelToDto( userService.findUser(email).get());
 	}
 
 	@GetMapping("/email/{email}/address")
@@ -75,10 +80,8 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public List<UserAccount> getAllUser() {
-		return userService.getAllUser();
+	public List<UserAccountDTO> getAllUser() {
+		return userAccountMapper.userAccountModelToDtos(userService.getAllUser());
 	}
-	
-
 
 }
