@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DestinationService {
 
   @Autowired
-  DestinationRepository destinationRepository;
+  private DestinationRepository destinationRepository;
 
   @Transactional(readOnly = true)
   public List<Destination> getAllDestinations(){

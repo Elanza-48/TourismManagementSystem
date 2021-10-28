@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 
 @Entity
 @Table(name = "transport_info")
@@ -21,16 +19,16 @@ public class Transport extends IdentityName{
 	
 	public enum TransportMode{
 		BUS,
-	    CAR,
-	    CRUISE,
-	    STEAMER,
-	    FLIGHT,
-	    RAILWAY
+	  CAR,
+	  CRUISE,
+	  STEAMER,
+	  FLIGHT,
+	  RAILWAY
 	}
 	
 	public enum TransportEntity{
-	    PRIVATE,
-	    PUBLIC
+	  PRIVATE,
+	  PUBLIC
 	}
 	
 	@Column
@@ -50,7 +48,6 @@ public class Transport extends IdentityName{
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
-	@JsonManagedReference("transportTkt")
 	private Set<Ticket> tickets;
 	
 	public Transport() {

@@ -34,8 +34,13 @@ public class SecurityController {
   @Autowired
   private JWTUtils jwtTokenUtils;
 
+  /**
+   * Initial Welcome Message.
+   * @return
+   */
+
   @GetMapping(produces = {"application/hal+json"})
-  public ResponseEntity<?> getMethodName() {
+  public ResponseEntity<Map<String,String>> getMethodName() {
 
     Map<String, String> map = new HashMap<>();
     map.put("message:", "Welcome to the Tour Company !");
@@ -49,7 +54,7 @@ public class SecurityController {
    * @return {@link ResponseEntity}
    */
   @GetMapping(value="/authenticate")
-  public ResponseEntity<?> authBodyFormat(){
+  public ResponseEntity<Map<String,String>> authBodyFormat(){
     Map<String, String> map = new HashMap<>();
     map.put("email", null);
     map.put("password", null);
@@ -59,14 +64,14 @@ public class SecurityController {
   /**
    * Gets authentication credentials from the user
    * authentcates user and returns JWT
-   * valid for 5 minutes.
+   * valid for 12 hours.
    * 
    * @param request
    * @return {@link ResponseEntity}
    * @throws Exception
    */
   @PostMapping(value="/authenticate")
-  public ResponseEntity<?> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
+  public ResponseEntity<Map<String,String>> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
     String emailPattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
     Map<String, String> token = new HashMap<>();
 
@@ -81,8 +86,8 @@ public class SecurityController {
       throw new Exception("Incorrect credentials !", e);
     }
     token.put("jwt", jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get()));
-    token.put("validity", "30 min");
+    token.put("validity", "12 hours");
 
-    return ResponseEntity.ok(token);   
+    return ResponseEntity.accepted().body(token);   
   }
 }

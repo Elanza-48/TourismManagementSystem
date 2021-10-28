@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -49,7 +47,6 @@ public class Package extends IdentityName{
 	private Set<Transport> transports;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
-	@JsonManagedReference("packageBooking")
 	private Set<Booking> bookings;
 	
 	public Package() {

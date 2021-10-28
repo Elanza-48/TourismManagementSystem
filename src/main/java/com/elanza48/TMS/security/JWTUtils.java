@@ -83,9 +83,9 @@ public class JWTUtils {
     Date issuedAt = verifyJWToken(token).get("iat").asDate();
     String email = verifyJWToken(token).get("email").asString();
     String role = verifyJWToken(token).get("role").asString();
-    int duration = (int) TimeUnit.MILLISECONDS.toMinutes(new Date().getTime()-issuedAt.getTime())%60;
+    int duration = (int) TimeUnit.MILLISECONDS.toHours(new Date().getTime()-issuedAt.getTime())%60;
 
-    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=30) return true;
+    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=12) return true;
     else return false; 
   }
 

@@ -13,11 +13,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 @Entity
 @Table(name = "user_Account")
 public class UserAccount extends Contact{
@@ -64,7 +59,6 @@ public class UserAccount extends Contact{
 	private UserAccountStatus status=UserAccountStatus.ACTIVE;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-	@JsonManagedReference(value = "userBooking")
 	Set<Booking> bookings;
 	
 	public UserAccount() {
@@ -80,8 +74,6 @@ public class UserAccount extends Contact{
 		this.dob=dob;
 	}
 
-	@JsonIgnore
-	@JsonProperty(access = Access.READ_WRITE)
 	public String getPassword() {
 		return password;
 	}

@@ -1,14 +1,12 @@
 package com.elanza48.TMS.controller.mapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elanza48.TMS.model.dto.AddressDTO;
+import com.elanza48.TMS.model.dto.BookingDTO;
 import com.elanza48.TMS.model.dto.UserAccountDTO;
+import com.elanza48.TMS.model.entity.Booking;
 import com.elanza48.TMS.model.entity.UserAccount;
+import com.elanza48.TMS.model.mapper.BookingMapper;
 import com.elanza48.TMS.model.mapper.UserAccountMapper;
 import com.elanza48.TMS.service.UserAccountService;
 
@@ -28,60 +30,59 @@ import com.elanza48.TMS.service.UserAccountService;
 public class UserController {
 	
 	@Autowired
-	UserAccountService userService;
+	private UserAccountService userService;
 
 	@Autowired
-	UserAccountMapper userAccountMapper;
+	private UserAccountMapper userAccountMapper;
 
-	private void checkUser(String email){
-		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-		
-		for (GrantedAuthority a : auth.getAuthorities()){
-			if(a.toString().equals("ADMIN")) return;
-		}
-		if(!auth.getPrincipal().toString().equals(email)){
-			throw new AccessDeniedException("explicit user access attempt !");
-		}
-	}	
+	@Autowired
+	private BookingMapper bookingMapper;
 	
 	@PostMapping
-	public UserAccount createUser(@RequestBody UserAccount user) {
-		return userService.createUser(user);
+	public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccount user) {
+		return ResponseEntity.accepted().body(userAccountMapper.userAccountModelToDto(
+			userService.createUser(user)
+		));
 	}
 	
 	@GetMapping("/email/{email}")
+	@PreAuthorize("#email == authentication.name")
 	public UserAccountDTO getUserByEmail(@PathVariable String email) {
-		checkUser(email);
 		return  userAccountMapper.userAccountModelToDto( userService.findUser(email).get());
 	}
 
 	@GetMapping("/email/{email}/address")
-	public ResponseEntity<?> getUserAddress(@PathVariable String email) {
-		checkUser(email);
-		return ResponseEntity.ok(userService.findUser(email).get().getAddress());
+	@PreAuthorize("#email == authentication.name")
+	public ResponseEntity<AddressDTO> getUserAddress(@PathVariable String email) {
+		return ResponseEntity.ok(userAccountMapper.userAccountModelToDto(
+			userService.findUser(email).get()).getAddress());
 	}
 
-	@GetMapping("/email/{email}/bookings")
-	public ResponseEntity<?> getUserBooking(@PathVariable String email) {
-		checkUser(email);
-		return ResponseEntity.ok(userService.findUser(email).get().getBookings());
+	@GetMapping("/email/{email}/booking")
+	@PreAuthorize("#email == authentication.name")
+	public ResponseEntity<List<BookingDTO>> getUserBooking(@PathVariable String email) {
+		return ResponseEntity.ok(bookingMapper.bookingModelToDtoList(
+			new ArrayList<Booking>(userService.findUser(email).get().getBookings())
+		));
 	}
 
 	@PatchMapping("/email/{email}")
-	public ResponseEntity<?> updateUserbyId(@PathVariable String email, @RequestBody Map<String , Object> body){
-		checkUser(email);
-		return ResponseEntity.ok(userService.updateUserByEmail(email, body));
+	@PreAuthorize("#email == authentication.name")
+	public ResponseEntity<UserAccountDTO> updateUserbyId(@PathVariable String email, @RequestBody Map<String , Object> body){
+		return ResponseEntity.accepted().body(userAccountMapper.userAccountModelToDto(userService.updateUserByEmail(email, body)));
 	}
 
 	@DeleteMapping("/email/{email}")
-	public void deleteUserByEmail(@PathVariable String email){
-		checkUser(email);
+	@PreAuthorize("#email == authentication.name")
+	public ResponseEntity<?> deleteUserByEmail(@PathVariable String email){
 		userService.deleteUser(email);
+		return ResponseEntity.accepted().body("{\"message\": \"User Deleted.\"}");
 	}
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<UserAccountDTO> getAllUser() {
-		return userAccountMapper.userAccountModelToDtos(userService.getAllUser());
+		return userAccountMapper.userAccountModelToDtoList(userService.getAllUser());
 	}
 
 }

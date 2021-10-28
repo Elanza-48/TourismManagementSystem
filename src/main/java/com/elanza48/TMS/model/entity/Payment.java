@@ -12,8 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import org.hibernate.annotations.Check;
 
 
@@ -23,22 +21,21 @@ import org.hibernate.annotations.Check;
 public class Payment extends Identity{
 	
 	public enum PaymentMode{
-	    CARD,
-	    UPI,
-	    INTERNET_BANKING,
-	    WALLET,
-	    CRYPTOCURRENCY
+		CARD,
+		UPI,
+		INTERNET_BANKING,
+		WALLET,
+		CRYPTOCURRENCY
 	}
 	
 	public enum PaymentStatus{
-	    SUCCESS,
-	    PENDING,
-	    FAILED
+		SUCCESS,
+		PENDING,
+		FAILED
 	}
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
-	@JsonBackReference("bookingPay")
 	private Booking bookingId;
 	
 	@Column

@@ -10,8 +10,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Range;
 
@@ -33,14 +31,12 @@ public class Destination extends IdentityName{
 	private short stayDuration=1;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
-	@JsonManagedReference("destHotels")
 	private Set<Hotel> hotels;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "destinations")
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
-	@JsonManagedReference("destRvw")
 	private Set<DestinationReview> reviews;
 	
 	public Destination() {

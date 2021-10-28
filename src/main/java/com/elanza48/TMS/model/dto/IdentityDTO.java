@@ -2,7 +2,11 @@ package com.elanza48.TMS.model.dto;
 
 import java.util.UUID;
 
+import javax.persistence.Id;
+
 abstract class IdentityDTO {
+
+	@Id
 	protected UUID id;
 	
 	public IdentityDTO() {}

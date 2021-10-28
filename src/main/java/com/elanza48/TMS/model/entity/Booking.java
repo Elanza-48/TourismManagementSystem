@@ -15,9 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.validator.constraints.Range;
 
 
@@ -26,15 +23,15 @@ import org.hibernate.validator.constraints.Range;
 public class Booking  extends Identity{
 	
 	public enum RoomType{
-	    STANDARD,
-	    SUPERIOR,
-	    DELUXE
+		STANDARD,
+		SUPERIOR,
+		DELUXE
 	}
 	
 	public enum BookingStatus{
-	    ACTIVE,
-	    CANCELLED,
-	    COMPLETE
+		ACTIVE,
+		CANCELLED,
+		COMPLETE
 	}
 	
 	@Column
@@ -43,7 +40,6 @@ public class Booking  extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="pkg_id", referencedColumnName = "id")
-	@JsonBackReference(value = "packageBooking")
 	private Package packageId;
 	
 	@Column(name = "T_DATE")
@@ -52,7 +48,6 @@ public class Booking  extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "usr_id", referencedColumnName = "id")
-	@JsonBackReference(value = "userBooking")
 	private UserAccount userId;
 	
 	@Column(name = "PASSENGER_COUNT", length = 2)
@@ -75,22 +70,18 @@ public class Booking  extends Identity{
 	private BookingStatus status = BookingStatus.ACTIVE;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@JsonManagedReference("bookingTickets")
 	private Set<Ticket> tickets;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@JsonManagedReference("bookingDestRvw")
 	private Set<DestinationReview> destinationReviews;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@JsonManagedReference("bookingHtlRvw")
 	private Set<HotelReview> hotelReviews;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "bookingId")
 	private Payment paymentInfo;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@JsonManagedReference("bookingEnqRvw")
 	private Set<Enquiry> enquiries;
 	
 	public Booking() {

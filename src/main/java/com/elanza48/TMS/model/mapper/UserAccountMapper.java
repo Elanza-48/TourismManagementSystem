@@ -9,9 +9,8 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface UserAccountMapper {
+
   UserAccountDTO userAccountModelToDto(UserAccount userAccount);
-
-  List<UserAccountDTO> userAccountModelToDtos(List<UserAccount> users);
-
+  List<UserAccountDTO> userAccountModelToDtoList(List<UserAccount> users);
   UserAccount UserAccountDtoToModel(UserAccountDTO userAccountDTO);
 }

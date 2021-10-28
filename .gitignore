@@ -32,8 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
-### Environment file
+### Environment file ###
 *.env
 
-### volumes
+### Docker volumes ###
 postgres-data
+
+### LOGS ###
+logs

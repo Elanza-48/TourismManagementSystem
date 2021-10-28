@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import org.hibernate.annotations.Type;
 
 
@@ -20,7 +18,6 @@ public class Enquiry extends Identity{
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id",referencedColumnName = "id")
-	@JsonBackReference("bookingEnqRvw")
 	private Booking bookingId;
 	
 	@Column

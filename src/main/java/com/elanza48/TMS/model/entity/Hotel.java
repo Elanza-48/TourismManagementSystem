@@ -14,17 +14,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "hotel_Info")
 public class Hotel extends Contact{
 	
 	public enum HotelType{
 		STANDARD,
-	    PRIME,
-	    ROYAL
+	  PRIME,
+	  ROYAL
 	}
 	
 	@Column
@@ -39,11 +36,9 @@ public class Hotel extends Contact{
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dest_id",referencedColumnName = "id")
-	@JsonBackReference("destHotels")
 	private Destination destinationId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
-	@JsonManagedReference("hotelsRvw")
 	private Set<HotelReview> reviews;
 	
 	public Hotel(){
