@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,23 +27,21 @@ public class Transport extends IdentityName{
 	  RAILWAY
 	}
 	
-	public enum TransportEntity{
-	  PRIVATE,
-	  PUBLIC
-	}
-	
 	@Column
 	private String description;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
 	
 	@Column
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TransportMode mode = TransportMode.CAR;
 	
-	@Column
+	@Column(name="public")
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	private TransportEntity entity= TransportEntity.PRIVATE;
+	private boolean isPublic= false;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")
 	private Set<Package> packages;
@@ -50,15 +49,13 @@ public class Transport extends IdentityName{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
 	private Set<Ticket> tickets;
 	
-	public Transport() {
-		super();
-	}
-
-	public Transport(@NotNull String name, String description, @NotNull TransportMode mode, @NotNull TransportEntity entity) {
+	public Transport() {}
+	public Transport(@NotNull String name, String description, @NotNull TransportMode mode,
+	 @NotNull boolean isPublic) {
 		super(name);
 		this.description = description;
 		this.mode = mode;
-		this.entity = entity;
+		this.isPublic = isPublic;
 	}
 
 	public String getDescription() {
@@ -77,13 +74,6 @@ public class Transport extends IdentityName{
 		this.mode = mode;
 	}
 
-	public TransportEntity getEntity() {
-		return entity;
-	}
-
-	public void setEntity(TransportEntity entity) {
-		this.entity = entity;
-	}
 
 	public Set<Package> getPackages() {
 		return packages;
@@ -93,12 +83,24 @@ public class Transport extends IdentityName{
 		this.packages = packages;
 	}
 
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
 	public Set<Ticket> getTickets() {
 		return tickets;
 	}
 
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override
@@ -113,7 +115,7 @@ public class Transport extends IdentityName{
 
 	@Override
 	public String toString() {
-		return "Transport [description=" + description + ", mode=" + mode + ", entity=" + entity + ", packages="
+		return "Transport [description=" + description + ", mode=" + mode + ", public=" + isPublic + ", packages="
 				+ packages + ", tickets=" + tickets + ", name=" + name + ", id=" + id
 				+ "]";
 	}

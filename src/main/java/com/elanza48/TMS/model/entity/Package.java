@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,7 +31,11 @@ public class Package extends IdentityName{
 	
 	@Column
 	@NotNull
-	private boolean isActive=true;
+	private boolean active=true;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "package_destination_map",
@@ -49,11 +54,9 @@ public class Package extends IdentityName{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
 	private Set<Booking> bookings;
 	
-	public Package() {
-		super();
-	}
-
-	public Package(@NotNull String name, String description, String activities, String events) {
+	public Package() {}
+	public Package(@NotNull String name, String description, String activities, 
+		String events) {
 		super(name);
 		this.description = description;
 		this.activities = activities;
@@ -85,11 +88,11 @@ public class Package extends IdentityName{
 	}
 
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public Set<Destination> getDestinations() {
@@ -116,6 +119,10 @@ public class Package extends IdentityName{
 		this.bookings = bookings;
 	}
 
+	public MetaData getMetaData() {
+		return metaData;
+	}
+
 	@Override
 	public String getName() {
 		return super.getName();
@@ -129,7 +136,7 @@ public class Package extends IdentityName{
 	@Override
 	public String toString() {
 		return "Package [description=" + description + ", activities=" + activities + ", events=" + events
-				+ ", isActive=" + isActive + ", destinations=" + destinations + ", transports=" + transports
+				+ ", isActive=" + active + ", destinations=" + destinations + ", transports=" + transports
 				+ ", bookings=" + bookings + ", name=" + name + ", id=" + id + "]";
 	}
 

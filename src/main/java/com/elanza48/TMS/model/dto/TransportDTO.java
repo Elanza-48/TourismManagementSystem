@@ -1,22 +1,20 @@
 package com.elanza48.TMS.model.dto;
 
-import com.elanza48.TMS.model.entity.Transport.TransportEntity;
 import com.elanza48.TMS.model.entity.Transport.TransportMode;
 
 public class TransportDTO extends IdentityNameDTO{
 	
 	private String description;
 	private TransportMode mode = TransportMode.CAR;
-	private TransportEntity entity= TransportEntity.PRIVATE;
+	private boolean isPublic;
 	
 	
 	public TransportDTO() {}
-
-	public TransportDTO(String name, String description, TransportMode mode, TransportEntity entity) {
+	public TransportDTO(String name, String description, TransportMode mode, boolean isPublic) {
 		super(name);
 		this.description = description;
 		this.mode = mode;
-		this.entity = entity;
+		this.isPublic = isPublic;
 	}
 
 	public String getDescription() {
@@ -35,13 +33,14 @@ public class TransportDTO extends IdentityNameDTO{
 		this.mode = mode;
 	}
 
-	public TransportEntity getEntity() {
-		return entity;
+	public boolean isPublic() {
+		return isPublic;
 	}
 
-	public void setEntity(TransportEntity entity) {
-		this.entity = entity;
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
+
 	@Override
 	public String getName() {
 		return super.getName();
@@ -54,7 +53,7 @@ public class TransportDTO extends IdentityNameDTO{
 
 	@Override
 	public String toString() {
-		return "Transport [description=" + description + ", mode=" + mode + ", entity=" + entity + 
+		return "Transport [description=" + description + ", mode=" + mode + ", public=" + isPublic + 
 		", name=" + name + ", id=" + id + "]";
 	}
 	

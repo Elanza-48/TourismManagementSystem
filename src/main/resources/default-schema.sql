@@ -1,268 +1,299 @@
 create schema if not exists main;
 
-create table if not exists destination_info
+create table if not exists main.destination_info
 (
 	id uuid not null
 		constraint destination_info_pkey
 			primary key,
-	name varchar(255) not null,
+	name varchar(255),
 	description text,
-	province varchar(255) not null,
-	max_stay_duration smallint not null
-		constraint destination_info_max_stay_duration_check
-			check ((max_stay_duration <= 10) AND (max_stay_duration >= 1))
+	created_at timestamp,
+	last_update timestamp,
+	province varchar(255),
+	max_stay_duration smallint
 );
 
-alter table destination_info owner to elanza48;
+alter table main.destination_info owner to elanza48;
 
-create table if not exists hotel_info
+create table if not exists main.hotel_info
 (
 	id uuid not null
 		constraint hotel_info_pkey
 			primary key,
-	name varchar(255) not null,
+	name varchar(255),
 	district varchar(255),
 	state varchar(255),
 	street varchar(255),
 	zip integer,
-	email varchar(255) not null
-		constraint uk_l8bt72o5k90md3trnaiht3buj
+	email varchar(255)
+		constraint uk_7buf3hcywohvmsjxk01sfy0cy
 			unique,
-	mobile_no bigint not null
-		constraint uk_d6f91gbew38eo1ip5unmnawwf
+	mobile_no bigint
+		constraint uk_63r0g6xsvc10yf3sk1db0h94e
 			unique,
-	base_price integer not null,
-	type varchar(255) not null,
+	base_price integer,
+	created_at timestamp,
+	last_update timestamp,
+	type varchar(255),
 	dest_id uuid
-		constraint fk5fqf7uq2lmmjpdgmohy0uh0w1
-			references destination_info
+		constraint fk3nyry6is77yukwn8qrwindt11
+			references main.destination_info
 );
 
-alter table hotel_info owner to elanza48;
+alter table main.hotel_info owner to elanza48;
 
-create table if not exists tour_package
+create table if not exists main.tour_package
 (
 	id uuid not null
 		constraint tour_package_pkey
 			primary key,
-	name varchar(255) not null,
+	name varchar(255),
+	active boolean,
 	activities varchar(255),
 	description text,
 	events varchar(255),
-	is_active boolean not null
+	created_at timestamp,
+	last_update timestamp
 );
 
-alter table tour_package owner to elanza48;
+alter table main.tour_package owner to elanza48;
 
-create table if not exists package_destination_map
+create table if not exists main.package_destination_map
 (
 	pkg_id uuid not null
-		constraint fkrdl0n6lfhnsj9sl5grpohnkyd
-			references tour_package,
+		constraint fkaibog18vwpo2ted1uty503ud7
+			references main.tour_package,
 	dest_id uuid not null
-		constraint fk1t2ow0a5oad8gebxkj33xg5gw
-			references destination_info,
+		constraint fkdltog2upcsu47rs0tce0yyoin
+			references main.destination_info,
 	constraint package_destination_map_pkey
 		primary key (pkg_id, dest_id)
 );
 
-alter table package_destination_map owner to elanza48;
+alter table main.package_destination_map owner to elanza48;
 
-create table if not exists transport_info
+create table if not exists main.transport_info
 (
 	id uuid not null
 		constraint transport_info_pkey
 			primary key,
-	name varchar(255) not null,
+	name varchar(255),
 	description varchar(255),
-	entity varchar(255) not null,
-	mode varchar(255) not null
+	public boolean,
+	created_at timestamp,
+	last_update timestamp,
+	mode varchar(255)
 );
 
-alter table transport_info owner to elanza48;
+alter table main.transport_info owner to elanza48;
 
-create table if not exists package_transport_map
+create table if not exists main.package_transport_map
 (
 	pkg_id uuid not null
-		constraint fk9memke7qoliougsasdho1tkwe
-			references tour_package,
+		constraint fktqlxcbxru5ktdhmctno46t89n
+			references main.tour_package,
 	transport_id uuid not null
 		constraint fkf7hrew16is0icrmni1q6vf2p2
-			references transport_info,
+			references main.transport_info,
 	constraint package_transport_map_pkey
 		primary key (pkg_id, transport_id)
 );
 
-alter table package_transport_map owner to elanza48;
+alter table main.package_transport_map owner to elanza48;
 
-create table if not exists user_account
+create table if not exists main.user_privilege
+(
+	id uuid not null
+		constraint user_privilege_pkey
+			primary key,
+	title varchar(255)
+		constraint uk_fb300n26btrtq4vfx0323rme4
+			unique,
+	description varchar(255),
+	created_at timestamp,
+	last_update timestamp
+);
+
+alter table main.user_privilege owner to elanza48;
+
+create table if not exists main.user_role
+(
+	id uuid not null
+		constraint user_role_pkey
+			primary key,
+	title varchar(255)
+		constraint uk_6x3pwox6vp81xlhxja06q1780
+			unique,
+	description varchar(255),
+	created_at timestamp,
+	last_update timestamp
+);
+
+alter table main.user_role owner to elanza48;
+
+create table if not exists main.user_account
 (
 	id uuid not null
 		constraint user_account_pkey
 			primary key,
-	name varchar(255) not null,
+	name varchar(255),
 	district varchar(255),
 	state varchar(255),
 	street varchar(255),
 	zip integer,
-	email varchar(255) not null
-		constraint uk_hl02wv5hym99ys465woijmfib
+	email varchar(255)
+		constraint uk_lvq41xhn5q9yj3lxo2ayu86cd
 			unique,
-	mobile_no bigint not null
-		constraint uk_nfugw5dmwb1j6muyt5qdbr896
+	mobile_no bigint
+		constraint uk_cvvqrox5ha7mwk75ubajya35y
 			unique,
-	dob date not null,
-	gender varchar(255) not null,
-	password varchar(255) not null,
-	role varchar(255) not null,
-	status varchar(255) not null
+	active boolean,
+	dob date,
+	gender varchar(255),
+	created_at timestamp,
+	last_update timestamp,
+	password varchar(255),
+	suspended boolean,
+	role_id uuid
+		constraint fk9emra1hnnkfjyk23gytulbhta
+			references main.user_role
 );
 
-alter table user_account owner to elanza48;
+alter table main.user_account owner to elanza48;
 
-create table if not exists booking_info
+create table if not exists main.booking_info
 (
 	id uuid not null
 		constraint booking_info_pkey
 			primary key,
-	date date not null,
-	passenger_count smallint not null
-		constraint booking_info_passenger_count_check
-			check ((passenger_count <= 12) AND (passenger_count >= 1)),
-	price integer not null,
-	r_type varchar(255) not null,
-	status varchar(255) not null,
-	t_date date not null,
+	date date,
+	created_at timestamp,
+	last_update timestamp,
+	passenger_count smallint,
+	price integer,
+	r_type varchar(255),
+	status varchar(255),
+	t_date date,
 	pkg_id uuid
-		constraint fkelbdjqisvxs739mlsod911w1a
-			references tour_package,
+		constraint fkgmg08oj8wiq9vpm1xxqy8vtjs
+			references main.tour_package,
 	usr_id uuid
-		constraint fk6d1chw6nwjy2f3uu3sedmi4yr
-			references user_account
+		constraint fkpsmvyud2kyu7t2pgvkaofupvl
+			references main.user_account
 );
 
-alter table booking_info owner to elanza48;
+alter table main.booking_info owner to elanza48;
 
-create table if not exists booking_transport_ticket
+create table if not exists main.booking_transport_ticket
 (
 	id uuid not null
 		constraint booking_transport_ticket_pkey
 			primary key,
-	date date not null,
+	date date,
+	created_at timestamp,
+	last_update timestamp,
 	seat_no varchar(255),
 	booking_id uuid
-		constraint fken34kwktauff7v7cmdigh4g6e
-			references booking_info,
+		constraint fkjcs8x40unllndq12178woqcxs
+			references main.booking_info,
 	transport_id uuid
 		constraint fke1v4en00je65862tg95hweahr
-			references transport_info
+			references main.transport_info
 );
 
-alter table booking_transport_ticket owner to elanza48;
+alter table main.booking_transport_ticket owner to elanza48;
 
-create table if not exists destination_review
+create table if not exists main.destination_review
 (
 	id uuid not null
 		constraint destination_review_pkey
 			primary key,
-	date date not null,
-	rating smallint
-		constraint destination_review_rating_check
-			check ((rating <= 10) AND (rating >= 1)),
+	date date,
+	created_at timestamp,
+	last_update timestamp,
+	rating smallint,
 	review text,
 	booking_id uuid
-		constraint fkqj9cu61twr3eqp94x8svsfmev
-			references booking_info,
+		constraint fkbmwlp8qp6s23b6voygsrnfrc5
+			references main.booking_info,
 	dest_id uuid
-		constraint fk5rifvqfr6bru4qxy9e4wfjg3i
-			references destination_info
+		constraint fks3p2n1ypo374ytq8xj6gbhobh
+			references main.destination_info
 );
 
-alter table destination_review owner to elanza48;
+alter table main.destination_review owner to elanza48;
 
-create table if not exists enquiry
+create table if not exists main.enquiry
 (
 	id uuid not null
 		constraint enquiry_pkey
 			primary key,
 	body text,
-	date date not null,
-	enq_open boolean not null,
-	subject varchar(255) not null,
+	date date,
+	created_at timestamp,
+	last_update timestamp,
+	enq_open boolean,
+	subject varchar(255),
 	booking_id uuid
-		constraint fk7tu0qxpmby0vug7thd1w7s7mm
-			references booking_info
+		constraint fkb7et3hi2hqf55kqh6k5dq5hxe
+			references main.booking_info
 );
 
-alter table enquiry owner to elanza48;
+alter table main.enquiry owner to elanza48;
 
-create table if not exists hotel_review
+create table if not exists main.hotel_review
 (
 	id uuid not null
 		constraint hotel_review_pkey
 			primary key,
-	date date not null,
-	rating smallint
-		constraint hotel_review_rating_check
-			check ((rating <= 10) AND (rating >= 1)),
+	date date,
+	created_at timestamp,
+	last_update timestamp,
+	rating smallint,
 	review text,
 	booking_id uuid
-		constraint fk9mu47qnkfke40xct5ovdg53oh
-			references booking_info,
+		constraint fkiok3vw0psyijrqd4yf77nt0cp
+			references main.booking_info,
 	hotel_id uuid
-		constraint fke0v23wothi7yrt4attt34nfn2
-			references hotel_info
+		constraint fk934dgkqikwhn1anev1406e26b
+			references main.hotel_info
 );
 
-alter table hotel_review owner to elanza48;
+alter table main.hotel_review owner to elanza48;
 
-create table if not exists payment_info
+create table if not exists main.payment_info
 (
 	id uuid not null
 		constraint payment_info_pkey
 			primary key,
-	date date not null,
+	date date,
 	discount smallint,
-	gst integer not null,
-	mode varchar(255) not null,
-	net_charge integer not null,
-	status varchar(255) not null,
-	txn_id varchar(255) not null,
+	gst integer,
+	created_at timestamp,
+	last_update timestamp,
+	mode varchar(255),
+	net_charge integer,
+	status varchar(255),
+	txn_id varchar(255),
 	booking_id uuid
-		constraint fk71aagn5gsa0onk975hm748abj
-			references booking_info,
+		constraint fkcq05b82ft1huyiwymeniiqnet
+			references main.booking_info,
 	constraint payment_info_check
 		check (gst < net_charge)
 );
 
-alter table payment_info owner to elanza48;
+alter table main.payment_info owner to elanza48;
 
-create or replace function truncate_tables(username character varying) returns void
-	language plpgsql
-as $$
-declare
-        statements cursor for
-            select tablename from pg_tables where tableowner= username and schemaname='main';
-    begin
-        for stmt in statements loop
-            execute 'truncate table' || quote_ident(stmt.tablename) || 'cascade';
-        end loop;
-    end;
-$$;
+create table if not exists main.user_role_privilege_map
+(
+	role_id uuid not null
+		constraint fkrwsdwuasxltfhpys5wri4n3r8
+			references main.user_role,
+	privilege_id uuid not null
+		constraint fkfyeiwvgai4axa8yy4aae2if60
+			references main.user_privilege,
+	constraint user_role_privilege_map_pkey
+		primary key (role_id, privilege_id)
+);
 
-alter function truncate_tables(varchar) owner to elanza48;
-
-create or replace function truncate_tables(usr_name character varying, schema_name character varying) returns void
-	language plpgsql
-as $$
-declare
-    statements cursor for
-        select tablename from pg_tables where schemaname= schema_name and tableowner=usr_name;
-begin
-    for stmt in statements loop
-        execute 'truncate table ' || schema_name || '.' || quote_ident(stmt.tablename) || ' cascade';
-    end loop;
-end;
-$$;
-
-alter function truncate_tables(varchar, varchar) owner to elanza48;
+alter table main.user_role_privilege_map owner to elanza48;

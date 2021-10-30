@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -66,14 +67,15 @@ public class Payment extends Identity{
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
-	
-	public Payment() {
-		super();
-	}
 
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
+	
+	
+	public Payment() {}
 	public Payment(Booking bookingId, @NotNull PaymentMode mode, short discount, @NotNull int netCharge,
 			@NotNull int gst, @NotNull String transactionId, @NotNull Date date, @NotNull PaymentStatus status) {
-		super();
 		this.bookingId = bookingId;
 		this.mode = mode;
 		this.discount = discount;
@@ -147,6 +149,10 @@ public class Payment extends Identity{
 
 	public void setStatus(PaymentStatus status) {
 		this.status = status;
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override

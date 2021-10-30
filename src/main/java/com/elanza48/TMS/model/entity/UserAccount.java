@@ -5,9 +5,12 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -20,19 +23,6 @@ public class UserAccount extends Contact{
 	public enum UserGender{
 		MALE,
 		FEMALE
-	}
-	
-	public enum UserRole{
-		USER,
-		MANAGER,
-		ADMIN
-	}
-	
-	public enum UserAccountStatus{
-		ACTIVE,
-		SUSPENDED,
-		INACTIVE,
-		CLOSED
 	}
 	
 	@Column
@@ -48,26 +38,30 @@ public class UserAccount extends Contact{
 	@NotNull
 	private Date dob;
 	
-	@Column
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private UserRole role= UserRole.USER;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
+	private UserRole role;
 	
 	@Column
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	private UserAccountStatus status=UserAccountStatus.ACTIVE;
+	private boolean active=true;
+
+	@Column
+	@NotNull
+	private boolean suspended=false;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData = new MetaData();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
 	Set<Booking> bookings;
 	
-	public UserAccount() {
-		super();
-	}
-	
+
+	public UserAccount() {}
 	public UserAccount(@NotNull String name, @NotNull @Email String email,
-			@NotNull long mobileNo, @NotNull Address address,
-			@NotNull String password, @NotNull Date dob, @NotNull UserGender gender) {
+			@NotNull long mobileNo, @NotNull Address address, @NotNull String password,
+			@NotNull Date dob, @NotNull UserGender gender) {
 		super(name, email, mobileNo, address);
 		this.password = password;
 		this.gender=gender;
@@ -106,20 +100,32 @@ public class UserAccount extends Contact{
 		this.role = role;
 	}
 
-	public UserAccountStatus getStatus() {
-		return status;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setStatus(UserAccountStatus status) {
-		this.status = status;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
+	public boolean isSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+	}
+	
 	public Set<Booking> getBookings() {
 		return bookings;
 	}
 
 	public void setBookings(Set<Booking> bookings) {
 		this.bookings = bookings;
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override
@@ -164,7 +170,7 @@ public class UserAccount extends Contact{
 
 	@Override
 	public String toString() {
-		return "UserAccount [role=" + role + ", status=" + status + ", dob=" + dob + ", bookings=" + bookings + ", email=" + email
+		return "UserAccount [role=" + role + ", active=" + active + ", dob=" + dob + ", bookings=" + bookings + ", email=" + email
 				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + "gender=" + gender + ", id=" + id + "]";
 	}
 

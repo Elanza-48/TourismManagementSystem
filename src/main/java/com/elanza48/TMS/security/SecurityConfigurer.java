@@ -1,7 +1,6 @@
 package com.elanza48.TMS.security;
 
 import com.elanza48.TMS.controller.filter.JwtRequestFilter;
-import com.elanza48.TMS.model.entity.UserAccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -46,63 +45,63 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 			.and()
 				.authorizeRequests()
 					.antMatchers("/user/*/*").hasAnyAuthority(
-							UserAccount.UserRole.USER.toString(),
-							UserAccount.UserRole.MANAGER.toString(),
-							UserAccount.UserRole.ADMIN.toString())
+							"USER",
+							"MANAGER",
+							"ADMIN")
 					.antMatchers(HttpMethod.POST, "/user").permitAll()
 			.and()
 				.authorizeRequests()
 					.antMatchers(HttpMethod.GET, "/tourPackages").permitAll()
 					.antMatchers(HttpMethod.POST,"/tourPackages").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PUT,"/tourPackages/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PATCH,"/tourPackages/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.DELETE,"/tourPackages/*").hasAnyAuthority(
-						UserAccount.UserRole.ADMIN.toString()
+						"ADMIN"
 					)
 			.and()
 				.authorizeRequests()
 					.antMatchers(HttpMethod.GET, "/destination").permitAll()
 					.antMatchers(HttpMethod.POST,"/destination").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PUT,"/destination/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PATCH,"/destination/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.DELETE,"/destination/*").hasAnyAuthority(
-						UserAccount.UserRole.ADMIN.toString()
+						"ADMIN"
 					)
 			.and()
 				.authorizeRequests()
 					.antMatchers(HttpMethod.GET, "/hotel").permitAll()
 					.antMatchers(HttpMethod.POST,"/hotel").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PUT,"/hotel/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.PATCH,"/hotel/*").hasAnyAuthority(
-						UserAccount.UserRole.MANAGER.toString(),
-						UserAccount.UserRole.ADMIN.toString()
+						"MANAGER",
+						"ADMIN"
 					)
 					.antMatchers(HttpMethod.DELETE,"/hotel/*").hasAnyAuthority(
-						UserAccount.UserRole.ADMIN.toString()
+						"ADMIN"
 					)
 			.and()
 				.authorizeRequests()

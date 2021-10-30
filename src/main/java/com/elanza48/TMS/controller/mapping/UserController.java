@@ -2,14 +2,12 @@ package com.elanza48.TMS.controller.mapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,12 +62,6 @@ public class UserController {
 		return ResponseEntity.ok(bookingMapper.bookingModelToDtoList(
 			new ArrayList<Booking>(userService.findUser(email).get().getBookings())
 		));
-	}
-
-	@PatchMapping("/email/{email}")
-	@PreAuthorize("#email == authentication.name")
-	public ResponseEntity<UserAccountDTO> updateUserbyId(@PathVariable String email, @RequestBody Map<String , Object> body){
-		return ResponseEntity.accepted().body(userAccountMapper.userAccountModelToDto(userService.updateUserByEmail(email, body)));
 	}
 
 	@DeleteMapping("/email/{email}")

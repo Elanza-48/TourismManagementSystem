@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -29,6 +30,10 @@ public class Destination extends IdentityName{
 	@Range(min = 1, max=10)
 	@NotNull
 	private short stayDuration=1;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
 	private Set<Hotel> hotels;
@@ -39,10 +44,9 @@ public class Destination extends IdentityName{
 	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
 	private Set<DestinationReview> reviews;
 	
-	public Destination() {
-		super();
-	}
-	public Destination(@NotNull String name, @NotNull String province, String description, @Range(min = 1, max = 13) @NotNull short stayDuration) {
+	public Destination() {}
+	public Destination(@NotNull String name, @NotNull String province, String description, 
+		@Range(min = 1, max = 13) @NotNull short stayDuration) {
 		super(name);
 		this.province = province;
 		this.description = description;
@@ -97,10 +101,15 @@ public class Destination extends IdentityName{
 		this.reviews = reviews;
 	}
 
+	public MetaData getMetaData() {
+		return metaData;
+	}
+
 	@Override
 	public String getName() {
 		return super.getName();
 	}
+	
 	@Override
 	public void setName(String name) {
 		super.setName(name);

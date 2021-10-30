@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,6 +21,10 @@ public class Ticket extends Identity{
 	@Column
 	@NotNull
 	private Date date;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData= new MetaData();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
@@ -29,12 +34,9 @@ public class Ticket extends Identity{
 	@JoinColumn(name = "transport_id", referencedColumnName = "id")
 	private Transport transportId;
 	
-	public Ticket() {
-		super();
-	}
-
-	public Ticket(String seatNumber, @NotNull Date date, Booking bookingId, Transport transportId) {
-		super();
+	public Ticket() {}
+	public Ticket(String seatNumber, @NotNull Date date, Booking bookingId,
+	 Transport transportId) {
 		this.seatNumber = seatNumber;
 		this.date=date;
 		this.bookingId = bookingId;
@@ -71,6 +73,10 @@ public class Ticket extends Identity{
 
 	public void setTransportId(Transport transportId) {
 		this.transportId = transportId;
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override

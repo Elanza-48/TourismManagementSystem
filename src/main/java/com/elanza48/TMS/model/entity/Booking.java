@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -45,6 +46,10 @@ public class Booking  extends Identity{
 	@Column(name = "T_DATE")
 	@NotNull
 	private Date tourDate;
+
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "usr_id", referencedColumnName = "id")
@@ -84,10 +89,7 @@ public class Booking  extends Identity{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
 	private Set<Enquiry> enquiries;
 	
-	public Booking() {
-		super();
-	}
-
+	public Booking() {}
 	public Booking(@NotNull Date date, Package packageId, @NotNull Date tourDate, UserAccount userId,
 			@NotNull @Range(min = 1, max = 12) short passengerCount, @NotNull RoomType roomType, @NotNull int price,
 			@NotNull BookingStatus status, Payment paymentInfo) {
@@ -101,7 +103,6 @@ public class Booking  extends Identity{
 		this.status = status;
 		this.paymentInfo = paymentInfo;
 	}
-
 
 	public Date getDate() {
 		return date;
@@ -206,7 +207,10 @@ public class Booking  extends Identity{
 	public void setEnquiries(Set<Enquiry> enquiries) {
 		this.enquiries = enquiries;
 	}
-	
+
+	public MetaData getMetaData() {
+		return metaData;
+	}
 
 	@Override
 	public String toString() {

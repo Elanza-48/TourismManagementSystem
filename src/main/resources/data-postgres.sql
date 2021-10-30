@@ -12,15 +12,209 @@ end;
 select main.truncate_tables('elanza48', 'main');
 
 ---- Insert data ----
-insert into main.user_account(id, name, gender,dob, district, state, street, zip, email, mobile_no, password, role, status) values
-    ((select uuid_generate_v4()),'Rajarshi Kundu','MALE', to_date('19920316','YYYYMMDD'), 'Ghatal', 'West Bengal', 'Ward no 22, Konnagar',721214, 'elanza48@outlook.com', 9645520836, '{noop}password_a1', 'ADMIN', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Rishav lahiri','MALE' , to_date('19950910','YYYYMMDD'),  'Kolkata', 'West Bengal', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, '{noop}password_m1', 'MANAGER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Ronit Chakraborty','MALE' , to_date('19971022','YYYYMMDD'), 'Kolkata', 'West Bengal', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', 'MANAGER', 'INACTIVE'),
-    ((select uuid_generate_v4()),'Sohaib Akram' ,'MALE' , to_date('19870808','YYYYMMDD'), 'North Delhi', 'Delhi', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, '{noop}password_u1', 'USER', 'CLOSED'),
-    ((select uuid_generate_v4()),'Gunjan Amrapalli' ,'MALE' , to_date('19810725','YYYYMMDD'), 'Mangalore', 'Karnataka', 'Mangalore H.O',575001, 'gunjana93@hotmail.com', 7986554746, '{noop}password_u2', 'USER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Avinash Yadav' ,'MALE' , to_date('19791231','YYYYMMDD'), 'Aligarh', 'Uttar Pradesh', 'Aligarh City',202001, 'yadavji82@outlook.com', 9756954756, '{noop}password_u3', 'USER', 'SUSPENDED'),
-    ((select uuid_generate_v4()),'Sheha Patel' ,'FEMALE' , to_date('19900911','YYYYMMDD'), 'Aurangabad', 'Bihar', 'Chandel Niwas, Maharajganj Road',824101, 'mesheha46@yahoo.com', 7563554663, '{noop}password_u4', 'USER', 'ACTIVE'),
-    ((select uuid_generate_v4()),'Kamalpreet Kaur' ,'FEMALE', to_date('19960703','YYYYMMDD'), 'Ludhiana', 'Punjab', 'Ferozepur Road',141001, 'kpkaur98@hotmail.com', 8657454743, '{noop}password_u5', 'USER', 'INACTIVE');
+
+insert into main.user_privilege(id, title, description, created_at, last_update) values
+    ((select uuid_generate_v4()),'USER_CREATE','USER_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'USER_READ','USER_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'USER_UPDATE','USER_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'USER_DELETE','USER_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'USER_SELF_READ','USER_SELF_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'USER_SELF_UPDATE','USER_SELF_UPDATE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'HOTEL_CREATE','HOTEL_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'HOTEL_READ','HOTEL_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'HOTEL_UPDATE','HOTEL_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'HOTEL_DELETE','HOTEL_DELETE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'DESTINATION_CREATE','DESTINATION_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'DESTINATION_READ','DESTINATION_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'DESTINATION_UPDATE','DESTINATION_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'DESTINATION_DELETE','DESTINATION_DELETE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'TRANSPORT_CREATE','TRANSPORT_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TRANSPORT_READ','TRANSPORT_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TRANSPORT_UPDATE','TRANSPORT_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TRANSPORT_DELETE','TRANSPORT_DELETE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'PACKAGE_CREATE','PACKAGE_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PACKAGE_READ','PACKAGE_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PACKAGE_UPDATE','PACKAGE_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PACKAGE_DELETE','PACKAGE_DELETE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'BOOKING_CREATE','BOOKING_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'BOOKING_READ','BOOKING_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'BOOKING_UPDATE','BOOKING_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'BOOKING_DELETE','BOOKING_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'BOOKING_SELF_READ','BOOKING_SELF_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'BOOKING_SELF_UPDATE','BOOKING_SELF_UPDATE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'TICKET_CREATE','TICKET_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TICKET_READ','TICKET_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TICKET_UPDATE','TICKET_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TICKET_DELETE','TICKET_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TICKET_SELF_READ','TICKET_SELF_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'TICKET_SELF_UPDATE','TICKET_SELF_UPDATE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'PAYMENT_CREATE','PAYMENT_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PAYMENT_READ','PAYMENT_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PAYMENT_UPDATE','PAYMENT_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PAYMENT_DELETE','PAYMENT_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'PAYMENT_SELF_READ','PAYMENT_SELF_READ',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'REVIEW_CREATE','REVIEW_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'REVIEW_READ','REVIEW_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'REVIEW_UPDATE','REVIEW_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'REVIEW_DELETE','REVIEW_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'REVIEW_SELF_UPDATE','REVIEW_SELF_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'REVIEW_SELF_DELETE','REVIEW_SELF_DELETE',(select localtimestamp), null),
+
+    ((select uuid_generate_v4()),'ENQUIRY_CREATE','ENQUIRY_CREATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'ENQUIRY_READ','ENQUIRY_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'ENQUIRY_UPDATE','ENQUIRY_UPDATE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'ENQUIRY_DELETE','ENQUIRY_DELETE',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'ENQUIRY_SELF_READ','ENQUIRY_SELF_READ',(select localtimestamp), null),
+    ((select uuid_generate_v4()),'ENQUIRY_SELF_UPDATE','ENQUIRY_SELF_UPDATE',(select localtimestamp), null);
+
+
+insert into main.user_role(id, title, description, created_at, last_update) values
+    ((select  uuid_generate_v4()),'ADMIN', 'ROLE_ADMIN', (select localtimestamp), null),
+    ((select  uuid_generate_v4()),'MANAGER', 'ROLE_MANAGER', (select localtimestamp), null),
+    ((select  uuid_generate_v4()),'USER', 'ROLE_USER', (select localtimestamp), null),
+    ((select  uuid_generate_v4()),'ALL', 'ROLE_USER', (select localtimestamp), null);
+
+
+insert into  main.user_role_privilege_map(role_id, privilege_id) values
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='USER_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='USER_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='USER_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='HOTEL_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='HOTEL_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='HOTEL_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='HOTEL_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='DESTINATION_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='DESTINATION_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='DESTINATION_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='DESTINATION_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TRANSPORT_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TRANSPORT_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TRANSPORT_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TRANSPORT_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PACKAGE_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PACKAGE_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PACKAGE_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PACKAGE_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='BOOKING_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='BOOKING_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='BOOKING_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='BOOKING_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TICKET_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TICKET_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TICKET_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='TICKET_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PAYMENT_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PAYMENT_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PAYMENT_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='PAYMENT_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='REVIEW_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='REVIEW_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='REVIEW_DELETE')),
+
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='ENQUIRY_CREATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='ENQUIRY_READ')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='ENQUIRY_UPDATE')),
+    ((select id from main.user_role where title='ADMIN'),(select id from main.user_privilege where title='ENQUIRY_DELETE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='USER_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='USER_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='HOTEL_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='HOTEL_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='DESTINATION_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='DESTINATION_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='TRANSPORT_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='TRANSPORT_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PACKAGE_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PACKAGE_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PACKAGE_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='BOOKING_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='BOOKING_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='BOOKING_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='TICKET_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='TICKET_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='TICKET_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PAYMENT_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PAYMENT_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='PAYMENT_UPDATE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='REVIEW_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='REVIEW_UPDATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='REVIEW_SELF_DELETE')),
+
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='ENQUIRY_CREATE')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='ENQUIRY_READ')),
+    ((select id from main.user_role where title='MANAGER'),(select id from main.user_privilege where title='ENQUIRY_UPDATE')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='USER_SELF_READ')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='USER_SELF_UPDATE')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='HOTEL_READ')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='TRANSPORT_READ')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='BOOKING_CREATE')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='BOOKING_SELF_READ')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='BOOKING_SELF_UPDATE')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='TICKET_SELF_READ')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='TICKET_SELF_UPDATE')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='PAYMENT_CREATE')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='PAYMENT_SELF_READ')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='REVIEW_CREATE')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='REVIEW_SELF_UPDATE')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='REVIEW_SELF_DELETE')),
+
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='ENQUIRY_CREATE')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='ENQUIRY_SELF_READ')),
+    ((select id from main.user_role where title='USER'),(select id from main.user_privilege where title='ENQUIRY_SELF_UPDATE')),
+
+    ((select id from main.user_role where title='ALL'),(select id from main.user_privilege where title='PACKAGE_READ')),
+    ((select id from main.user_role where title='ALL'),(select id from main.user_privilege where title='DESTINATION_READ')),
+    ((select id from main.user_role where title='ALL'),(select id from main.user_privilege where title='REVIEW_READ'));
+
+
+insert into main.user_account(id, name, gender, dob, district, state, street, zip, email, mobile_no, password, active, suspended, created_at, last_update, role_id) values
+    ((select uuid_generate_v4()),'Rajarshi Kundu','MALE', to_date('19920316','YYYYMMDD'), 'Ghatal', 'West Bengal', 'Ward no 22, Konnagar',721214, 'elanza48@outlook.com', 9645520836, '{noop}password_a1', true, false, (select localtimestamp), null,
+     (select id from main.user_role where title='ADMIN')),
+    ((select uuid_generate_v4()),'Rishav lahiri','MALE' , to_date('19950910','YYYYMMDD'),  'Kolkata', 'West Bengal', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, '{noop}password_m1', true, false, (select localtimestamp), null,
+     (select id from main.user_role where title='MANAGER')),
+    ((select uuid_generate_v4()),'Ronit Chakraborty','MALE' , to_date('19971022','YYYYMMDD'), 'Kolkata', 'West Bengal', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', false, false, (select localtimestamp), null,
+     (select id from main.user_role where title='MANAGER')),
+    ((select uuid_generate_v4()),'Sohaib Akram' ,'MALE' , to_date('19870808','YYYYMMDD'), 'North Delhi', 'Delhi', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, '{noop}password_u1', false, true, (select localtimestamp), null,
+     (select id from main.user_role where title='USER')),
+    ((select uuid_generate_v4()),'Gunjan Amrapalli' ,'MALE' , to_date('19810725','YYYYMMDD'), 'Mangalore', 'Karnataka', 'Mangalore H.O',575001, 'gunjana93@hotmail.com', 7986554746, '{noop}password_u2', true, false, (select localtimestamp), null,
+     (select id from main.user_role where title='USER')),
+    ((select uuid_generate_v4()),'Avinash Yadav' ,'MALE' , to_date('19791231','YYYYMMDD'), 'Aligarh', 'Uttar Pradesh', 'Aligarh City',202001, 'yadavji82@outlook.com', 9756954756, '{noop}password_u3', true, true, (select localtimestamp), null,
+     (select id from main.user_role where title='USER')),
+    ((select uuid_generate_v4()),'Sheha Patel' ,'FEMALE' , to_date('19900911','YYYYMMDD'), 'Aurangabad', 'Bihar', 'Chandel Niwas, Maharajganj Road',824101, 'mesheha46@yahoo.com', 7563554663, '{noop}password_u4', true, false, (select localtimestamp), null,
+     (select id from main.user_role where title='USER')),
+    ((select uuid_generate_v4()),'Kamalpreet Kaur' ,'FEMALE', to_date('19960703','YYYYMMDD'), 'Ludhiana', 'Punjab', 'Ferozepur Road',141001, 'kpkaur98@hotmail.com', 8657454743, '{noop}password_u5', false, false, (select localtimestamp), null,
+     (select id from main.user_role where title='USER'));
+
 
 insert into main.destination_info(id, name, description, province, max_stay_duration) values
     ((select uuid_generate_v4()), 'Manali', 'Himachal Pradesh', 'Manali', 7),
@@ -58,18 +252,18 @@ insert into main.hotel_info(id, name, district, state, street, zip, email, mobil
     ((select uuid_generate_v4()), 'Treebo Trend Sky Dale Inn & Suites','Ooty', 'Tamil Nadu','284, Ooty West Lake Road (Thettukkal Road)',643004, 'skydaleinn@hotmail.com', 5398746588, 1586, 'STANDARD',(select id from main.destination_info where name='Ooty')),
     ((select uuid_generate_v4()), 'Hotel De Pebbles','Port Blair', 'Andaman and Nicobar','Jawaharlal Nehru Road Ground',744102, 'hoteldepebbles@yahoo.com', 2458762457, 2957, 'STANDARD',(select  id from main.destination_info where name='Andaman and Nicobar Islands'));
 
-insert into main.transport_info(id, name, description, entity, mode) values
-    ((select uuid_generate_v4()), 'Slik route transports', 'Delux bus service', 'PRIVATE', 'BUS'),
-    ((select uuid_generate_v4()), 'Ozone car rentals', 'Comfort to day car service', 'PRIVATE', 'CAR'),
-    ((select uuid_generate_v4()), 'UTC', 'Uttarakhand Transport Corporation', 'PUBLIC', 'BUS'),
-    ((select uuid_generate_v4()), 'Palace on Wheels', 'Experience royalty at its finest', 'PUBLIC', 'RAILWAY'),
-    ((select uuid_generate_v4()), 'Vector car rentals', 'Speedy and Comfort', 'PRIVATE', 'CAR'),
-    ((select uuid_generate_v4()), 'Himsagar Express', 'From Kashmir to Kanyakumari.', 'PUBLIC', 'RAILWAY'),
-    ((select uuid_generate_v4()), 'Indigo', 'The Lean clean machine', 'PRIVATE', 'FLIGHT'),
-    ((select uuid_generate_v4()), 'Omega waterways', 'Experts on waterways', 'PRIVATE', 'STEAMER'),
-    ((select uuid_generate_v4()), 'Sea Hawk Luxury', 'Serve the best on water', 'PRIVATE', 'CRUISE');
+insert into main.transport_info(id, name, description, public, mode) values
+    ((select uuid_generate_v4()), 'Slik route transports', 'Delux bus service', false, 'BUS'),
+    ((select uuid_generate_v4()), 'Ozone car rentals', 'Comfort to day car service', false, 'CAR'),
+    ((select uuid_generate_v4()), 'UTC', 'Uttarakhand Transport Corporation', true, 'BUS'),
+    ((select uuid_generate_v4()), 'Palace on Wheels', 'Experience royalty at its finest', true, 'RAILWAY'),
+    ((select uuid_generate_v4()), 'Vector car rentals', 'Speedy and Comfort', false, 'CAR'),
+    ((select uuid_generate_v4()), 'Himsagar Express', 'From Kashmir to Kanyakumari.', true, 'RAILWAY'),
+    ((select uuid_generate_v4()), 'Indigo', 'The Lean clean machine', false, 'FLIGHT'),
+    ((select uuid_generate_v4()), 'Omega waterways', 'Experts on waterways', false, 'STEAMER'),
+    ((select uuid_generate_v4()), 'Sea Hawk Luxury', 'Serve the best on water', false, 'CRUISE');
 
-insert into main.tour_package(id, name, activities, description, events, is_active) values
+insert into main.tour_package(id, name, activities, description, events, active) values
     ((select  uuid_generate_v4()), 'Amazing Himalayas','Hill views, Side seeing, Traking', 'Amazing Views of himalayan range', 'Local Art and culture', true),
     ((select  uuid_generate_v4()), 'Couple Goals','Forest Views, Side seeing, Traking', 'Amazing Places for Honeymoon', 'Local Art and culture, Safari', true),
     ((select  uuid_generate_v4()), 'Spiritual Mighty','Hill views, Temple view, Traking', 'Enjoy the places almighty', 'Temple/Mosque/Gurdwara Darshan', true),
@@ -169,3 +363,68 @@ insert into main.enquiry(id, date, subject, body, booking_id, enq_open) values
     ((select uuid_generate_v4()), to_date('20190427','YYYYMMDD'),'Cancellation of My Booking.','Sir,\n Due to some unavoidable circumstance I will not be able to continue my journey in the trip. So I want cancel my booking. \nKindly help me. \nThank you',
      (select bi.id from main.user_account as usr, main.booking_info as bi where usr.email='yadavji82@outlook.com' and usr.id=bi.usr_id and bi.t_date=to_date('20190611','YYYYMMDD')),false);
 
+
+/*
+PRIVILEGES: {
+    "USER_CREATE",
+    "USER_READ",
+    "USER_UPDATE",
+    "USER_DELETE",
+    "USER_SELF_READ",
+    "USER_SELF_UPDATE",
+
+    "HOTEL_CREATE",
+    "HOTEL_READ",
+    "HOTEL_UPDATE",
+    "HOTEL_DELETE",
+
+    "DESTINATION_CREATE",
+    "DESTINATION_READ",
+    "DESTINATION_UPDATE",
+    "DESTINATION_DELETE",
+
+    "TRANSPORT_CREATE",
+    "TRANSPORT_READ",
+    "TRANSPORT_UPDATE",
+    "TRANSPORT_DELETE",
+
+    "PACKAGE_CREATE",
+    "PACKAGE_READ",
+    "PACKAGE_UPDATE",
+    "PACKAGE_DELETE",
+
+    "BOOKING_CREATE",
+    "BOOKING_READ",
+    "BOOKING_UPDATE",
+    "BOOKING_DELETE",
+    "BOOKING_SELF_READ",
+    "BOOKING_SELF_UPDATE",
+
+    "TICKET_CREATE",
+    "TICKET_READ",
+    "TICKET_UPDATE",
+    "TICKET_DELETE",
+    "TICKET_SELF_READ",
+    "TICKET_SELF_UPDATE",
+
+    "PAYMENT_CREATE",
+    "PAYMENT_READ",
+    "PAYMENT_UPDATE",
+    "PAYMENT_DELETE",
+    "PAYMENT_SELF_READ",
+
+    "REVIEW_CREATE",
+    "REVIEW_READ",
+    "REVIEW_UPDATE",
+    "REVIEW_DELETE",
+    "REVIEW_SELF_UPDATE",
+    "REVIEW_SELF_DELETE",
+
+    "ENQUIRY_CREATE",
+    "ENQUIRY_READ",
+    "ENQUIRY_UPDATE",
+    "ENQUIRY_DELETE",
+    "ENQUIRY_SELF_READ",
+    "ENQUIRY_SELF_UPDATE"
+}
+*/

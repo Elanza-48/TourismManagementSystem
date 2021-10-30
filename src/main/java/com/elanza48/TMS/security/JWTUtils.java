@@ -44,7 +44,7 @@ public class JWTUtils {
   public String genrateToken(UserAccount user){
     Map<String, Object> payload= new HashMap<>();
     payload.put("email", user.getEmail());
-    payload.put("role", user.getRole().toString());
+    payload.put("role", user.getRole().getName());
 
     return createJWToken(payload, user.getName());
   }
@@ -85,7 +85,7 @@ public class JWTUtils {
     String role = verifyJWToken(token).get("role").asString();
     int duration = (int) TimeUnit.MILLISECONDS.toHours(new Date().getTime()-issuedAt.getTime())%60;
 
-    if(user.getEmail().equals(email) && user.getRole().toString().equals(role) && duration<=12) return true;
+    if(user.getEmail().equals(email) && user.getRole().getName().equals(role) && duration<=12) return true;
     else return false; 
   }
 

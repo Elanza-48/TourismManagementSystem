@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,11 +37,12 @@ public class DestinationReview extends Identity{
 	@Column
 	@Type(type = "text")
 	private String review;
-	
-	public DestinationReview() {
-		super();
-	}
 
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
+	
+	public DestinationReview() {}
 	public DestinationReview(Destination destinationId, Booking bookingId, @NotNull Date date, 
 			@Range(min = 1, max = 10) short rating, String review) {
 		this.destinationId = destinationId;
@@ -88,6 +90,10 @@ public class DestinationReview extends Identity{
 
 	public void setReview(String review) {
 		this.review = review;
+	}
+	
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override

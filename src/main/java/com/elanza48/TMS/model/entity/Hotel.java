@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,7 +33,10 @@ public class Hotel extends Contact{
 	@Column(name = "base_price")
 	@NotNull
 	private int basePrice;
-	
+
+	@Embedded
+	@NotNull
+	private MetaData metaData=new MetaData();
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dest_id",referencedColumnName = "id")
@@ -41,10 +45,7 @@ public class Hotel extends Contact{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
 	private Set<HotelReview> reviews;
 	
-	public Hotel(){
-		super();
-	}
-
+	public Hotel(){}
 	public Hotel(@NotNull String name, @NotNull @Email String email, @NotNull  long mobileNo,
 			@NotNull Address address, @NotNull HotelType type, @NotNull int basePrice,
 			Destination destinationId) {
@@ -84,6 +85,9 @@ public class Hotel extends Contact{
 
 	public void setReviews(Set<HotelReview> reviews) {
 		this.reviews = reviews;
+	}
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override

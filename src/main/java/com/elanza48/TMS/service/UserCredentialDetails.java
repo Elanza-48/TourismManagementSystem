@@ -1,5 +1,6 @@
 package com.elanza48.TMS.service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -21,7 +22,8 @@ public class UserCredentialDetails implements UserDetails{
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString()));
+
+    return Arrays.asList(new SimpleGrantedAuthority(user.getRole().getName()));
   }
 
   @Override
@@ -36,28 +38,30 @@ public class UserCredentialDetails implements UserDetails{
 
   @Override
   public boolean isAccountNonExpired() {
-    if(user.getStatus()==UserAccount.UserAccountStatus.CLOSED)
+    if(!user.isActive() && user.isSuspended())
       return false;
     else return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    if(user.getStatus()==UserAccount.UserAccountStatus.SUSPENDED)
+    if(user.isActive() && user.isSuspended())
       return false;
     else return true;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    if(user.getStatus()==UserAccount.UserAccountStatus.INACTIVE)
+    if(!user.isActive() && !user.isSuspended() &&
+      (LocalDate.now().getYear()-
+        user.getMetaData().getCreatedTimesatmp().toLocalDateTime().getYear())>=1)
       return false;
     else return true;
   }
 
   @Override
   public boolean isEnabled() {
-    if(user.getStatus()==UserAccount.UserAccountStatus.ACTIVE)
+    if(user.isActive())
       return true;
     else return false;
   }

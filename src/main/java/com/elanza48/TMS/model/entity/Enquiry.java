@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,19 +35,21 @@ public class Enquiry extends Identity{
 	
 	@Column(name = "enq_open")
 	@NotNull
-	private boolean isOpen= true;
-	
-	public Enquiry() {
-		super();
-	}
+	private boolean open= true;
 
+	@Embedded
+	@NotNull
+	private MetaData metaData;
+	
+	
+	public Enquiry() {}
 	public Enquiry(Booking bookingId, @NotNull Date date, @NotNull String subject, String body,
-			@NotNull boolean isOpen) {
+			@NotNull boolean open) {
 		this.bookingId = bookingId;
 		this.date=date;
 		this.subject = subject;
 		this.body = body;
-		this.isOpen = isOpen;
+		this.open = open;
 	}
 
 	public Booking getBookingId() {
@@ -82,16 +85,20 @@ public class Enquiry extends Identity{
 	}
 
 	public boolean isOpen() {
-		return isOpen;
+		return open;
 	}
 
-	public void setOpen(boolean isOpen) {
-		this.isOpen = isOpen;
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
 	}
 
 	@Override
 	public String toString() {
 		return "Enquiry [bookingId=" + bookingId +  ", date=" + date + ", subject="
-				+ subject + ", body=" + body + ", isOpen=" + isOpen + ", id=" + id + "]";
+				+ subject + ", body=" + body + ", isOpen=" + open + ", id=" + id + "]";
 	}
 }
