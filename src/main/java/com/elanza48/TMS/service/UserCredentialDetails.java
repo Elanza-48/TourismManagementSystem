@@ -1,6 +1,5 @@
 package com.elanza48.TMS.service;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -52,9 +51,7 @@ public class UserCredentialDetails implements UserDetails{
 
   @Override
   public boolean isCredentialsNonExpired() {
-    if(!user.isActive() && !user.isSuspended() &&
-      (LocalDate.now().getYear()-
-        user.getMetaData().getCreatedTimesatmp().toLocalDateTime().getYear())>=1)
+    if(!isAccountNonExpired())
       return false;
     else return true;
   }

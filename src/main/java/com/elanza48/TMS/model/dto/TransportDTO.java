@@ -2,42 +2,25 @@ package com.elanza48.TMS.model.dto;
 
 import com.elanza48.TMS.model.entity.Transport.TransportMode;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class TransportDTO extends IdentityNameDTO{
 	
 	private String description;
 	private TransportMode mode = TransportMode.CAR;
 	private boolean isPublic;
 	
-	
-	public TransportDTO() {}
+
 	public TransportDTO(String name, String description, TransportMode mode, boolean isPublic) {
 		super(name);
 		this.description = description;
 		this.mode = mode;
-		this.isPublic = isPublic;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public TransportMode getMode() {
-		return mode;
-	}
-
-	public void setMode(TransportMode mode) {
-		this.mode = mode;
-	}
-
-	public boolean isPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
 

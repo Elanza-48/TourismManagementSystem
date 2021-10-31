@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elanza48.TMS.model.ModelDtoMapper;
 import com.elanza48.TMS.model.dto.AddressDTO;
 import com.elanza48.TMS.model.dto.BookingDTO;
 import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.Booking;
 import com.elanza48.TMS.model.entity.UserAccount;
-import com.elanza48.TMS.model.mapper.BookingMapper;
-import com.elanza48.TMS.model.mapper.UserAccountMapper;
 import com.elanza48.TMS.service.UserAccountService;
 
 @RestController
@@ -31,14 +30,11 @@ public class UserController {
 	private UserAccountService userService;
 
 	@Autowired
-	private UserAccountMapper userAccountMapper;
-
-	@Autowired
-	private BookingMapper bookingMapper;
+	private ModelDtoMapper modelDtoMapper;
 	
 	@PostMapping
 	public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccount user) {
-		return ResponseEntity.accepted().body(userAccountMapper.userAccountModelToDto(
+		return ResponseEntity.accepted().body(modelDtoMapper.userAccountModelToDto(
 			userService.createUser(user)
 		));
 	}
@@ -46,20 +42,20 @@ public class UserController {
 	@GetMapping("/email/{email}")
 	@PreAuthorize("#email == authentication.name")
 	public UserAccountDTO getUserByEmail(@PathVariable String email) {
-		return  userAccountMapper.userAccountModelToDto( userService.findUser(email).get());
+		return  modelDtoMapper.userAccountModelToDto( userService.findUser(email).get());
 	}
 
 	@GetMapping("/email/{email}/address")
 	@PreAuthorize("#email == authentication.name")
 	public ResponseEntity<AddressDTO> getUserAddress(@PathVariable String email) {
-		return ResponseEntity.ok(userAccountMapper.userAccountModelToDto(
+		return ResponseEntity.ok(modelDtoMapper.userAccountModelToDto(
 			userService.findUser(email).get()).getAddress());
 	}
 
 	@GetMapping("/email/{email}/booking")
 	@PreAuthorize("#email == authentication.name")
 	public ResponseEntity<List<BookingDTO>> getUserBooking(@PathVariable String email) {
-		return ResponseEntity.ok(bookingMapper.bookingModelToDtoList(
+		return ResponseEntity.ok(modelDtoMapper.bookingModelToDtoList(
 			new ArrayList<Booking>(userService.findUser(email).get().getBookings())
 		));
 	}
@@ -74,7 +70,7 @@ public class UserController {
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<UserAccountDTO> getAllUser() {
-		return userAccountMapper.userAccountModelToDtoList(userService.getAllUser());
+		return modelDtoMapper.userAccountModelToDtoList(userService.getAllUser());
 	}
 
 }

@@ -2,6 +2,13 @@ package com.elanza48.TMS.model.dto;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class PackageDTO extends IdentityNameDTO{
 	
 	private String description;
@@ -11,61 +18,12 @@ public class PackageDTO extends IdentityNameDTO{
 	private Set<DestinationDTO> destinations;
 	private Set<TransportDTO> transports;
 	
-	public PackageDTO() {}
 
 	public PackageDTO(String name, String description, String activities, String events) {
 		super(name);
 		this.description = description;
 		this.activities = activities;
 		this.events = events;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getActivities() {
-		return activities;
-	}
-
-	public void setActivities(String activities) {
-		this.activities = activities;
-	}
-
-	public String getEvents() {
-		return events;
-	}
-
-	public void setEvents(String events) {
-		this.events = events;
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public Set<DestinationDTO> getDestinations() {
-		return destinations;
-	}
-
-	public void setDestinations(Set<DestinationDTO> destinations) {
-		this.destinations = destinations;
-	}
-
-	public Set<TransportDTO> getTransports() {
-		return transports;
-	}
-
-	public void setTransports(Set<TransportDTO> transports) {
-		this.transports = transports;
 	}
 
 	@Override

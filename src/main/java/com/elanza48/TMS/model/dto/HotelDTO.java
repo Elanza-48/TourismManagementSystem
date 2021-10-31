@@ -2,6 +2,13 @@ package com.elanza48.TMS.model.dto;
 
 import com.elanza48.TMS.model.entity.Hotel.HotelType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class HotelDTO extends ContactDTO{
 
 	private HotelType type = HotelType.STANDARD;
@@ -9,37 +16,11 @@ public class HotelDTO extends ContactDTO{
 	private DestinationDTO destinationId;
 
 
-	public HotelDTO(){}
-
 	public HotelDTO(String name,String email,long mobileNo,AddressDTO address, HotelType type, int basePrice,
 			DestinationDTO destinationId) {
 		super(name, email, mobileNo, address);
 		this.type = type;
 		this.basePrice = basePrice;
-		this.destinationId = destinationId;
-	}
-
-	public HotelType getType() {
-		return type;
-	}
-
-	public void setType(HotelType type) {
-		this.type = type;
-	}
-
-	public int getBasePrice() {
-		return basePrice;
-	}
-
-	public void setBasePrice(int basePrice) {
-		this.basePrice = basePrice;
-	}
-
-	public DestinationDTO getDestinationId() {
-		return destinationId;
-	}
-
-	public void setDestinationId(DestinationDTO destinationId) {
 		this.destinationId = destinationId;
 	}
 

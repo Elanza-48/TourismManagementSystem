@@ -2,7 +2,6 @@ package com.elanza48.TMS.model.dto;
 
 import java.sql.Date;
 
-import com.elanza48.TMS.model.entity.UserRole;
 import com.elanza48.TMS.model.entity.UserAccount.UserGender;
 
 import lombok.Getter;
@@ -17,14 +16,15 @@ public class UserAccountDTO extends ContactDTO{
 
 	private UserGender gender;
 	private Date dob;
-	private UserRole role;
+	private UserRoleDTO role;
 	
 	
 	public UserAccountDTO(String name,String email,long mobileNo, AddressDTO address,
-	 Date dob, UserGender gender) {
+	 Date dob, UserGender gender, UserRoleDTO role) {
 		super(name, email, mobileNo, address);
 		this.gender=gender;
 		this.dob=dob;
+		this.role=role;
 	}
 
 	@Override
