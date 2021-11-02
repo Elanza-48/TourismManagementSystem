@@ -1,17 +1,9 @@
 package com.elanza48.TMS.model.entity;
 
+import java.util.Arrays;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -20,6 +12,14 @@ import javax.validation.constraints.NotNull;
   column = @Column(name = "title", unique = true))
 public class UserRole extends IdentityName{
 
+  public enum ROLES {
+    ADMIN, MANAGER, USER, ALL;
+
+    public String getRole(){
+      return "ROLE_"+name();
+    }
+  };
+
   @Column
   private String description;
 
@@ -27,7 +27,7 @@ public class UserRole extends IdentityName{
   @NotNull
   private MetaData metaData = new MetaData();
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinTable(name = "user_role_privilege_map", 
     joinColumns = {@JoinColumn(name = "role_id") }, 
     inverseJoinColumns = { @JoinColumn(name = "privilege_id") }

@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/destination")
 public class DestinationController {
 
-  @Autowired
   private DestinationService destinationService;
+
+  @Autowired
+  public void setDestinationService(DestinationService destinationService) {
+      this.destinationService = destinationService;
+  }
 
   @GetMapping
   public List<Destination> getAllDestinations(){

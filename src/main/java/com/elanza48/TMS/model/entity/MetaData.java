@@ -27,6 +27,7 @@ public class MetaData {
   @PrePersist
   public void setCreatedTimesatmp() {
     this.createdTimesatmp = new Timestamp(new Date().getTime());
+    this.updateTimestamp=this.createdTimesatmp;
   }
 
   public Timestamp getUpdateTimestamp() {

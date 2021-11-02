@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class HotelService {
   
-  @Autowired
   private HotelRepository hotelRepository;
+  @Autowired
+  public void setHotelRepository(HotelRepository hotelRepository) {
+    this.hotelRepository = hotelRepository;
+  }
 
   @Transactional(readOnly = true)
   public List<Hotel> getAllhotels(){

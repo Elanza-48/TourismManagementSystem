@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hotel")
 public class HotelController {
 
-  @Autowired
   private HotelService hotelService;
 
-  @GetMapping
+  @Autowired
+  public void setHotelService(HotelService hotelService) {
+      this.hotelService = hotelService;
+  }
+
+    @GetMapping
   public List<Hotel> getAllHotels(){
       return hotelService.getAllhotels();
   }

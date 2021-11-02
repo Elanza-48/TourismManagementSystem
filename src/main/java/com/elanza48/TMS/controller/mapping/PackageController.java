@@ -7,6 +7,7 @@ import com.elanza48.TMS.model.entity.Package;
 import com.elanza48.TMS.service.PackageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(value = "/tourPackages")
 public class PackageController {
 
-  @Autowired
   private PackageService packageService;
+
+  @Autowired
+  public void setPackageService(PackageService packageService) {
+      this.packageService = packageService;
+  }
 
   @GetMapping
   public List<Package> getAllActivePackages(){
@@ -33,6 +38,7 @@ public class PackageController {
   }
 
   @PostMapping
+  @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
   public Package insertPackage(@RequestBody Package body) {
       return packageService.createPackage(body);
   }

@@ -1,8 +1,13 @@
 package com.elanza48.TMS.controller.mapping;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -23,29 +28,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping
+@PreAuthorize("permitAll()")
 public class SecurityController {
 
-  @Autowired
   private AuthenticationManager authenticationManager;
-
-  @Autowired
   private UserAccountService userAccountService;
+  private JWTUtils jwtTokenUtils;
 
   @Autowired
-  private JWTUtils jwtTokenUtils;
+  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    this.authenticationManager = authenticationManager;
+  }
+  @Autowired
+  public void setUserAccountService(UserAccountService userAccountService) {
+    this.userAccountService = userAccountService;
+  }
+  @Autowired
+  public void setJwtTokenUtils(JWTUtils jwtTokenUtils) {
+    this.jwtTokenUtils = jwtTokenUtils;
+  }
 
   /**
    * Initial Welcome Message.
-   * @return
+   * @return {@link ResponseEntity}
    */
 
-  @GetMapping(produces = {"application/hal+json"})
+  @GetMapping
   public ResponseEntity<Map<String,String>> getMethodName() {
 
     Map<String, String> map = new HashMap<>();
     map.put("message:", "Welcome to the Tour Company !");
     map.put("link", "./authenticate");
-    map.put("link", "./user");
     return ResponseEntity.ok(map);
   }
 
@@ -63,17 +76,15 @@ public class SecurityController {
 
   /**
    * Gets authentication credentials from the user
-   * authentcates user and returns JWT
+   * authenticates user and returns JWT
    * valid for 12 hours.
-   * 
-   * @param request
+   *
    * @return {@link ResponseEntity}
-   * @throws Exception
    */
   @PostMapping(value="/authenticate")
   public ResponseEntity<Map<String,String>> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
     String emailPattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
-    Map<String, String> token = new HashMap<>();
+    Map<String, String> tokenMap = new HashMap<>();
 
     try{
       if(!Pattern.compile(emailPattern).matcher(request.get("email")).matches())
@@ -85,9 +96,11 @@ public class SecurityController {
     }catch(BadCredentialsException e){
       throw new Exception("Incorrect credentials !", e);
     }
-    token.put("jwt", jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get()));
-    token.put("validity", "12 hours");
-
-    return ResponseEntity.accepted().body(token);   
+    String token=jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get());
+    tokenMap.put("jwt", token);
+    tokenMap.put("expiresOn", jwtTokenUtils.extractClaims(token).get("exp").asDate().toInstant()
+            .atZone(ZoneId.of("Asia/Kolkata"))
+            .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)));
+    return ResponseEntity.accepted().body(tokenMap);
   }
 }

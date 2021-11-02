@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,14 +26,21 @@ import com.elanza48.TMS.service.UserAccountService;
 @RestController
 @RequestMapping(value = "/user", produces = {"application/hal+json"})
 public class UserController {
-	
-	@Autowired
+
 	private UserAccountService userService;
+	private ModelDtoMapper modelDtoMapper;
 
 	@Autowired
-	private ModelDtoMapper modelDtoMapper;
-	
+	public void setUserService(UserAccountService userService) {
+		this.userService = userService;
+	}
+	@Autowired
+	public void setModelDtoMapper(ModelDtoMapper modelDtoMapper) {
+		this.modelDtoMapper = modelDtoMapper;
+	}
+
 	@PostMapping
+	@PreAuthorize("permitAll()")
 	public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccount user) {
 		return ResponseEntity.accepted().body(modelDtoMapper.userAccountModelToDto(
 			userService.createUser(user)
@@ -40,12 +48,14 @@ public class UserController {
 	}
 	
 	@GetMapping("/email/{email}")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
 	public UserAccountDTO getUserByEmail(@PathVariable String email) {
 		return  modelDtoMapper.userAccountModelToDto( userService.findUser(email).get());
 	}
 
 	@GetMapping("/email/{email}/address")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
 	public ResponseEntity<AddressDTO> getUserAddress(@PathVariable String email) {
 		return ResponseEntity.ok(modelDtoMapper.userAccountModelToDto(
@@ -53,6 +63,7 @@ public class UserController {
 	}
 
 	@GetMapping("/email/{email}/booking")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
 	public ResponseEntity<List<BookingDTO>> getUserBooking(@PathVariable String email) {
 		return ResponseEntity.ok(modelDtoMapper.bookingModelToDtoList(
@@ -61,6 +72,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/email/{email}")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
 	public ResponseEntity<?> deleteUserByEmail(@PathVariable String email){
 		userService.deleteUser(email);
@@ -68,7 +80,7 @@ public class UserController {
 	}
 	
 	@GetMapping
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@Secured({"ROLE_ADMIN"})
 	public List<UserAccountDTO> getAllUser() {
 		return modelDtoMapper.userAccountModelToDtoList(userService.getAllUser());
 	}

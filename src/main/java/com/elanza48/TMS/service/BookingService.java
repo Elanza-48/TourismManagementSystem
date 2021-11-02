@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BookingService {
 
-  @Autowired
   private BookingRepository bookingRepository;
+  @Autowired
+  public void setBookingRepository(BookingRepository bookingRepository) {
+    this.bookingRepository = bookingRepository;
+  }
 
   @Transactional(readOnly = true)
   public List<Booking> getAllBookings(){
@@ -27,7 +30,7 @@ public class BookingService {
   }
 
   @Transactional
-  public Booking cr(Booking booking){
+  public Booking createBooking(Booking booking){
     return bookingRepository.save(booking);
   }
 }

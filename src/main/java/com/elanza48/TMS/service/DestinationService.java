@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DestinationService {
 
-  @Autowired
   private DestinationRepository destinationRepository;
+  @Autowired
+  public void setDestinationRepository(DestinationRepository destinationRepository) {
+    this.destinationRepository = destinationRepository;
+  }
 
   @Transactional(readOnly = true)
   public List<Destination> getAllDestinations(){

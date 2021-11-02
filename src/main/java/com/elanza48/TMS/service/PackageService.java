@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PackageService {
 
-  @Autowired
   private PackageRepository packageRepository;
+  @Autowired
+  public void setPackageRepository(PackageRepository packageRepository) {
+    this.packageRepository = packageRepository;
+  }
 
   @Transactional(readOnly = true)
   public List<Package> getAllPackages(){
