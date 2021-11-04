@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import com.elanza48.TMS.model.entity.Payment.PaymentMode;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDTO extends IdentityDTO{
+public class PaymentDTO extends IdentityDTO implements Serializable {
 	
 	@Setter private BookingDTO bookingId;
 	@Setter private PaymentMode mode= PaymentMode.CARD;

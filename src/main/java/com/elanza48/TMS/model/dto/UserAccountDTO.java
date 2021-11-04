@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import com.elanza48.TMS.model.entity.UserAccount.UserGender;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserAccountDTO extends ContactDTO{
+public class UserAccountDTO extends ContactDTO implements Serializable {
 
 	private UserGender gender;
 	private Date dob;

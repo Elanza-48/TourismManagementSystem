@@ -55,7 +55,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+				.authorizeRequests()
+					.antMatchers("/status/**").hasAnyRole(
+							UserRole.ROLES.ADMIN.name(),
+							UserRole.ROLES.MANAGER.name()
+				);
 
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}

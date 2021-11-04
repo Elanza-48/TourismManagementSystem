@@ -1,28 +1,22 @@
 package com.elanza48.TMS.model.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.sql.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_Account")
 public class UserAccount extends Contact{
 
 	public enum UserGender{
-		MALE,
-		FEMALE
+		MALE, FEMALE, TRANS
 	}
 	
 	@Column
@@ -31,13 +25,14 @@ public class UserAccount extends Contact{
 	
 	@Column
 	@NotNull
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.ORDINAL)
 	private UserGender gender;
 
 	@Column
 	@NotNull
 	private Date dob;
-	
+
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private UserRole role;
@@ -53,7 +48,7 @@ public class UserAccount extends Contact{
 	@Embedded
 	@NotNull
 	private MetaData metaData = new MetaData();
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
 	Set<Booking> bookings;
 	

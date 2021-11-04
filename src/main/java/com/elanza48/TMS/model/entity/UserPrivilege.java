@@ -1,17 +1,15 @@
 package com.elanza48.TMS.model.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_privilege")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))

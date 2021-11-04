@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import com.elanza48.TMS.model.entity.Booking.BookingStatus;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDTO  extends IdentityDTO{
+public class BookingDTO  extends IdentityDTO implements Serializable {
 
 	private Date date;
 	private PackageDTO packageId;

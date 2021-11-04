@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MetaDataDTO {
+public class MetaDataDTO implements Serializable {
 
   private Timestamp createdTimesatmp;
   private Timestamp updateTimestamp;

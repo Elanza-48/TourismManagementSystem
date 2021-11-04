@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
-abstract class ContactDTO extends IdentityNameDTO {
+abstract class ContactDTO extends IdentityNameDTO implements Serializable {
 
 	protected String email;
 	protected long mobileNo;

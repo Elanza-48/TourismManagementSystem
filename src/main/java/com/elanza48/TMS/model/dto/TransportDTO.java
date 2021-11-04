@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class TransportDTO extends IdentityNameDTO{
+public class TransportDTO extends IdentityNameDTO implements Serializable {
 	
 	private String description;
 	private TransportMode mode = TransportMode.CAR;

@@ -1,21 +1,62 @@
 package com.elanza48.TMS.model.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressDTO {
+public class AddressDTO implements Serializable {
 
-	private String street;
-	private String district;
+	@Getter @Setter private String street;
+	@Getter @Setter private String district;
 	private String state;
-	private int zip;
+	@Getter @Setter private int zip;
+	@JsonIgnore private Map<String,String> stateMap=null;
+
+	private void jsonToMap() {
+		if(this.stateMap==null) {
+			try {
+				byte[] rawData = Files.readAllBytes(Paths.get("src/main/resources/IndianStates.json"));
+				ObjectMapper objectMapper = new ObjectMapper();
+				this.stateMap = objectMapper.readValue(rawData, HashMap.class);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public String getState(){
+		jsonToMap();
+		return this.stateMap.get(this.state);
+	}
+
+	public void setState(String state) {
+		if(state.length()==2){
+			this.state=state;
+			return;
+		}else if(state.length()>2) {
+			jsonToMap();
+			for (Map.Entry<String, String> entry : this.stateMap.entrySet()) {
+				if (state.equals(entry.getValue())) {
+					this.state = entry.getKey();
+					return;
+				}
+			}
+		}
+		throw new IllegalArgumentException();
+	}
 
 
 	@Override

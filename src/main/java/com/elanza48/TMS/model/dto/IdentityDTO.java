@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.dto;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Id;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-abstract class IdentityDTO {
+abstract class IdentityDTO implements Serializable {
 
 	@Id
 	protected UUID id;
@@ -27,7 +28,7 @@ abstract class IdentityDTO {
 
 @AllArgsConstructor
 @NoArgsConstructor
-abstract class IdentityNameDTO extends IdentityDTO{
+abstract class IdentityNameDTO extends IdentityDTO implements Serializable{
 	protected String name;
 	
 	public String getName() {

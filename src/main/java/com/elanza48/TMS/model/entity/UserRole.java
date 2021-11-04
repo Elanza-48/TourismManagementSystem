@@ -1,12 +1,15 @@
 package com.elanza48.TMS.model.entity;
 
-import java.util.Arrays;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_role")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))
@@ -27,6 +30,7 @@ public class UserRole extends IdentityName{
   @NotNull
   private MetaData metaData = new MetaData();
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinTable(name = "user_role_privilege_map", 
     joinColumns = {@JoinColumn(name = "role_id") }, 

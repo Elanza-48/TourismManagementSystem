@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +50,11 @@ public class UserController {
 			userService.createUser(user)
 		));
 	}
-	
+
+	@Caching(
+			cacheable = @Cacheable(value = "TMSCache"),
+			put = @CachePut(value = "TMSCache")
+	)
 	@GetMapping("/email/{email}")
 	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
