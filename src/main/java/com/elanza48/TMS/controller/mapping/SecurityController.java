@@ -97,7 +97,7 @@ public class SecurityController {
       throw new Exception("Incorrect credentials !", e);
     }
     String token=jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get());
-    tokenMap.put("jwt", token);
+    tokenMap.put("token", token);
     tokenMap.put("expiresOn", jwtTokenUtils.extractClaims(token).get("exp").asDate().toInstant()
             .atZone(ZoneId.of("Asia/Kolkata"))
             .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)));

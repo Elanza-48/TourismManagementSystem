@@ -1,19 +1,18 @@
 package com.elanza48.TMS.model.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import java.io.Serializable;
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "booking_transport_ticket")
-public class Ticket extends Identity{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Ticket extends Identity implements Serializable {
 	
 	@Column(name = "seat_no")
 	private String seatNumber;

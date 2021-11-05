@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 @MappedSuperclass
-abstract class Identity {
+abstract class Identity implements Serializable {
 	
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -36,7 +37,7 @@ abstract class Identity {
 }
 
 @MappedSuperclass
-abstract class IdentityName extends Identity{
+abstract class IdentityName extends Identity implements Serializable{
 	
 	@Column
 	@NotNull

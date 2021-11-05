@@ -1,5 +1,6 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -7,14 +8,17 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.PastOrPresent;
 
 @Embeddable
-public class MetaData {
+public class MetaData implements Serializable {
 
   @Column(name = "created_at", updatable = false)
+  @PastOrPresent
   private Timestamp createdTimesatmp;
 
   @Column(name = "last_update")
+  @PastOrPresent
   private Timestamp updateTimestamp;
 
 

@@ -5,9 +5,10 @@ import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @MappedSuperclass
-abstract class Contact extends IdentityName {
+abstract class Contact extends IdentityName implements Serializable {
 	
 	@Column(unique = true)
 	@NotNull

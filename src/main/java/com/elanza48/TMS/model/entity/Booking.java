@@ -1,27 +1,22 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Range;
 
 
 @Entity
 @Table(name = "booking_Info")
-public class Booking  extends Identity{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Booking  extends Identity implements Serializable {
 	
 	public enum RoomType{
 		STANDARD,
@@ -37,6 +32,7 @@ public class Booking  extends Identity{
 	
 	@Column
 	@NotNull
+	@PastOrPresent
 	private Date date;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -75,18 +71,23 @@ public class Booking  extends Identity{
 	private BookingStatus status = BookingStatus.ACTIVE;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Ticket> tickets;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<DestinationReview> destinationReviews;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<HotelReview> hotelReviews;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Payment paymentInfo;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Enquiry> enquiries;
 	
 	public Booking() {}

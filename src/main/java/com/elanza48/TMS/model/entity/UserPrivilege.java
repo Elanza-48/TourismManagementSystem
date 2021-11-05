@@ -2,6 +2,7 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "user_privilege")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))
-public class UserPrivilege extends IdentityName {
+public class UserPrivilege extends IdentityName implements Serializable {
 
   @Column
   private String description;
@@ -23,6 +24,7 @@ public class UserPrivilege extends IdentityName {
   private MetaData metaData= new MetaData();
 
   @ManyToMany(cascade = CascadeType.ALL, mappedBy = "privileges")
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   private Set<UserRole> roles;
 
 

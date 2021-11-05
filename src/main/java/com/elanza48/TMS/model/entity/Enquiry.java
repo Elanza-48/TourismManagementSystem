@@ -1,20 +1,20 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 
 @Entity
-public class Enquiry extends Identity{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Enquiry extends Identity implements Serializable {
 
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -23,6 +23,7 @@ public class Enquiry extends Identity{
 	
 	@Column
 	@NotNull
+	@PastOrPresent
 	private Date date;
 	
 	@Column

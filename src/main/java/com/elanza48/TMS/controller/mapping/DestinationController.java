@@ -3,6 +3,8 @@ package com.elanza48.TMS.controller.mapping;
 import java.util.List;
 import java.util.UUID;
 
+import com.elanza48.TMS.model.ModelDtoMapper;
+import com.elanza48.TMS.model.dto.DestinationDTO;
 import com.elanza48.TMS.model.entity.Destination;
 import com.elanza48.TMS.service.DestinationService;
 
@@ -19,20 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class DestinationController {
 
   private DestinationService destinationService;
+  private  ModelDtoMapper modelDtoMapper;
 
   @Autowired
   public void setDestinationService(DestinationService destinationService) {
       this.destinationService = destinationService;
   }
+  @Autowired
+  public void setModelDtoMapper(ModelDtoMapper modelDtoMapper) {
+      this.modelDtoMapper = modelDtoMapper;
+  }
 
   @GetMapping
-  public List<Destination> getAllDestinations(){
-      return destinationService.getAllDestinations();
+  public List<DestinationDTO> getAllDestinations(){
+      return modelDtoMapper.destinationModelToDtoList(destinationService.getAllDestinations());
   }
 
   @GetMapping("/{id}")
-  public Destination getDestinationById(@PathVariable UUID id){
-      return destinationService.getDestinationByid(id);
+  public DestinationDTO getDestinationById(@PathVariable UUID id){
+      return modelDtoMapper.destinationModelToDto(destinationService.getDestinationByid(id));
   }
 
   @PostMapping

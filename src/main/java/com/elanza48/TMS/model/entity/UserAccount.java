@@ -2,18 +2,20 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_Account")
-public class UserAccount extends Contact{
+public class UserAccount extends Contact implements Serializable {
 
 	public enum UserGender{
 		MALE, FEMALE, TRANS
@@ -30,9 +32,9 @@ public class UserAccount extends Contact{
 
 	@Column
 	@NotNull
+	@Past
 	private Date dob;
 
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private UserRole role;
@@ -50,6 +52,7 @@ public class UserAccount extends Contact{
 	private MetaData metaData = new MetaData();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	Set<Booking> bookings;
 	
 

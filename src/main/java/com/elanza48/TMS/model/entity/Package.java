@@ -1,23 +1,19 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "tour_Package")
-public class Package extends IdentityName{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Package extends IdentityName implements Serializable {
 	
 	@Column
 	@Type(type = "text")
@@ -42,6 +38,7 @@ public class Package extends IdentityName{
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="dest_id")}
 	)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Destination> destinations;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -49,9 +46,11 @@ public class Package extends IdentityName{
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="transport_id")}
 	)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Transport> transports;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Booking> bookings;
 	
 	public Package() {}

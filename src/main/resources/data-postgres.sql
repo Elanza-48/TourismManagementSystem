@@ -202,7 +202,7 @@ insert into main.user_account(id, name, gender, dob, district, state, street, zi
      (select id from main.user_role where title='ADMIN')),
     ((select uuid_generate_v4()),'Rishav lahiri',0 , to_date('19950910','YYYYMMDD'),  'Kolkata', 'WB', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, '{noop}password_m1', true, false, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='MANAGER')),
-    ((select uuid_generate_v4()),'Ronit Chakraborty',0 , to_date('19971022','YYYYMMDD'), 'Kolkata', 'B', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', false, false, (select localtimestamp), (select localtimestamp),
+    ((select uuid_generate_v4()),'Ronit Chakraborty',0 , to_date('19971022','YYYYMMDD'), 'Kolkata', 'WB', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', false, false, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='MANAGER')),
     ((select uuid_generate_v4()),'Sohaib Akram' ,0 , to_date('19870808','YYYYMMDD'), 'North Delhi', 'DL', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, '{noop}password_u1', false, true, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='USER')),

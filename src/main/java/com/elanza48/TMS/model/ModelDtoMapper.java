@@ -2,17 +2,10 @@ package com.elanza48.TMS.model;
 
 import java.util.List;
 
-import com.elanza48.TMS.model.dto.BookingDTO;
-import com.elanza48.TMS.model.dto.DestinationDTO;
-import com.elanza48.TMS.model.dto.HotelDTO;
-import com.elanza48.TMS.model.dto.PackageDTO;
-import com.elanza48.TMS.model.dto.UserAccountDTO;
-import com.elanza48.TMS.model.entity.Booking;
-import com.elanza48.TMS.model.entity.Destination;
-import com.elanza48.TMS.model.entity.Hotel;
-import com.elanza48.TMS.model.entity.Package;
-import com.elanza48.TMS.model.entity.UserAccount;
+import com.elanza48.TMS.model.dto.*;
+import com.elanza48.TMS.model.entity.*;
 
+import com.elanza48.TMS.model.entity.Package;
 import org.mapstruct.Mapper;
 
 @Mapper
@@ -33,7 +26,7 @@ public interface ModelDtoMapper {
   Destination destinationDtoToModel(DestinationDTO destDto);
 
 
-  PackageDTO packageModelToDto(Package package1);
+  PackageDTO packageModelToDto(Package tourPackage);
   List<PackageDTO> packageModelToDtoList(List<Package> packages);
   Package packageDtoToModel(PackageDTO packageDTO);
 
@@ -41,5 +34,15 @@ public interface ModelDtoMapper {
   BookingDTO bookingModelToDto(Booking booking);
   List<BookingDTO> bookingModelToDtoList(List<Booking> bookings);
   Booking bookingDtoToModel(BookingDTO bookingDTO);
-  
+
+
+  UserRoleDTO userRoleModelToDto(UserRole userRole);
+  List<UserRoleDTO> userRoleModelToDtoList(List<UserRoleDTO> userRoles);
+  UserRole userRoleDtoToModel(UserRoleDTO userRoleDTO);
+
+
+  UserPrivilegeDTO userPrivilegeModelToDto(UserPrivilege userPrivilege);
+  List<UserPrivilegeDTO> userPrivilegeModelToDtoList(List<UserPrivilege> userPrivileges);
+  UserPrivilege userPrivilegeDtoToModel(UserPrivilegeDTO userPrivilegeDTO);
+
 }

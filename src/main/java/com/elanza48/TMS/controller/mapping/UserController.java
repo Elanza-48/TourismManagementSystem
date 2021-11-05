@@ -3,6 +3,8 @@ package com.elanza48.TMS.controller.mapping;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.elanza48.TMS.model.dto.*;
+import com.elanza48.TMS.model.entity.UserPrivilege;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -20,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elanza48.TMS.model.ModelDtoMapper;
-import com.elanza48.TMS.model.dto.AddressDTO;
-import com.elanza48.TMS.model.dto.BookingDTO;
-import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.Booking;
 import com.elanza48.TMS.model.entity.UserAccount;
 import com.elanza48.TMS.service.UserAccountService;
@@ -56,15 +55,15 @@ public class UserController {
 			put = @CachePut(value = "TMSCache")
 	)
 	@GetMapping("/email/{email}")
-	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
-	@PreAuthorize("#email == authentication.name")
+	@Secured({"ROLE_USER"})
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
 	public UserAccountDTO getUserByEmail(@PathVariable String email) {
 		return  modelDtoMapper.userAccountModelToDto( userService.findUser(email).get());
 	}
 
 	@GetMapping("/email/{email}/address")
 	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
-	@PreAuthorize("#email == authentication.name")
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
 	public ResponseEntity<AddressDTO> getUserAddress(@PathVariable String email) {
 		return ResponseEntity.ok(modelDtoMapper.userAccountModelToDto(
 			userService.findUser(email).get()).getAddress());
@@ -72,10 +71,28 @@ public class UserController {
 
 	@GetMapping("/email/{email}/booking")
 	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
-	@PreAuthorize("#email == authentication.name")
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
 	public ResponseEntity<List<BookingDTO>> getUserBooking(@PathVariable String email) {
 		return ResponseEntity.ok(modelDtoMapper.bookingModelToDtoList(
 			new ArrayList<Booking>(userService.findUser(email).get().getBookings())
+		));
+	}
+
+	@GetMapping("/email/{email}/role")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
+	public ResponseEntity<UserRoleDTO> getUserRole(@PathVariable String email) {
+		return ResponseEntity.ok(modelDtoMapper.userRoleModelToDto(
+				userService.findUser(email).get().getRole()
+		));
+	}
+
+	@GetMapping("/email/{email}/role/privilege")
+	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
+	public ResponseEntity<List<UserPrivilegeDTO>> getUserRolePrivilege(@PathVariable String email) {
+		return ResponseEntity.ok(modelDtoMapper.userPrivilegeModelToDtoList(
+				new ArrayList<UserPrivilege>(userService.findUser(email).get().getRole().getPrivileges())
 		));
 	}
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.elanza48.TMS.security.JWTUtils;
 import com.elanza48.TMS.service.UserAccountService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,17 +19,23 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter{
 
-  @Autowired
   private UserAccountService userAccountService;
+  private JWTUtils jwtUtils;
 
   @Autowired
-  private JWTUtils jwtUtils;
-  
+  public void setUserAccountService(UserAccountService userAccountService) {
+      this.userAccountService = userAccountService;
+  }
+  @Autowired
+  public void setJwtUtils(JWTUtils jwtUtils) {
+    this.jwtUtils = jwtUtils;
+  }
 
-  @Override
+    @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
@@ -49,6 +56,8 @@ public class JwtRequestFilter extends OncePerRequestFilter{
               credentialDetails.getUsername(), credentialDetails.getPassword(),credentialDetails.getAuthorities());
               userAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
               SecurityContextHolder.getContext().setAuthentication(userAuthToken);
+              log.info("LOGIN: [user: {}, role: {}]", credentialDetails.getUsername(),
+                      credentialDetails.getAuthorities());
           }
         }
     filterChain.doFilter(request, response);

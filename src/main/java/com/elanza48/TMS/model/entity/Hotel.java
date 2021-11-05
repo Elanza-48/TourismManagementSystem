@@ -1,23 +1,19 @@
 package com.elanza48.TMS.model.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "hotel_Info")
-public class Hotel extends Contact{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Hotel extends Contact implements Serializable {
 	
 	public enum HotelType{
 		STANDARD,
@@ -43,6 +39,7 @@ public class Hotel extends Contact{
 	private Destination destinationId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<HotelReview> reviews;
 	
 	public Hotel(){}

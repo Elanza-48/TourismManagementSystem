@@ -1,25 +1,25 @@
 package com.elanza48.TMS.model.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "destination_Info")
-public class Destination extends IdentityName{
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Destination extends IdentityName implements Serializable {
 	
 	@Column
 	@NotNull
+	@Length(min = 2, max = 2)
 	private String province;
 	
 	@Column
@@ -36,16 +36,20 @@ public class Destination extends IdentityName{
 	private MetaData metaData=new MetaData();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Hotel> hotels;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "destinations")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<DestinationReview> reviews;
 	
 	public Destination() {}
-	public Destination(@NotNull String name, @NotNull String province, String description, 
+	public Destination(@NotNull String name, @NotNull @Length(min = 2, max = 2)
+			String province, String description,
 		@Range(min = 1, max = 13) @NotNull short stayDuration) {
 		super(name);
 		this.province = province;

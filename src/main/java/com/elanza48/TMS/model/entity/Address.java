@@ -1,12 +1,15 @@
 package com.elanza48.TMS.model.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 @Embeddable
-public class Address {
+public class Address implements Serializable {
 	@Column
 	@NotNull
 	private String street;
@@ -17,6 +20,7 @@ public class Address {
 	
 	@Column
 	@NotNull
+	@Length(min = 2, max = 2)
 	private String state;
 	
 	@Column(length = 6)
@@ -25,7 +29,8 @@ public class Address {
 	private int zip;
 	
 	public Address(){}
-	public Address(@NotNull String street, @NotNull String district, @NotNull String state,
+	public Address(@NotNull String street, @NotNull String district, @NotNull @Length(min = 2, max = 2)
+			String state,
 			@NotNull @Pattern(regexp="(^$|[0-9]{6})") int zip) {
 		this.street = street;
 		this.district = district;
