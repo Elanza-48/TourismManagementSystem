@@ -1,5 +1,8 @@
 package com.elanza48.TMS.controller.mapping;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,12 +57,15 @@ public class SecurityController {
    */
 
   @GetMapping
-  public ResponseEntity<Map<String,String>> getMethodName() {
-
+  public ResponseEntity<Link> getMethodName() {
     Map<String, String> map = new HashMap<>();
     map.put("message:", "Welcome to the Tour Company !");
-    map.put("link", "./authenticate");
-    return ResponseEntity.ok(map);
+    Link link = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(
+                    SecurityController.class)
+                    .authBodyFormat()
+    ).withRel("authenticate");
+    return ResponseEntity.ok(link);
   }
 
   /**
@@ -77,7 +83,6 @@ public class SecurityController {
   /**
    * Gets authentication credentials from the user
    * authenticates user and returns JWT
-   * valid for 12 hours.
    *
    * @return {@link ResponseEntity}
    */
@@ -96,7 +101,7 @@ public class SecurityController {
     }catch(BadCredentialsException e){
       throw new Exception("Incorrect credentials !", e);
     }
-    String token=jwtTokenUtils.genrateToken(userAccountService.findUser(request.get("email")).get());
+    String token=jwtTokenUtils.generateToken(userAccountService.findUser(request.get("email")).get());
     tokenMap.put("token", token);
     tokenMap.put("expiresOn", jwtTokenUtils.extractClaims(token).get("exp").asDate().toInstant()
             .atZone(ZoneId.of("Asia/Kolkata"))

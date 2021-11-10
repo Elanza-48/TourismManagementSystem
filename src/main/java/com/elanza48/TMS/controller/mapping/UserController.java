@@ -99,7 +99,7 @@ public class UserController {
 	@DeleteMapping("/email/{email}")
 	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
-	public ResponseEntity<?> deleteUserByEmail(@PathVariable String email){
+	public ResponseEntity<String> deleteUserByEmail(@PathVariable String email){
 		userService.deleteUser(email);
 		return ResponseEntity.accepted().body("{\"message\": \"User Deleted.\"}");
 	}
