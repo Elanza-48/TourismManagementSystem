@@ -20,7 +20,7 @@ Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststo
 $ openssl req -x509 -out localhost.crt -keyout localhost.pem \
   -newkey rsa:4096 -nodes -sha256 \
   -subj '/CN=localhost' -extensions EXT -config <( \
-   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\n \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\n
    subjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 
 # generate PKCS12 keystore/truststore file that contains both our certificate and key.
@@ -43,15 +43,17 @@ $ keytool -exportcert -keystore keystore.p12 -storetype PKCS12 \
     -storepass password -alias tms_ssl -file localhost.crt
 ``` 
 
-The Spring Security uses [java-jwt](https://github.com/auth0/java-jwt) library to generate and verity JWT tokens using ECDSA P-521 key value pairs.
+The Spring Security uses [java-jwt](https://github.com/auth0/java-jwt) library to generate and verity JWT tokens using ECDSA P-512 key value pairs.
 Generate them under `resources` directory and add the file names in the properties file.
 ``` shell
-# Sample ECDSA-521 Key-value generation using openssl.
-$ openssl ecparam -genkey -name secp521r1 -out private-pkcs1.pem
-$ openssl ec -in private-pkcs1.pem -pubout -out public.pem
+# Sample ECDSA P-512 Key-value generation using openssl.
+$ openssl ecparam -genkey -name secp521r1 -noout -out private-keypair.pem
 
-# convert pkcs#1 to pkcs#8
-$ openssl pkcs8 -topk8 -inform pem -outform pem -in private-pkcs1.pem -out private.pem -nocrypt
+# [Optional] generate public key from private keypair. 
+$ openssl ec -in private-keypair.pem -pubout -out public.pem
+
+# [Optional] convert pkcs#1 to pkcs#8
+$ openssl pkcs8 -topk8 -inform pem -outform pem -in private-keypair.pem -out private.pem -nocrypt
 ```
 
 

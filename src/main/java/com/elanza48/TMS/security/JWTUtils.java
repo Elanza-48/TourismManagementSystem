@@ -1,5 +1,6 @@
 package com.elanza48.TMS.security;
 
+import java.io.IOException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.time.LocalDateTime;
@@ -34,11 +35,8 @@ public class JWTUtils {
   @Value("${webtoken.jwt.validity.duration-hours:12}")
   private int duration=12;
 
-  @Value("${webtoken.jwt.encrytion.ecdsa.private-key}")
-  private Resource privateKeyPath;
-
-  @Value("${webtoken.jwt.encrytion.ecdsa.public-key}")
-  private Resource publicKeyPath;
+  @Value("${webtoken.jwt.encrytion.ecdsa.key-pair}")
+  private Resource keyPair;
 
 
   private ECPublicKey publicKey=null;
@@ -46,21 +44,20 @@ public class JWTUtils {
   private Algorithm algorithm=null;
 
   private void initUtils(){
-    final String ASYMMETRIC_ALGORITHM = "EC";
     try{
-      System.out.println(publicKeyPath.getFile().getAbsolutePath());
+      System.out.println(keyPair.getFile().getAbsolutePath());
       if(this.publicKey==null){
-        this.publicKey = (ECPublicKey) PemUtils.readPublicKeyFromFile(
-                publicKeyPath.getFile(), ASYMMETRIC_ALGORITHM);
+        this.publicKey =  (ECPublicKey) PemUtils.getECKeyVal(
+                keyPair.getFile()).getPublic();
       }
       if(this.privateKey==null){
-        this.privateKey = (ECPrivateKey) PemUtils.readPrivateKeyFromFile(
-                privateKeyPath.getFile(), ASYMMETRIC_ALGORITHM);
+        this.privateKey = (ECPrivateKey) PemUtils.getECKeyVal(
+                keyPair.getFile()).getPrivate();
       }if(this.algorithm==null){
         algorithm = Algorithm.ECDSA512(publicKey,privateKey);
       }
-    }catch(Exception e){
-      e.printStackTrace();
+    }catch(IOException e){
+      log.error("JWT : [message :{}]",e.getLocalizedMessage());
     }
   }
 
