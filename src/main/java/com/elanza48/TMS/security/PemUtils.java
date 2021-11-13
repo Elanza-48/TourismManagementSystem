@@ -1,31 +1,39 @@
 package com.elanza48.TMS.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Encoding;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
+import org.bouncycastle.crypto.params.ECDomainParameters;
+import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemReader;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.*;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
-import java.security.spec.EncodedKeySpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Map;
 
 @Slf4j
 public class PemUtils {
+
+    public static AsymmetricCipherKeyPair generateEC512KeyPair(){
+        ECNamedCurveParameterSpec ecNamedCurveParameterSpec =
+                ECNamedCurveTable.getParameterSpec("secp521r1");
+        ECDomainParameters domainParameters = new ECDomainParameters(
+                ecNamedCurveParameterSpec.getCurve(),
+                ecNamedCurveParameterSpec.getG(),
+                ecNamedCurveParameterSpec.getN(),
+                ecNamedCurveParameterSpec.getH(),
+                ecNamedCurveParameterSpec.getSeed()
+        );
+
+        ECKeyPairGenerator generator = new ECKeyPairGenerator();
+        generator.init(new ECKeyGenerationParameters(domainParameters , new SecureRandom()));
+        return generator.generateKeyPair();
+    }
 
     public static KeyPair getECKeyVal(File pemFile) throws IOException {
         if (!pemFile.isFile() || !pemFile.exists()) {

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-abstract class IdentityDTO implements Serializable {
+public abstract class IdentityDTO implements Serializable {
 
 	@Id
 	protected UUID id;
@@ -23,18 +23,4 @@ abstract class IdentityDTO implements Serializable {
 		this.id = id;
 	}
 	
-}
-
-
-@AllArgsConstructor
-@NoArgsConstructor
-abstract class IdentityNameDTO extends IdentityDTO implements Serializable{
-	protected String name;
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 }

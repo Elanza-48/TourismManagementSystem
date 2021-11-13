@@ -20,8 +20,7 @@ Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststo
 $ openssl req -x509 -out localhost.crt -keyout localhost.pem \
   -newkey rsa:4096 -nodes -sha256 \
   -subj '/CN=localhost' -extensions EXT -config <( \
-   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\n
-   subjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 
 # generate PKCS12 keystore/truststore file that contains both our certificate and key.
 $ openssl pkcs12 -export -in localhost.crt -inkey localhost.pem -name tms_ssl \
@@ -34,7 +33,7 @@ $ openssl x509 -in localhost.crt -out localhost.crt.pem -outform pem
 # Sample RSA-4096 ssl certificate keystore generation using keytools.
 # can provide -validity <no of days> argument to set certificate validity.
 $ keytool -genkeypair -alias tms_ssl -keyalg RSA -keysize 4096 \
-  -dname "CN=localhost" -keypass password -keystore keystore.p12 \
+  -dname "CN=localhost , O=elanza48 , C=IN , S= Karnataka" -keypass password -keystore keystore.p12 \
   -storeType PKCS12 -storepass password
   
 # [Optional] extract certificate.

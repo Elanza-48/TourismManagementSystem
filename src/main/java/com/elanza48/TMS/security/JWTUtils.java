@@ -45,16 +45,15 @@ public class JWTUtils {
 
   private void initUtils(){
     try{
-      System.out.println(keyPair.getFile().getAbsolutePath());
       if(this.publicKey==null){
         this.publicKey =  (ECPublicKey) PemUtils.getECKeyVal(
-                keyPair.getFile()).getPublic();
+                this.keyPair.getFile()).getPublic();
       }
       if(this.privateKey==null){
         this.privateKey = (ECPrivateKey) PemUtils.getECKeyVal(
-                keyPair.getFile()).getPrivate();
+                this.keyPair.getFile()).getPrivate();
       }if(this.algorithm==null){
-        algorithm = Algorithm.ECDSA512(publicKey,privateKey);
+        this.algorithm = Algorithm.ECDSA512(publicKey,privateKey);
       }
     }catch(IOException e){
       log.error("JWT : [message :{}]",e.getLocalizedMessage());
@@ -73,7 +72,7 @@ public class JWTUtils {
     String token=null;
 
     LocalDateTime issuedTime= LocalDateTime.now(ZONE);
-    LocalDateTime expirationTime = issuedTime.plusHours(duration);
+    LocalDateTime expirationTime = issuedTime.plusHours(this.duration);
     try{
       initUtils();
       token = JWT.create()
@@ -81,7 +80,7 @@ public class JWTUtils {
          .withIssuedAt(Date.from(issuedTime.atZone(ZONE).toInstant()))
          .withExpiresAt(Date.from(expirationTime.atZone(ZONE).toInstant()))
          .withSubject(subject)
-         .withIssuer("elanza48").sign(algorithm);
+         .withIssuer("elanza48").sign(this.algorithm);
 
     }catch(JWTCreationException e){
       log.error("JWT: [status: error, user:{}, message: {}]",payload.get("email") ,e.getLocalizedMessage());
@@ -96,7 +95,7 @@ public class JWTUtils {
     DecodedJWT decodedJWT=null;
     try {
       initUtils();
-      JWTVerifier verifier = JWT.require(algorithm).acceptExpiresAt(60).build();
+      JWTVerifier verifier = JWT.require(this.algorithm).acceptExpiresAt(60).build();
       decodedJWT = verifier.verify(JWT.decode(token));
     }catch(JWTVerificationException e){
       log.error("JWT: [status: error, message: {}]",e.getLocalizedMessage());

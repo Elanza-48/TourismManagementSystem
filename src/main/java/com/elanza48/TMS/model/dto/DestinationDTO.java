@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @NoArgsConstructor
 public class DestinationDTO extends IdentityNameDTO implements Serializable {
 
@@ -40,7 +42,7 @@ public class DestinationDTO extends IdentityNameDTO implements Serializable {
 				ObjectMapper objectMapper = new ObjectMapper();
 				this.stateMap = objectMapper.readValue(rawData, HashMap.class);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("DESTINATION_DTO: [status : error, message: {}]",e.getLocalizedMessage());
 			}
 		}
 	}
