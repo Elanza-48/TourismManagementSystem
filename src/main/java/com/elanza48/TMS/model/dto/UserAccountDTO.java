@@ -1,10 +1,12 @@
 package com.elanza48.TMS.model.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import com.elanza48.TMS.model.entity.UserAccount.UserGender;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +18,11 @@ import lombok.Setter;
 public class UserAccountDTO extends ContactDTO implements Serializable {
 
 	private UserGender gender;
+	@JsonSerialize(using = com.elanza48.TMS.config.JSONDateFormatter.class)
+	@JsonDeserialize(using = com.elanza48.TMS.config.JSONDateValidator.class)
 	private Date dob;
 	private UserRoleDTO role;
+	private String password="hidden";
 	
 	
 	public UserAccountDTO(String name,String email,long mobileNo, AddressDTO address,

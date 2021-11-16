@@ -12,14 +12,26 @@ import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.*;
 
+/**
+ * Utility class to handle Cryptographic keys.
+ * Uses {@link org.bouncycastle}
+ *
+ * @author Elanza-48
+ */
 @Slf4j
-public class PemUtils {
+@Service
+public class CipherUtils {
 
-    public static AsymmetricCipherKeyPair generateEC512KeyPair(){
+    /**
+     * Generates new ECDSA P-512 Keypair.
+     * @return {@link AsymmetricCipherKeyPair}
+     */
+    public AsymmetricCipherKeyPair generateEC512KeyPair(){
         ECNamedCurveParameterSpec ecNamedCurveParameterSpec =
                 ECNamedCurveTable.getParameterSpec("secp521r1");
         ECDomainParameters domainParameters = new ECDomainParameters(
@@ -35,7 +47,15 @@ public class PemUtils {
         return generator.generateKeyPair();
     }
 
-    public static KeyPair getECKeyVal(File pemFile) throws IOException {
+    /**
+     * Parse ECDSA P-512 Key from external file in `pem` format.
+     *
+     * @param pemFile
+     * @return {@link KeyPair}
+     * @throws IOException
+     */
+
+    public KeyPair getECKeyVal(File pemFile) throws IOException {
         if (!pemFile.isFile() || !pemFile.exists()) {
             throw new FileNotFoundException(
                     String.format("The file '%s' doesn't exist.", pemFile.getAbsolutePath()));
@@ -43,7 +63,7 @@ public class PemUtils {
         return generateECKeyPair(pemFile);
     }
 
-    private static KeyPair generateECKeyPair(File pemFile){
+    private KeyPair generateECKeyPair(File pemFile){
         Security.addProvider(new BouncyCastleProvider());
 
         try{

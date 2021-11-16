@@ -4,6 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehcache.event.CacheEvent;
 import org.ehcache.event.CacheEventListener;
 
+/**
+ * Custom formatted Cache Event Logger.
+ * Uses {@link org.ehcache}
+ *
+ * @author Elanza-48
+ */
 @Slf4j
 public class CacheEventLogger implements CacheEventListener<Object, Object> {
     @Override

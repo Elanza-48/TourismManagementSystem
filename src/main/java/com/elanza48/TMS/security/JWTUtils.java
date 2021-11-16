@@ -22,10 +22,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.elanza48.TMS.model.entity.UserAccount;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * Utility class to handle JWT tokens.
+ *
+ * @author Elanza-48
+ */
 @Slf4j
 @Service
 public class JWTUtils {
@@ -43,14 +50,21 @@ public class JWTUtils {
   private ECPrivateKey privateKey=null;
   private Algorithm algorithm=null;
 
+  private CipherUtils cipherUtils=null;
+
+  @Autowired
+  public void setCipherUtils(CipherUtils cipherUtils) {
+    this.cipherUtils = cipherUtils;
+  }
+
   private void initUtils(){
     try{
       if(this.publicKey==null){
-        this.publicKey =  (ECPublicKey) PemUtils.getECKeyVal(
+        this.publicKey =  (ECPublicKey) cipherUtils.getECKeyVal(
                 this.keyPair.getFile()).getPublic();
       }
       if(this.privateKey==null){
-        this.privateKey = (ECPrivateKey) PemUtils.getECKeyVal(
+        this.privateKey = (ECPrivateKey) cipherUtils.getECKeyVal(
                 this.keyPair.getFile()).getPrivate();
       }if(this.algorithm==null){
         this.algorithm = Algorithm.ECDSA512(publicKey,privateKey);

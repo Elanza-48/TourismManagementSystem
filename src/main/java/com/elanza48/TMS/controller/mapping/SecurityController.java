@@ -4,7 +4,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,19 +57,8 @@ public class SecurityController {
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> getMethodName() {
 
-    Map<String, String> map = new LinkedHashMap<>();
-    map.put("message:", "Welcome to the Tour Company !");
-
-    List<Link> links = new LinkedList<>();
-    links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-            SecurityController.class).authBodyFormat()).withRel("authenticate"));
-    links.add(WebMvcLinkBuilder.linkTo(UserController.class).withRel("user"));
-    links.add(WebMvcLinkBuilder.linkTo(PackageController.class).withRel("tourPackages"));
-    links.add(WebMvcLinkBuilder.linkTo(HotelController.class).withRel("hotel"));
-    links.add(WebMvcLinkBuilder.linkTo(DestinationController.class).withRel("destination"));
-    links.add(WebMvcLinkBuilder.linkTo(SecurityController.class).withSelfRel());
-
-    return ResponseEntity.ok(CollectionModel.of(map,links));
+    return ResponseEntity.ok(CollectionModel.of(
+            Map.of("message:", "Welcome to the Tour Company !"),getHyperLinks()));
   }
 
   /**
@@ -78,11 +66,11 @@ public class SecurityController {
    * @return {@link ResponseEntity}
    */
   @GetMapping(value="/authenticate")
-  public ResponseEntity<Map<String,String>> authBodyFormat(){
-    Map<String, String> map = new LinkedHashMap<>();
-    map.put("email", null);
-    map.put("password", null);
-    return ResponseEntity.ok(map);
+  public ResponseEntity<RepresentationModel<?>> authBodyFormat(){
+
+    return ResponseEntity.ok(CollectionModel.of(Map.of(
+            "email", "null", "password", "null"
+    ), getHyperLinks()));
   }
 
   /**
@@ -91,7 +79,7 @@ public class SecurityController {
    *
    * @return {@link ResponseEntity}
    */
-  @PostMapping(value="/authenticate", consumes = "application/hal+json")
+  @PostMapping(value="/authenticate")
   public ResponseEntity<RepresentationModel<?>> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
     String emailPattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
     Map<String, String> tokenMap = new LinkedHashMap<>();
@@ -112,14 +100,19 @@ public class SecurityController {
             .atZone(ZoneId.of("Asia/Kolkata"))
             .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)));
 
+    return ResponseEntity.accepted().body(CollectionModel.of(tokenMap,getHyperLinks()));
+  }
+
+  private List<Link> getHyperLinks(){
     List<Link> links = new LinkedList<>();
     links.add(WebMvcLinkBuilder.linkTo(SecurityController.class).withRel("home"));
-    links.add(WebMvcLinkBuilder.linkTo(UserController.class).withRel("user"));
+    links.add(WebMvcLinkBuilder.linkTo(UserAccountController.class).withRel("user"));
     links.add(WebMvcLinkBuilder.linkTo(PackageController.class).withRel("tourPackages"));
     links.add(WebMvcLinkBuilder.linkTo(HotelController.class).withRel("hotel"));
     links.add(WebMvcLinkBuilder.linkTo(DestinationController.class).withRel("destination"));
     links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-            SecurityController.class).authBodyFormat()).withSelfRel());
-    return ResponseEntity.accepted().body(CollectionModel.of(tokenMap,links));
+            SecurityController.class).authBodyFormat()).withRel("authenticate"));
+
+    return links;
   }
 }

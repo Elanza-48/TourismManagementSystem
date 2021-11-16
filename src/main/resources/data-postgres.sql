@@ -1,15 +1,15 @@
-create  or replace function main.truncate_tables(usr_name in varchar, schema_name in varchar) returns void
-language plpgsql as '
+create  or replace function main.truncate_tables(schema_name in varchar) returns void
+    language plpgsql as '
 declare
     statements cursor for
-        select tablename from pg_tables where schemaname= schema_name and tableowner=usr_name;
+        select tablename from pg_tables where schemaname= schema_name and tableowner!=''postgres'';
 begin
     for stmt in statements loop
         execute ''truncate table '' || schema_name || ''.'' || quote_ident(stmt.tablename) || '' cascade'';
     end loop;
 end;
 ';
-select main.truncate_tables('elanza48', 'main');
+select main.truncate_tables('main');
 
 ---- Insert data ----
 

@@ -2,8 +2,9 @@ package com.elanza48.TMS.controller.mapping;
 
 import java.util.*;
 
-import com.elanza48.TMS.model.dto.*;
-import com.elanza48.TMS.model.entity.UserPrivilege;
+import com.elanza48.TMS.model.dto.AddressDTO;
+import com.elanza48.TMS.model.dto.UserAccountDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/user", produces = {"application/hal+json"})
-public class UserController {
+public class UserAccountController {
 
 	private UserAccountService userService;
 	private ModelDtoMapper modelDtoMapper;
@@ -42,12 +43,27 @@ public class UserController {
 		this.modelDtoMapper = modelDtoMapper;
 	}
 
-	@PostMapping
+	@GetMapping
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccount user) {
-		return ResponseEntity.accepted().body(modelDtoMapper.userAccountModelToDto(
-			userService.createUser(user)
-		));
+	public ResponseEntity<RepresentationModel<?>> getUserAccountHAL() {
+		return ResponseEntity.ok(new RepresentationModel<>(getHyperLinks()));
+	}
+
+	@GetMapping("/register")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<RepresentationModel<?>> getRegisterFormat(){
+		UserAccountDTO userAccountDTO = new UserAccountDTO();
+		userAccountDTO.setAddress(new AddressDTO());
+		return ResponseEntity.ok(CollectionModel.of(userAccountDTO, getHyperLinks()));
+	}
+
+	@PostMapping("/register")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<RepresentationModel<?>> createUser(@RequestBody UserAccountDTO userAccountDTO) {
+		UserAccount userAccount = modelDtoMapper.userAccountDtoToModel(userAccountDTO);
+		return ResponseEntity.accepted().body(CollectionModel.of(modelDtoMapper.userAccountModelToDto(
+			userService.createUser(userAccount)), getHyperLinks())
+		);
 	}
 
 	@Caching(
@@ -94,19 +110,21 @@ public class UserController {
 	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
 	public ResponseEntity<RepresentationModel<?>> getUserRolePrivilege(@PathVariable String email) {
 			return ResponseEntity.ok(CollectionModel.of(modelDtoMapper.userPrivilegeModelToDtoList(
-					new ArrayList<UserPrivilege>(userService.findUser(email).get().getRole().getPrivileges())
+					new ArrayList<>(userService.findUser(email).get().getRole().getPrivileges())
 			),getHyperLinks()));
 	}
 
 	@DeleteMapping("/email/{email}")
 	@Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 	@PreAuthorize("#email == authentication.name")
-	public ResponseEntity<String> deleteUserByEmail(@PathVariable String email){
+	public ResponseEntity<RepresentationModel<?>> deleteUserByEmail(@PathVariable String email){
 		userService.deleteUser(email);
-		return ResponseEntity.accepted().body("{\"message\": \"User Deleted.\"}");
+		return ResponseEntity.accepted().body(CollectionModel.of(
+				Map.of("message","User Deleted."), getHyperLinks())
+		);
 	}
 	
-	@GetMapping
+	@GetMapping("/all")
 	@Secured({"ROLE_ADMIN"})
 	public ResponseEntity<RepresentationModel<?>> getAllUser() {
 		return ResponseEntity.ok(CollectionModel.of(
@@ -116,17 +134,19 @@ public class UserController {
 	private List<Link> getHyperLinks(){
 		List<Link> links = new LinkedList<>();
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getUserBooking(null)).withRel("userBooking"));
+				UserAccountController.class).getUserBooking(null)).withRel("userBooking"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getUserRole(null)).withRel("userRole"));
+				UserAccountController.class).getUserRole(null)).withRel("userRole"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getUserRolePrivilege(null)).withRel("userPrivilege"));
+				UserAccountController.class).getUserRolePrivilege(null)).withRel("userPrivilege"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getUserAddress(null)).withRel("userAddress"));
+				UserAccountController.class).getUserAddress(null)).withRel("userAddress"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getUserByEmail(null)).withRel("user"));
+				UserAccountController.class).getUserByEmail(null)).withRel("userDetails"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				UserController.class).getAllUser()).withRel("users"));
+				UserAccountController.class).getAllUser()).withRel("allUserDetails"));
+		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+				UserAccountController.class).getRegisterFormat()).withRel("userRegistration"));
 
 		return links;
 	}
@@ -138,7 +158,7 @@ public class UserController {
         Map<String, Object> body= new LinkedHashMap<>();
         body.put("status", HttpStatus.FORBIDDEN.value());
         body.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
-        body.put("message",  "Required Admin Privileges");
+        body.put("message",  "Required Higher Privileges !");
         return new ResponseEntity<>(CollectionModel.of(body,getHyperLinks()),HttpStatus.NOT_FOUND);
     }
 

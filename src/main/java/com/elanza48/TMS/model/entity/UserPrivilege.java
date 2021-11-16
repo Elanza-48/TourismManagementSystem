@@ -23,7 +23,10 @@ public class UserPrivilege extends IdentityName implements Serializable {
   @NotNull
   private MetaData metaData= new MetaData();
 
-  @ManyToMany(cascade = CascadeType.ALL, mappedBy = "privileges")
+  @ManyToMany(cascade = {
+          CascadeType.MERGE,
+          CascadeType.REFRESH
+  }, mappedBy = "privileges")
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   private Set<UserRole> roles;
 
@@ -66,6 +69,6 @@ public class UserPrivilege extends IdentityName implements Serializable {
 
   @Override
   public String toString() {
-    return "UserPrivilege [description=" + description + ", roles=" + roles + "]";
+    return "UserPrivilege [description=" + description + "]";
   }
 }

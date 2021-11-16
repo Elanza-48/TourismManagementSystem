@@ -3,7 +3,7 @@ package com.elanza48.TMS.model.entity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -32,10 +32,15 @@ public class UserAccount extends Contact implements Serializable {
 
 	@Column
 	@NotNull
+	@Temporal(TemporalType.DATE)
 	@Past
 	private Date dob;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {
+			CascadeType.PERSIST,
+			CascadeType.MERGE,
+			CascadeType.REFRESH
+	})
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private UserRole role;
 	
@@ -169,7 +174,7 @@ public class UserAccount extends Contact implements Serializable {
 	@Override
 	public String toString() {
 		return "UserAccount [role=" + role + ", active=" + active + ", dob=" + dob + ", bookings=" + bookings + ", email=" + email
-				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + "gender=" + gender + ", id=" + id + "]";
+				+ ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name + ", gender=" + gender + ", id=" + id + "]";
 	}
 
 }

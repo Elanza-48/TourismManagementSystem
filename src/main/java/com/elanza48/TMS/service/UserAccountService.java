@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.elanza48.TMS.model.dao.UserRoleRepository;
+import com.elanza48.TMS.model.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,10 +19,11 @@ import com.elanza48.TMS.model.dao.UserAccountRepository;
 import com.elanza48.TMS.model.entity.UserAccount;
 
 @Service
-@Transactional(propagation = Propagation.SUPPORTS)
+@Transactional
 public class UserAccountService implements UserDetailsService{
 
 	UserAccountRepository userRepo;
+	UserRoleRepository userRoleRepo;
 	PasswordEncoder encoder;
 
 	@Autowired
@@ -30,6 +33,10 @@ public class UserAccountService implements UserDetailsService{
 	@Autowired
 	public void setEncoder(PasswordEncoder encoder) {
 		this.encoder = encoder;
+	}
+	@Autowired
+	public void setUserRoleRepo(UserRoleRepository userRoleRepo) {
+		this.userRoleRepo = userRoleRepo;
 	}
 
 	@Override
@@ -41,8 +48,10 @@ public class UserAccountService implements UserDetailsService{
 		return new UserCredentialDetails(findUser(email).get());
 	};
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public UserAccount createUser(UserAccount user) {
 		user.setPassword(encoder.encode(user.getPassword()));
+		user.setRole(userRoleRepo.findByName(UserRole.ROLES.USER.name()).get());
 		return userRepo.save(user);
 	}
 
