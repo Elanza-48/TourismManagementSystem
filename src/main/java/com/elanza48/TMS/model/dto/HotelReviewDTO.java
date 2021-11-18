@@ -24,7 +24,7 @@ public class HotelReviewDTO extends IdentityDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "HotelReview [hotelId=" + hotelId + ", bookingId=" + bookingId + ", date=" + date + ", rating=" + rating
+		return "HotelReviewDTO [hotelId=" + hotelId + ", bookingId=" + bookingId + ", date=" + date + ", rating=" + rating
 				+ ", review=" + review + ", id=" + id + "]";
 	}
 }

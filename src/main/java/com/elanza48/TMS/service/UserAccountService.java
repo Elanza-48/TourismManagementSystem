@@ -44,7 +44,7 @@ public class UserAccountService implements UserDetailsService{
 
 		Optional<UserAccount> userAccount= findUser(email);
 		if(userAccount.isEmpty() || !userAccount.get().getEmail().equals(email))
-			throw new UsernameNotFoundException("LOGIN: [status: 'not found' ,user: "+email+"]");
+			throw new UsernameNotFoundException(String.format("LOGIN: [status: 'not found' ,user: %s", email));
 		return new UserCredentialDetails(findUser(email).get());
 	};
 

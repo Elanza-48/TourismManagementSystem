@@ -45,7 +45,7 @@ public interface ModelDtoMapper {
 
 
   UserRoleDTO userRoleModelToDto(UserRole userRole);
-  List<UserRoleDTO> userRoleModelToDtoList(List<UserRoleDTO> userRoles);
+  List<UserRoleDTO> userRoleModelToDtoList(List<UserRole> userRoles);
   @Mapping(target = "id", ignore = true)
   UserRole userRoleDtoToModel(UserRoleDTO userRoleDTO);
 

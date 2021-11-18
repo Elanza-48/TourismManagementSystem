@@ -22,7 +22,7 @@ public class TicketDTO extends IdentityDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Ticket [seatNumber=" + seatNumber + ", date=" + date + ", bookingId=" + bookingId + ", transportId="
+		return "TicketDTO [seatNumber=" + seatNumber + ", date=" + date + ", bookingId=" + bookingId + ", transportId="
 				+ transportId + ", id=" + id + "]";
 	}
 }

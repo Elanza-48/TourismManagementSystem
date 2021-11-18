@@ -68,7 +68,7 @@ public class HotelDTO extends ContactDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Hotel [type=" + type + ", basePrice=" + basePrice + ", destinationId=" + destinationId + 
+		return "HotelDTO [type=" + type + ", basePrice=" + basePrice + ", destinationId=" + destinationId +
 		 ", email=" + email + ", mobileNo=" + mobileNo + ", address=" + address + ", name=" + name
 				+ ", id=" + id + "]";
 	}

@@ -2,7 +2,10 @@ package com.elanza48.TMS.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.elanza48.TMS.model.entity.UserAccount;
 import com.elanza48.TMS.model.entity.UserAccount.UserGender;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,6 +34,28 @@ public class UserAccountDTO extends ContactDTO implements Serializable {
 		this.gender=gender;
 		this.dob=dob;
 		this.role=role;
+	}
+
+	public static Map<String, Object> getBodyFormat(){
+		Map<String, Object> userFormat = new LinkedHashMap<>();
+		userFormat.put("name", "string");
+		userFormat.put("email", "email pattern string");
+		userFormat.put("mobileNo", "integer: {10}");
+		userFormat.put("address", Map.of(
+				"street", "string",
+				"district", "string",
+				"state", "string",
+				"zip", "integer: {6}"
+		));
+		userFormat.put("gender", String.format("string: [%s, %s, %s]",
+				UserAccount.UserGender.MALE.name(),
+				UserAccount.UserGender.FEMALE.name(),
+				UserAccount.UserGender.TRANS.name()
+		));
+		userFormat.put("dob", "string: [dd-MM-yyyy]");
+		userFormat.put("password", "string");
+
+		return userFormat;
 	}
 
 	@Override
@@ -75,7 +100,7 @@ public class UserAccountDTO extends ContactDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "UserAccount [role=" + role + ", dob=" + dob + ", email=" + email + ", mobileNo=" + mobileNo 
+		return "UserAccountDTO [role=" + role + ", dob=" + dob + ", email=" + email + ", mobileNo=" + mobileNo
 			+ ", address=" + address + ", name=" + name + "gender=" + gender + ", id=" + id + "]";
 	}
 

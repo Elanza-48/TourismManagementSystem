@@ -79,7 +79,7 @@ public class DestinationDTO extends IdentityNameDTO implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Destination [province=" + province + ", description=" + description + ", stayDuration=" + stayDuration
+		return "DestinationDTO [province=" + province + ", description=" + description + ", stayDuration=" + stayDuration
 				+ ", name=" + name + ", id="
 				+ id + "]";
 	}

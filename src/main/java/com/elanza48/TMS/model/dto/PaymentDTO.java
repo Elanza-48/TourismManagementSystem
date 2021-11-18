@@ -34,7 +34,7 @@ public class PaymentDTO extends IdentityDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Payment [bookingId=" + bookingId + ", mode=" + mode + ", discount=" + discount + ", netCharge="
+		return "PaymentDTO [bookingId=" + bookingId + ", mode=" + mode + ", discount=" + discount + ", netCharge="
 				+ netCharge + ", gst=" + gst + ", transactionId=" + transactionId + ", date=" + date + ", status="
 				+ status + ", id=" + id + "]";
 	}

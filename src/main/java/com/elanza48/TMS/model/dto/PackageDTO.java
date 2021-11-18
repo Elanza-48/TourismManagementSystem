@@ -39,7 +39,7 @@ public class PackageDTO extends IdentityNameDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Package [description=" + description + ", activities=" + activities + ", events=" + events
+		return "PackageDTO [description=" + description + ", activities=" + activities + ", events=" + events
 				+ ", isActive=" + isActive + ", destinations=" + destinations + ", transports=" + transports
 				+ ", name=" + name + ", id=" + id + "]";
 	}

@@ -21,7 +21,7 @@ public class MetaDataDTO implements Serializable {
 
   @Override
   public String toString() {
-    return "MetaData [createdTimesatmp=" + createdTimesatmp + ", updateTimestamp=" + updateTimestamp + "]";
+    return "MetaDataDTO [createdTimesatmp=" + createdTimesatmp + ", updateTimestamp=" + updateTimestamp + "]";
   }
  
 }

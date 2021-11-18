@@ -22,7 +22,7 @@ public class DestinationReviewDTO extends IdentityDTO implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "DestinationReview [destinationId=" + destinationId + ", bookingId=" + bookingId + ", date=" + date
+		return "DestinationReviewDTO [destinationId=" + destinationId + ", bookingId=" + bookingId + ", date=" + date
 				+ ", rating=" + rating + ", review=" + review + ", id=" + id + "]";
 	}
 }

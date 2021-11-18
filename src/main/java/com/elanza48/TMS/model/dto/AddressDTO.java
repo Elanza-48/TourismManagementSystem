@@ -64,6 +64,6 @@ public class AddressDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Address [street=" + street + ", district=" + district + ", state=" + state + ", zip=" + zip + "]";
+		return "AddressDTO [street=" + street + ", district=" + district + ", state=" + state + ", zip=" + zip + "]";
 	}
 }

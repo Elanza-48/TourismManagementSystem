@@ -31,7 +31,7 @@ public class UserRoleDTO extends IdentityNameDTO implements Serializable {
   }
   @Override
   public String toString() {
-    return "UserRole [description=" + description + ", privileges=" + privileges + "]";
+    return "UserRoleDTO [description=" + description + ", privileges=" + privileges + "]";
   }
 
 }

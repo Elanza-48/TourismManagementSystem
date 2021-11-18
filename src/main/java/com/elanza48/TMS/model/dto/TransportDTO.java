@@ -38,7 +38,7 @@ public class TransportDTO extends IdentityNameDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Transport [description=" + description + ", mode=" + mode + ", public=" + isPublic + 
+		return "TransportDTO [description=" + description + ", mode=" + mode + ", public=" + isPublic +
 		", name=" + name + ", id=" + id + "]";
 	}
 	

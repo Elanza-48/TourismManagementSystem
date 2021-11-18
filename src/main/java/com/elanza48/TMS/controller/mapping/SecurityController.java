@@ -56,7 +56,6 @@ public class SecurityController {
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> getMethodName() {
-
     return ResponseEntity.ok(CollectionModel.of(
             Map.of("message:", "Welcome to the Tour Company !"),getHyperLinks()));
   }
@@ -66,11 +65,10 @@ public class SecurityController {
    * @return {@link ResponseEntity}
    */
   @GetMapping(value="/authenticate")
-  public ResponseEntity<RepresentationModel<?>> authBodyFormat(){
-
-    return ResponseEntity.ok(CollectionModel.of(Map.of(
+  public ResponseEntity<?> authBodyFormat(){
+    return ResponseEntity.ok(Map.of(
             "email", "null", "password", "null"
-    ), getHyperLinks()));
+    ));
   }
 
   /**
@@ -80,7 +78,7 @@ public class SecurityController {
    * @return {@link ResponseEntity}
    */
   @PostMapping(value="/authenticate")
-  public ResponseEntity<RepresentationModel<?>> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
+  public ResponseEntity<?> generateAuthToken(@RequestBody Map<String, String> request) throws Exception {
     String emailPattern="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
     Map<String, String> tokenMap = new LinkedHashMap<>();
 
@@ -100,7 +98,7 @@ public class SecurityController {
             .atZone(ZoneId.of("Asia/Kolkata"))
             .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)));
 
-    return ResponseEntity.accepted().body(CollectionModel.of(tokenMap,getHyperLinks()));
+    return ResponseEntity.accepted().body(tokenMap);
   }
 
   private List<Link> getHyperLinks(){

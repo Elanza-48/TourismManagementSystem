@@ -23,7 +23,7 @@ public class EnquiryDTO extends IdentityDTO implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Enquiry [bookingId=" + bookingId +  ", date=" + date + ", subject="
+		return "EnquiryDTO [bookingId=" + bookingId +  ", date=" + date + ", subject="
 				+ subject + ", body=" + body + ", isOpen=" + isOpen + ", id=" + id + "]";
 	}
 }

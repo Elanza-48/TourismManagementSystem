@@ -30,7 +30,7 @@ public class BookingDTO  extends IdentityDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Booking [date=" + date + ", packageId=" + packageId + ", tourDate=" + tourDate + ", userId=" + userId
+		return "BookingDTO [date=" + date + ", packageId=" + packageId + ", tourDate=" + tourDate + ", userId=" + userId
 				+ ", passengerCount=" + passengerCount + ", roomType=" + roomType + ", price=" + price + ", status="
 				+ status + ", id=" + id + "]";
 	}
