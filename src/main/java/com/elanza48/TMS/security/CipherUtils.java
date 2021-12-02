@@ -12,9 +12,11 @@ import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 
 /**
@@ -26,6 +28,26 @@ import java.security.*;
 @Slf4j
 @Service
 public class CipherUtils {
+
+    /**
+     * <p>SHA-256 hash generator.</p>
+     *
+     * @param password
+     * @return {@link String}
+     */
+
+    public String hashSHA256(String password){
+        MessageDigest digester;
+        String hash=null;
+        try{
+            digester=MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = digester.digest(password.getBytes(StandardCharsets.UTF_8));
+            hash= Hex.toHexString(hashedBytes);
+        }catch (NoSuchAlgorithmException e){
+            log.error("HASHING: [status: {}, message: {} ]","error", e.getLocalizedMessage());
+        }
+        return hash;
+    }
 
     /**
      * Generates new ECDSA P-512 Keypair.

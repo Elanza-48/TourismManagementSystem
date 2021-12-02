@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "transport_info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Transport extends IdentityName implements Serializable {
 	
 	public enum TransportMode{
@@ -41,11 +41,11 @@ public class Transport extends IdentityName implements Serializable {
 	private boolean isPublic= false;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	
 	public Transport() {}

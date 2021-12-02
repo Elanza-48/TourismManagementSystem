@@ -40,7 +40,7 @@ public class JWTUtils {
   private final ZoneId ZONE= ZoneOffset.UTC;
 
   @Value("${webtoken.jwt.validity.duration-hours:12}")
-  private int duration=12;
+  private int duration;
 
   @Value("${webtoken.jwt.encrytion.ecdsa.key-pair}")
   private Resource keyPair;
@@ -74,15 +74,24 @@ public class JWTUtils {
     }
   }
 
+  private String generateJwtId(String data){
+    String id = cipherUtils.hashSHA256(data);
+    if(id==null) throw new NullPointerException("JWT-ID couldn't be generated !");
+    return id;
+  }
+
   public String generateToken(UserAccount user){
+
+
     Map<String, Object> payload= new HashMap<>();
     payload.put("email", user.getEmail());
     payload.put("role", user.getRole().getName());
 
-    return createJWToken(payload, user.getName());
+    return createJWToken(payload, generateJwtId(String.format("%s.%s",
+            user.getId(), user.getEmail())), user.getName());
   }
 
-  private String createJWToken( Map<String, Object> payload, String subject){
+  private String createJWToken( Map<String, Object> payload, String jwtId,String subject){
     String token=null;
 
     LocalDateTime issuedTime= LocalDateTime.now(ZONE);
@@ -91,6 +100,7 @@ public class JWTUtils {
       initUtils();
       token = JWT.create()
          .withPayload(payload)
+         .withJWTId(jwtId)
          .withIssuedAt(Date.from(issuedTime.atZone(ZONE).toInstant()))
          .withExpiresAt(Date.from(expirationTime.atZone(ZONE).toInstant()))
          .withSubject(subject)
@@ -119,12 +129,16 @@ public class JWTUtils {
   }
 
   public boolean validateToken(String token, UserAccount user){
-
     if (verifyJWToken(token).isEmpty()) return false;
+    Map<String, Claim> decodedToken = verifyJWToken(token).get();
 
-    String email = verifyJWToken(token).get().get("email").asString();
-    String role = verifyJWToken(token).get().get("role").asString();
+    String email = decodedToken.get("email").asString();
+    String role = decodedToken.get("role").asString();
+    String jid= decodedToken.get("jti").asString();
+
     return (user.getEmail().equals(email) && user.getRole().getName().equals(role));
+    //TODO: temporarily jwt id check disabled.
+//            && generateJwtId(String.format("%s.%s",user.getId(), user.getEmail())).equals(jid));
   }
 
   public Map<String,Claim> extractClaims(String jwt){

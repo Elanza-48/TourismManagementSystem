@@ -3,7 +3,7 @@ package com.elanza48.TMS.controller.mapping;
 import java.util.List;
 import java.util.UUID;
 
-import com.elanza48.TMS.model.ModelDtoMapper;
+import com.elanza48.TMS.model.mapper.ModelDtoToMapper;
 import com.elanza48.TMS.model.dto.PackageDTO;
 import com.elanza48.TMS.model.entity.Package;
 import com.elanza48.TMS.service.PackageService;
@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PackageController {
 
   private PackageService packageService;
-  private ModelDtoMapper modelDtoMapper;
+  private ModelDtoToMapper modelDtoToMapper;
 
     @Autowired
-    public void setModelDtoMapper(ModelDtoMapper modelDtoMapper) {
-        this.modelDtoMapper = modelDtoMapper;
+    public void setModelDtoToMapper(ModelDtoToMapper modelDtoToMapper) {
+        this.modelDtoToMapper = modelDtoToMapper;
     }
 
     @Autowired
@@ -37,12 +37,12 @@ public class PackageController {
 
   @GetMapping
   public List<PackageDTO> getAllActivePackages(){
-      return modelDtoMapper.packageModelToDtoList(packageService.getAllPackages());
+      return modelDtoToMapper.packageModelToDtoList(packageService.getAllPackages());
   }
 
   @GetMapping("/{id}")
   public PackageDTO getPackageById(@PathVariable UUID id){
-      return modelDtoMapper.packageModelToDto(packageService.getPackageById(id));
+      return modelDtoToMapper.packageModelToDto(packageService.getPackageById(id));
   }
 
   @PostMapping

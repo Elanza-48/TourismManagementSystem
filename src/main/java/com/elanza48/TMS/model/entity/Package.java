@@ -12,7 +12,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "tour_Package")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Package extends IdentityName implements Serializable {
 	
 	@Column
@@ -38,7 +38,7 @@ public class Package extends IdentityName implements Serializable {
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="dest_id")}
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Destination> destinations;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -46,11 +46,11 @@ public class Package extends IdentityName implements Serializable {
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="transport_id")}
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Transport> transports;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Booking> bookings;
 	
 	public Package() {}

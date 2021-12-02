@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class IdentityDTO implements Serializable {
 
-	@Id
+	@Id @JsonIgnore
 	protected UUID id;
 	
 	public UUID getId() {

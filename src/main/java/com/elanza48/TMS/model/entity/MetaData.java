@@ -15,11 +15,11 @@ public class MetaData implements Serializable {
 
   @Column(name = "created_at", updatable = false)
   @PastOrPresent
-  private Timestamp createdTimesatmp;
+  private Timestamp createdTimesatmp=null;
 
   @Column(name = "last_update")
   @PastOrPresent
-  private Timestamp updateTimestamp;
+  private Timestamp updateTimestamp=null;
 
 
   public MetaData(){}
@@ -30,8 +30,10 @@ public class MetaData implements Serializable {
 
   @PrePersist
   public void setCreatedTimesatmp() {
-    this.createdTimesatmp = new Timestamp(new Date().getTime());
-    this.updateTimestamp=this.createdTimesatmp;
+    if(this.createdTimesatmp==null){
+      this.createdTimesatmp = new Timestamp(new Date().getTime());
+      this.updateTimestamp=this.createdTimesatmp;
+    }
   }
 
   public Timestamp getUpdateTimestamp() {

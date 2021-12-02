@@ -1,64 +1,45 @@
 package com.elanza48.TMS.model.dto;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
+import com.elanza48.TMS.config.JSONIndianStateMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.mapstruct.Named;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO implements Serializable {
 
 	@Getter @Setter private String street;
 	@Getter @Setter private String district;
-	private String state;
+	@Getter private String state;
 	@Getter @Setter private int zip;
-	@JsonIgnore private Map<String,String> stateMap=null;
 
-	private void jsonToMap() {
-		if(this.stateMap==null) {
-			try {
-				Resource resource = new ClassPathResource("static/IndianStates.json");
-				byte[] rawData = Files.readAllBytes(resource.getFile().toPath());
-				ObjectMapper objectMapper = new ObjectMapper();
-				this.stateMap = objectMapper.readValue(rawData, HashMap.class);
-			} catch (IOException e) {
-				log.error("ADDRESS_DTO: [status : error, message: {}]",e.getLocalizedMessage());
-			}
-		}
-	}
-
-	public String getState(){
-		jsonToMap();
-		return this.stateMap.get(this.state);
+	public AddressDTO(String street, String district, String state, int zip) {
+		this.street = street;
+		this.district = district;
+		this.setState(state);
+		this.zip = zip;
 	}
 
 	public void setState(String state) {
-		if(state.length()==2){
+		if(state.length()==2 && JSONIndianStateMapper.getStateMapping().containsKey(state)){
 			this.state=state;
-			return;
-		}else if(state.length()>2) {
-			jsonToMap();
-			for (Map.Entry<String, String> entry : this.stateMap.entrySet()) {
-				if (state.equals(entry.getValue())) {
+		}else if(state.length()>2 && JSONIndianStateMapper.getStateMapping().containsValue(state)) {
+			for (Map.Entry<String, String> entry : JSONIndianStateMapper.getStateMapping().entrySet()) {
+				if (state.equalsIgnoreCase(entry.getValue())) {
 					this.state = entry.getKey();
-					return;
+					break;
 				}
 			}
+		}else{
+			throw new IllegalArgumentException();
 		}
-		throw new IllegalArgumentException();
+
 	}
 
 

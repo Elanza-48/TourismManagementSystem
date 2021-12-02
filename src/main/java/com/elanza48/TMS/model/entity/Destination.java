@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "destination_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Destination extends IdentityName implements Serializable {
 	
 	@Column
@@ -36,15 +36,15 @@ public class Destination extends IdentityName implements Serializable {
 	private MetaData metaData=new MetaData();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Hotel> hotels;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "destinations")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Package> packages;
 	
 	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DestinationReview> reviews;
 	
 	public Destination() {}

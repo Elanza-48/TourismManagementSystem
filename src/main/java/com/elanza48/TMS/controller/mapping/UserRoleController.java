@@ -1,6 +1,9 @@
 package com.elanza48.TMS.controller.mapping;
 
-import com.elanza48.TMS.model.ModelDtoMapper;
+import com.elanza48.TMS.model.entity.UserAccount;
+import com.elanza48.TMS.model.entity.UserRole;
+import com.elanza48.TMS.model.mapper.DtoToModelMapper;
+import com.elanza48.TMS.model.mapper.ModelDtoToMapper;
 import com.elanza48.TMS.model.dto.UserRoleDTO;
 import com.elanza48.TMS.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +16,26 @@ import org.springframework.web.bind.annotation.*;
 public class UserRoleController {
 
     private UserRoleService userRoleService;
-    private ModelDtoMapper modelDtoMapper;
+    private ModelDtoToMapper modelDtoToMapper;
+    private DtoToModelMapper dtoToModelMapper;
 
     @Autowired
-    public void setModelDtoMapper(ModelDtoMapper modelDtoMapper) {
-        this.modelDtoMapper = modelDtoMapper;
+    public void setModelDtoToMapper(ModelDtoToMapper modelDtoToMapper) {
+        this.modelDtoToMapper = modelDtoToMapper;
     }
     @Autowired
     public void setUserRoleService(UserRoleService userRoleService) {
         this.userRoleService = userRoleService;
     }
+    @Autowired
+    public void setDtoToModelMapper(DtoToModelMapper dtoToModelMapper) {
+        this.dtoToModelMapper = dtoToModelMapper;
+    }
 
     @GetMapping("/role")
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     public ResponseEntity<?> getAllRole(){
-        return ResponseEntity.ok(modelDtoMapper.userRoleModelToDtoList(
+        return ResponseEntity.ok(modelDtoToMapper.userRoleModelToDtoList(
                 userRoleService.getAllRole()
         ));
     }
@@ -35,15 +43,15 @@ public class UserRoleController {
     @GetMapping("/role/{name}")
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     public ResponseEntity<?> getRoleByName(@PathVariable String name){
-        return ResponseEntity.ok(modelDtoMapper.userRoleModelToDto(
+        return ResponseEntity.ok(modelDtoToMapper.userRoleModelToDto(
                 userRoleService.findRole(name).get()
         ));
     }
 
     @PostMapping("/role")
     public ResponseEntity<?> createRole(@RequestBody UserRoleDTO userRoleDTO){
-        return ResponseEntity.accepted().body(modelDtoMapper.userRoleModelToDto(
-                userRoleService.createRole(modelDtoMapper.userRoleDtoToModel(userRoleDTO))
+        return ResponseEntity.accepted().body(modelDtoToMapper.userRoleModelToDto(
+                userRoleService.createRole(dtoToModelMapper.userRoleDtoToModel(userRoleDTO, new UserRole()))
         ));
     }
 }

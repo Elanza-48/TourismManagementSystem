@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "hotel_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Hotel extends Contact implements Serializable {
 	
 	public enum HotelType{
@@ -39,7 +39,7 @@ public class Hotel extends Contact implements Serializable {
 	private Destination destinationId;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> reviews;
 	
 	public Hotel(){}

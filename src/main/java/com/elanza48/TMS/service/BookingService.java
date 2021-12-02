@@ -11,25 +11,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class BookingService {
 
   private BookingRepository bookingRepository;
+
   @Autowired
   public void setBookingRepository(BookingRepository bookingRepository) {
     this.bookingRepository = bookingRepository;
   }
 
-  @Transactional(readOnly = true)
   public List<Booking> getAllBookings(){
     return bookingRepository.findAll();
   }
 
-  @Transactional(readOnly = true)
   public Booking getBookingById(UUID id){
     return bookingRepository.findById(id).get();
   }
 
-  @Transactional
   public Booking createBooking(Booking booking){
     return bookingRepository.save(booking);
   }

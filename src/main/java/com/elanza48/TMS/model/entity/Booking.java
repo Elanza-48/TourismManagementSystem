@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "booking_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Booking  extends Identity implements Serializable {
 	
 	public enum RoomType{
@@ -71,23 +71,23 @@ public class Booking  extends Identity implements Serializable {
 	private BookingStatus status = BookingStatus.ACTIVE;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DestinationReview> destinationReviews;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> hotelReviews;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Payment paymentInfo;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Enquiry> enquiries;
 	
 	public Booking() {}

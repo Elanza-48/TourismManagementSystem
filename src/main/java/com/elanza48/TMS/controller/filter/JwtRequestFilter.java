@@ -40,12 +40,13 @@ public class JwtRequestFilter extends OncePerRequestFilter{
       throws ServletException, IOException {
 
         final String authHeader= request.getHeader("Authorization");
-        String email=null, jwt=null;
+        String email=null, jwt=null, jwtId=null;
 
 
         if(authHeader !=null && authHeader.startsWith("Bearer ")){
           jwt=authHeader.substring(7);
           email=jwtUtils.extractClaims(jwt).get("email").asString();
+          jwtId=jwtUtils.extractClaims(jwt).get("jti").asString();
         }
 
         if(email != null && SecurityContextHolder.getContext().getAuthentication()==null){
@@ -56,7 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
               credentialDetails.getUsername(), credentialDetails.getPassword(),credentialDetails.getAuthorities());
               userAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
               SecurityContextHolder.getContext().setAuthentication(userAuthToken);
-              log.info("LOGIN: [status: success, user: {}, role: {}]", credentialDetails.getUsername(),
+              log.info("LOGIN: [status: success, jwtID: {} user: {}, role: {}]",jwtId, credentialDetails.getUsername(),
                       credentialDetails.getAuthorities());
           }
         }

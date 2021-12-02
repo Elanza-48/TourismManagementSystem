@@ -13,7 +13,7 @@ import javax.validation.constraints.Past;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "user_Account")
 public class UserAccount extends Contact implements Serializable {
 
@@ -57,7 +57,7 @@ public class UserAccount extends Contact implements Serializable {
 	private MetaData metaData = new MetaData();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	Set<Booking> bookings;
 	
 

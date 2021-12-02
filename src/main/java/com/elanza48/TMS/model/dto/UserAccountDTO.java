@@ -44,7 +44,7 @@ public class UserAccountDTO extends ContactDTO implements Serializable {
 		userFormat.put("address", Map.of(
 				"street", "string",
 				"district", "string",
-				"state", "string",
+				"state", "string: {^2} [goto: '/IndianStates.json']",
 				"zip", "integer: {6}"
 		));
 		userFormat.put("gender", String.format("string: [%s, %s, %s]",

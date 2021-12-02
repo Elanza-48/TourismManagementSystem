@@ -65,10 +65,19 @@ public class ResponseEntityErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<?> resourceNotFoundHandler(){
+    public ResponseEntity<?> resourceNotFoundHandler(
+            NoSuchElementException exception, HttpServletRequest request){
 
         ErrorResponse errorResponse = new ErrorResponse( HttpStatus.NOT_FOUND,
                 "Resource doesn't exists !", HttpStatus.NOT_FOUND.getReasonPhrase());
+
+        return new ResponseEntity<>(errorResponse,errorResponse.getStatus());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> generalExceptionHandler(Exception e,  HttpServletRequest request){
+        ErrorResponse errorResponse= new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getLocalizedMessage(), e.getMessage());
 
         return new ResponseEntity<>(errorResponse,errorResponse.getStatus());
     }

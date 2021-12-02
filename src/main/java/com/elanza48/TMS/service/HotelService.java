@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class HotelService {
   
   private HotelRepository hotelRepository;
@@ -19,17 +20,14 @@ public class HotelService {
     this.hotelRepository = hotelRepository;
   }
 
-  @Transactional(readOnly = true)
   public List<Hotel> getAllhotels(){
     return hotelRepository.findAll();
   }
 
-  @Transactional(readOnly = true)
   public Hotel getHotelById(UUID id ){
     return hotelRepository.findById(id).get();
   }
 
-  @Transactional
   public Hotel createHotel(Hotel hotel){
     return hotelRepository.save(hotel);
   }
