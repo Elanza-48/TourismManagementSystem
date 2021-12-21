@@ -34,7 +34,9 @@ public class UserRole extends IdentityName implements Serializable {
   @ManyToMany(cascade = {
           CascadeType.MERGE,
           CascadeType.REFRESH
-  })
+  },
+          fetch = FetchType.EAGER
+  )
   @JoinTable(name = "user_role_privilege_map", 
     joinColumns = {@JoinColumn(name = "role_id") }, 
     inverseJoinColumns = { @JoinColumn(name = "privilege_id") }
@@ -46,7 +48,10 @@ public class UserRole extends IdentityName implements Serializable {
           CascadeType.PERSIST,
           CascadeType.MERGE,
           CascadeType.REFRESH
-  }, mappedBy = "role")
+  },
+          mappedBy = "role",
+          fetch = FetchType.EAGER
+  )
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   private Set<UserAccount> users;
 

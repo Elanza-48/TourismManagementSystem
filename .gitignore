@@ -40,5 +40,4 @@ build/
 postgres-data
 
 ### dumps ###
-logs
-temp
+.temp

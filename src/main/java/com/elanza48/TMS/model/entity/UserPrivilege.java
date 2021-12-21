@@ -26,7 +26,10 @@ public class UserPrivilege extends IdentityName implements Serializable {
   @ManyToMany(cascade = {
           CascadeType.MERGE,
           CascadeType.REFRESH
-  }, mappedBy = "privileges")
+  },
+          mappedBy = "privileges",
+          fetch = FetchType.EAGER
+  )
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   private Set<UserRole> roles;
 

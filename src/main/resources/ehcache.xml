@@ -9,11 +9,11 @@
             http://www.ehcache.org/v3/jsr107
             http://www.ehcache.org/schema/ehcache-107-ext-3.9.xsd">
     <!-- Persistent cache directory -->
-    <persistence directory="temp/cache" />
+    <persistence directory=".temp/cache" />
     <!-- Default cache template -->
     <cache alias="TMSCache">
         <expiry>
-            <ttl unit="minutes">2</ttl>
+            <ttl unit="minutes">5</ttl>
         </expiry>
         <listeners>
             <listener>
@@ -28,7 +28,7 @@
             </listener>
         </listeners>
         <resources>
-            <heap unit="entries">2000</heap>
+            <heap unit="entries">10000</heap>
             <offheap unit="MB">2</offheap>
             <disk persistent="true" unit="MB">5</disk>
         </resources>

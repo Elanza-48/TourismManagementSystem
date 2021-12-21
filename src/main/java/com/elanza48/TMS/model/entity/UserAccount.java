@@ -56,7 +56,11 @@ public class UserAccount extends Contact implements Serializable {
 	@NotNull
 	private MetaData metaData = new MetaData();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "userId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	Set<Booking> bookings;
 	

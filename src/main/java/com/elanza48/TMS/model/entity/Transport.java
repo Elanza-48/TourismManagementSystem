@@ -40,11 +40,19 @@ public class Transport extends IdentityName implements Serializable {
 	@NotNull
 	private boolean isPublic= false;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "transports")
+	@ManyToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "transports",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Package> packages;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transportId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "transportId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	

@@ -4,29 +4,47 @@ version: "3.9"
 # docker-compose up --build
 
 services:
-  spring_tms:
-    image: spring-boot-tms
-    container_name: spring_tms
-    build:
-      context: .
-      dockerfile: server.Dockerfile
+  tms-nginx:
+    image: nginx:1.21.4
+    container_name: tms-nginx
+    restart: always
+    ports:
+      - 7800:7800
+      - 7801:7801
+    depends_on:
+      - tms-app
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+  tms-app:
+    image: adoptopenjdk/openjdk11-openj9:alpine-slim
+    container_name: tms-app
+    working_dir: /opt/app
     env_file:
       - project.env
-    ports:
-      - "7900:7800"
-      - "7901:7801"
-    depends_on:
-      postgres_db:
-        condition: service_healthy
+    expose:
+      - "7800"
+      - "7801"
+    volumes:
+      - ./target:/opt/app
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/tms-db
+      - TZ=Asia/Kolkata
+      - LANG=en_US.UTF-8
+      - LANGUAGE=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tms-postgres:5432/tms-db
       - SPRING_DATASOURCE_USERNAME=elanza48
       - SPRING_DATASOURCE_PASSWORD=elanza48
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      tms-postgres:
+        condition: service_healthy
+    command: ["java", "-jar", "/opt/app/tourism-management-system.jar"]
 
-  postgres_db:
+  # postgreSQL
+  tms-postgres:
     image: custom-postgres
-    container_name: postgres_db
+    container_name: tms-postgres
     restart: unless-stopped
     build:
       context: .
@@ -36,13 +54,17 @@ services:
     ports:
       - 5532:5432
     environment:
+      - TZ=Asia/Kolkata
+      - LANG=en_US.UTF-8
+      - LANGUAGE=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
       - POSTGRES_DB=tms-db
       - POSTGRES_USER=elanza48
       - POSTGRES_PASSWORD=elanza48
-    # volumes:
-    #   - ./postgres-data:/var/lib/postgresql/data
-    healthcheck: 
-          test: ["CMD-SHELL", "pg_isready -d tms-db -U elanza48"]
+#    volumes:
+#       - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+          test: ["CMD-SHELL", "pg_isready", "-d", "tms-db", "-U", "elanza48"]
           interval: 10s
           timeout: 5s
           retries: 5

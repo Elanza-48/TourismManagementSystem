@@ -12,12 +12,12 @@ import com.elanza48.TMS.model.mapper.DtoToModelMapper;
 import com.elanza48.TMS.model.mapper.ModelDtoToMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elanza48.TMS.model.dao.UserAccountRepository;
@@ -38,7 +38,7 @@ public class UserAccountService implements UserDetailsService{
 		this.userRepo = userRepo;
 	}
 	@Autowired
-	public void setEncoder(PasswordEncoder encoder) {
+	public void setEncoder(@Lazy PasswordEncoder encoder) {
 		this.encoder = encoder;
 	}
 	@Autowired

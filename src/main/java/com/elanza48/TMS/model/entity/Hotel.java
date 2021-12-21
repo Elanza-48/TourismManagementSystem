@@ -38,7 +38,11 @@ public class Hotel extends Contact implements Serializable {
 	@JoinColumn(name = "dest_id",referencedColumnName = "id")
 	private Destination destinationId;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "hotelId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> reviews;
 	

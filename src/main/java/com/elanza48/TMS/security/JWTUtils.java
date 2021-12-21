@@ -1,6 +1,7 @@
 package com.elanza48.TMS.security;
 
 import java.io.IOException;
+import java.security.KeyPair;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.time.LocalDateTime;
@@ -42,14 +43,8 @@ public class JWTUtils {
   @Value("${webtoken.jwt.validity.duration-hours:12}")
   private int duration;
 
-  @Value("${webtoken.jwt.encrytion.ecdsa.key-pair}")
-  private Resource keyPair;
-
-
-  private ECPublicKey publicKey=null;
-  private ECPrivateKey privateKey=null;
+  private KeyPair keyPair=null;
   private Algorithm algorithm=null;
-
   private CipherUtils cipherUtils=null;
 
   @Autowired
@@ -59,29 +54,26 @@ public class JWTUtils {
 
   private void initUtils(){
     try{
-      if(this.publicKey==null){
-        this.publicKey =  (ECPublicKey) cipherUtils.getECKeyVal(
-                this.keyPair.getFile()).getPublic();
-      }
-      if(this.privateKey==null){
-        this.privateKey = (ECPrivateKey) cipherUtils.getECKeyVal(
-                this.keyPair.getFile()).getPrivate();
+      if(this.keyPair==null){
+        this.keyPair =  cipherUtils.getNewEC512KeyPair();
       }if(this.algorithm==null){
-        this.algorithm = Algorithm.ECDSA512(publicKey,privateKey);
+        this.algorithm = Algorithm.ECDSA512(
+                (ECPublicKey) keyPair.getPublic(),
+                (ECPrivateKey) keyPair.getPrivate()
+        );
       }
-    }catch(IOException e){
+    }catch(Exception e){
       log.error("JWT : [message :{}]",e.getLocalizedMessage());
     }
   }
 
   private String generateJwtId(String data){
-    String id = cipherUtils.hashSHA256(data);
+    String id = cipherUtils.hashSHA1(data);
     if(id==null) throw new NullPointerException("JWT-ID couldn't be generated !");
     return id;
   }
 
   public String generateToken(UserAccount user){
-
 
     Map<String, Object> payload= new HashMap<>();
     payload.put("email", user.getEmail());
@@ -136,9 +128,8 @@ public class JWTUtils {
     String role = decodedToken.get("role").asString();
     String jid= decodedToken.get("jti").asString();
 
-    return (user.getEmail().equals(email) && user.getRole().getName().equals(role));
-    //TODO: temporarily jwt id check disabled.
-//            && generateJwtId(String.format("%s.%s",user.getId(), user.getEmail())).equals(jid));
+    return (user.getEmail().equals(email) && user.getRole().getName().equals(role) &&
+      generateJwtId(String.format("%s.%s",user.getId(), user.getEmail())).equals(jid));
   }
 
   public Map<String,Claim> extractClaims(String jwt){

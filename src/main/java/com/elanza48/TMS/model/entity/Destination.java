@@ -35,15 +35,27 @@ public class Destination extends IdentityName implements Serializable {
 	@NotNull
 	private MetaData metaData=new MetaData();
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "destinationId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "destinationId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Hotel> hotels;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "destinations")
+	@ManyToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "destinations",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Package> packages;
 	
-	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "destinationId")
+	@OneToMany(
+			cascade = CascadeType.ALL ,
+			mappedBy = "destinationId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DestinationReview> reviews;
 	

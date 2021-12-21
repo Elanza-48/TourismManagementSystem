@@ -2,9 +2,13 @@ package com.elanza48.TMS.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
+import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
+import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
+import org.bouncycastle.jcajce.provider.digest.SHA1;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -18,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Utility class to handle Cryptographic keys.
@@ -29,31 +35,41 @@ import java.security.*;
 @Service
 public class CipherUtils {
 
+    private BouncyCastleProvider bcProvider=null;
+    private void addBouncyCastleProvider(){
+        if(Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null){
+            if(this.bcProvider==null){
+                this.bcProvider=new BouncyCastleProvider();
+            }
+            Security.addProvider(bcProvider);
+        }
+    }
+
     /**
      * <p>SHA-256 hash generator.</p>
      *
-     * @param password
+     * @param message
      * @return {@link String}
      */
 
-    public String hashSHA256(String password){
-        MessageDigest digester;
-        String hash=null;
-        try{
-            digester=MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = digester.digest(password.getBytes(StandardCharsets.UTF_8));
-            hash= Hex.toHexString(hashedBytes);
-        }catch (NoSuchAlgorithmException e){
-            log.error("HASHING: [status: {}, message: {} ]","error", e.getLocalizedMessage());
-        }
-        return hash;
+    public String hashSHA1(String message){
+        this.addBouncyCastleProvider();
+
+        SHA1Digest  digester=new SHA1Digest();
+        byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
+        digester.update(messageBytes, 0, messageBytes.length);
+        byte[] hashedBytes = new byte[20];
+        digester.doFinal(hashedBytes, 0);
+        return Hex.toHexString(hashedBytes);
     }
 
     /**
      * Generates new ECDSA P-512 Keypair.
      * @return {@link AsymmetricCipherKeyPair}
      */
-    public AsymmetricCipherKeyPair generateEC512KeyPair(){
+    private AsymmetricCipherKeyPair generateEC512KeyPair(){
+        this.addBouncyCastleProvider();
+
         ECNamedCurveParameterSpec ecNamedCurveParameterSpec =
                 ECNamedCurveTable.getParameterSpec("secp521r1");
         ECDomainParameters domainParameters = new ECDomainParameters(
@@ -69,27 +85,38 @@ public class CipherUtils {
         return generator.generateKeyPair();
     }
 
+    private  KeyPair BcToJsKeyPairConverter(AsymmetricCipherKeyPair bcKeyPair, String signatureScheme) throws Exception{
+        byte[] pkcs8Encoded = PrivateKeyInfoFactory.createPrivateKeyInfo(bcKeyPair.getPrivate()).getEncoded();
+        PKCS8EncodedKeySpec pkcs8KeySpec= new PKCS8EncodedKeySpec(pkcs8Encoded);
+
+        byte[] spkiEncoded = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(bcKeyPair.getPublic()).getEncoded();
+        X509EncodedKeySpec spkiKeySpec= new X509EncodedKeySpec(spkiEncoded);
+
+        KeyFactory factory = KeyFactory.getInstance(signatureScheme);
+        return new KeyPair(factory.generatePublic(spkiKeySpec), factory.generatePrivate(pkcs8KeySpec));
+    }
+
+    public KeyPair getNewEC512KeyPair() throws Exception{
+        return BcToJsKeyPairConverter(generateEC512KeyPair(), "EC");
+    }
+
     /**
      * Parse ECDSA P-512 Key from external file in `pem` format.
      *
-     * @param pemFile
+     * @param pemInputStream
      * @return {@link KeyPair}
      * @throws IOException
      */
 
-    public KeyPair getECKeyVal(File pemFile) throws IOException {
-        if (!pemFile.isFile() || !pemFile.exists()) {
-            throw new FileNotFoundException(
-                    String.format("The file '%s' doesn't exist.", pemFile.getAbsolutePath()));
-        }
-        return generateECKeyPair(pemFile);
+    public KeyPair getECKeyPair(InputStream pemInputStream) throws IOException {
+        return generateECKeyPairFromFile(pemInputStream);
     }
 
-    private KeyPair generateECKeyPair(File pemFile){
-        Security.addProvider(new BouncyCastleProvider());
+    private KeyPair generateECKeyPairFromFile(InputStream pemInput){
+        this.addBouncyCastleProvider();
 
         try{
-            PEMParser pemParser = new PEMParser(new InputStreamReader(new FileInputStream(pemFile)));
+            PEMParser pemParser = new PEMParser(new InputStreamReader(pemInput));
             PEMKeyPair pemKeyPair= (PEMKeyPair) pemParser.readObject();
 
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter();

@@ -43,7 +43,7 @@ $ keytool -exportcert -keystore keystore.p12 -storetype PKCS12 \
 ``` 
 
 The Spring Security uses [java-jwt](https://github.com/auth0/java-jwt) library to generate and verity JWT tokens using ECDSA P-512 key value pairs.
-Generate them under `resources` directory and add the file names in the properties file.
+~~Generate them under `resources` directory and add the file names in the properties file.~~
 ``` shell
 # Sample ECDSA P-512 Key-value generation using openssl.
 $ openssl ecparam -genkey -name secp521r1 -noout -out private-keypair.pem
@@ -55,7 +55,7 @@ $ openssl ec -in private-keypair.pem -pubout -out public.pem
 $ openssl pkcs8 -topk8 -inform pem -outform pem -in private-keypair.pem -out private.pem -nocrypt
 ```
 
-
+***Now ECDSA P-512 key pair is auto-generated using java [bouncycastle](https://www.bouncycastle.org/java.html) library.*
 
 *sample key-value pairs:* [auth0](https://github.com/auth0/java-jwt/tree/master/lib/src/test/resources)
 

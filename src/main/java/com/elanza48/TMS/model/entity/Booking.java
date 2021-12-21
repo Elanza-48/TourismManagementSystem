@@ -70,15 +70,27 @@ public class Booking  extends Identity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private BookingStatus status = BookingStatus.ACTIVE;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "bookingId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "bookingId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DestinationReview> destinationReviews;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "bookingId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> hotelReviews;
 	
@@ -86,7 +98,11 @@ public class Booking  extends Identity implements Serializable {
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Payment paymentInfo;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "bookingId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Enquiry> enquiries;
 	

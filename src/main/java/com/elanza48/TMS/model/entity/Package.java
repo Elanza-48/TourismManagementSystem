@@ -33,7 +33,10 @@ public class Package extends IdentityName implements Serializable {
 	@NotNull
 	private MetaData metaData=new MetaData();
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(
+			cascade = CascadeType.ALL,
+			fetch = FetchType.EAGER
+	)
 	@JoinTable(name = "package_destination_map",
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="dest_id")}
@@ -41,7 +44,10 @@ public class Package extends IdentityName implements Serializable {
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Destination> destinations;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(
+			cascade = CascadeType.ALL,
+			fetch = FetchType.EAGER
+	)
 	@JoinTable(name = "package_transport_map",
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="transport_id")}
@@ -49,7 +55,11 @@ public class Package extends IdentityName implements Serializable {
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Transport> transports;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "packageId")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "packageId",
+			fetch = FetchType.EAGER
+	)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Booking> bookings;
 	
