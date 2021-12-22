@@ -1,7 +1,7 @@
 version: "3.9"
 
 # docker-compose down  -v --rmi all
-# docker-compose up --build
+# docker-compose --env-file ./project.env up --build
 
 services:
   tms-nginx:
@@ -21,12 +21,12 @@ services:
     container_name: tms-app
     working_dir: /opt/app
     env_file:
-      - project.env
+      - ./project.env
     expose:
       - "7800"
       - "7801"
     volumes:
-      - ./target:/opt/app
+      - ./build/libs:/opt/app
     environment:
       - TZ=Asia/Kolkata
       - LANG=en_US.UTF-8
@@ -39,7 +39,7 @@ services:
     depends_on:
       tms-postgres:
         condition: service_healthy
-    command: ["java", "-jar", "/opt/app/tourism-management-system.jar"]
+    command: ["java", "-jar", "/opt/app/TourismManagementSystem-${APP_VERSION}.jar"]
 
   # postgreSQL
   tms-postgres:
@@ -50,7 +50,7 @@ services:
       context: .
       dockerfile: db.Dockerfile
     env_file:
-      - project.env
+      - ./project.env
     ports:
       - 5532:5432
     environment:

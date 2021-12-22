@@ -55,7 +55,7 @@ $ openssl ec -in private-keypair.pem -pubout -out public.pem
 $ openssl pkcs8 -topk8 -inform pem -outform pem -in private-keypair.pem -out private.pem -nocrypt
 ```
 
-***Now ECDSA P-512 key pair is auto-generated using java [bouncycastle](https://www.bouncycastle.org/java.html) library.*
+***note: Now ECDSA P-512 key pair is auto-generated using java [bouncycastle](https://www.bouncycastle.org/java.html) library.*
 
 *sample key-value pairs:* [auth0](https://github.com/auth0/java-jwt/tree/master/lib/src/test/resources)
 

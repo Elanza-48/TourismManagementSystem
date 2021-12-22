@@ -1,6 +1,5 @@
 package com.elanza48.TMS.security;
 
-import java.io.IOException;
 import java.security.KeyPair;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
@@ -22,10 +21,9 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.elanza48.TMS.model.entity.UserAccount;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 
@@ -34,7 +32,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Elanza-48
  */
-@Slf4j
+@Log4j2
 @Service
 public class JWTUtils {
 

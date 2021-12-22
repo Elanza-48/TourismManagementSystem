@@ -10,7 +10,7 @@ import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.UserRole;
 import com.elanza48.TMS.model.mapper.DtoToModelMapper;
 import com.elanza48.TMS.model.mapper.ModelDtoToMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.elanza48.TMS.model.dao.UserAccountRepository;
 import com.elanza48.TMS.model.entity.UserAccount;
 
-@Slf4j
+@Log4j2
 @Service
 public class UserAccountService implements UserDetailsService{
 

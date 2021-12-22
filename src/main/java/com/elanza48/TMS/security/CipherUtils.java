@@ -1,6 +1,6 @@
 package com.elanza48.TMS.security;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
@@ -8,7 +8,6 @@ import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
 import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
 import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
-import org.bouncycastle.jcajce.provider.digest.SHA1;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -31,7 +30,7 @@ import java.security.spec.X509EncodedKeySpec;
  *
  * @author Elanza-48
  */
-@Slf4j
+@Log4j2
 @Service
 public class CipherUtils {
 

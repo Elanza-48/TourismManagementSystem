@@ -1,25 +1,14 @@
 package com.elanza48.TMS.model.dto;
 
 import com.elanza48.TMS.config.JSONIndianStateMapper;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.annotate.JsonIgnore;
-import org.mapstruct.Named;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
+import lombok.extern.log4j.Log4j2;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+@Log4j2
 @NoArgsConstructor
 public class DestinationDTO extends IdentityNameDTO implements Serializable {
 

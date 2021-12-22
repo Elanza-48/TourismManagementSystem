@@ -1,6 +1,6 @@
 package com.elanza48.TMS.config;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.ehcache.event.CacheEvent;
 import org.ehcache.event.CacheEventListener;
 
@@ -10,7 +10,7 @@ import org.ehcache.event.CacheEventListener;
  *
  * @author Elanza-48
  */
-@Slf4j
+@Log4j2
 public class CacheEventLogger implements CacheEventListener<Object, Object> {
     @Override
     public void onEvent(CacheEvent<?, ?> cacheEvent) {

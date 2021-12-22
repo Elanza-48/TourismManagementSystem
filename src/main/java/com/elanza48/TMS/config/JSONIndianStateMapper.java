@@ -1,7 +1,7 @@
 package com.elanza48.TMS.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+@Log4j2
 public class JSONIndianStateMapper {
     private static Map<String, String> stateMap=null;
     public static Map<String, String> getStateMapping() {

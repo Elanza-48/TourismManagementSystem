@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Date;
  * @author Elanza-48
  *
  */
-@Slf4j
+@Log4j2
 @JsonComponent
 public class JSONDateValidator extends StdDeserializer<Date> {
 

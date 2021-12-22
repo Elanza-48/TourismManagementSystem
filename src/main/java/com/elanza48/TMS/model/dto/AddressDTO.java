@@ -4,13 +4,12 @@ import com.elanza48.TMS.config.JSONIndianStateMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.Named;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.Serializable;
 import java.util.Map;
 
-@Slf4j
+@Log4j2
 @NoArgsConstructor
 public class AddressDTO implements Serializable {
 
