@@ -17,7 +17,7 @@ public class JSONIndianStateMapper {
         if(stateMap==null) {
             try {
                 Resource resource = new ClassPathResource("static/IndianStates.json");
-                byte[] rawData = Files.readAllBytes(resource.getFile().toPath());
+                byte[] rawData = resource.getInputStream().readAllBytes();
                 ObjectMapper objectMapper = new ObjectMapper();
                 stateMap = objectMapper.readValue(rawData, HashMap.class);
             } catch (IOException e) {

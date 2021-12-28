@@ -1,7 +1,7 @@
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.6.1'
+    id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
@@ -20,8 +20,6 @@ repositories {
 }
 
 ext{
-    set('log4j2.version','2.17.0')
-
     mapstruct_version='1.4.2.Final'
     projectlombok_version= '1.18.22'
     bouncycastle_version='1.69'
@@ -54,8 +52,9 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${projectlombok_version}"
     compileOnly "org.mapstruct:mapstruct:${mapstruct_version}"
 
-    annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
 }
 
 configurations {

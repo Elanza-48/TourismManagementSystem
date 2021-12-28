@@ -43,10 +43,10 @@ out/
 .vscode/
 
 ### Environment file ###
-*.env
+*.env*
 
 ### Docker volumes ###
-postgres-data
+**/postgres-data
 
 ### dumps ###
 .temp
