@@ -3,17 +3,68 @@ version: "3.9"
 # docker-compose down  -v --rmi all
 # UID=$(id -u) GID=$(id -g) docker-compose --env-file ./.env up --build
 
-networks:
-  tms-tier:
-    driver: bridge
-
 services:
+  postgres:
+    image: tms-postgres-img
+    container_name: tms-postgres
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    networks:
+      - tms-bridge
+    ports:
+      - "5532:5432"
+    volumes:
+      - tms-pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${PG_DB:-tms-db-dev}
+      - POSTGRES_USER=${PG_USER:-elanza48}
+      - POSTGRES_PASSWORD=${PG_PASSWD:-elanza48}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  pgadmin:
+    image: dpage/pgadmin4:6.8
+    container_name: tms-pgadmin4
+    restart: unless-stopped
+    networks:
+      - tms-bridge
+    ports:
+      - "5050:80"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: elanza48@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: elanza48
+
+  app:
+    image: adoptopenjdk/openjdk11-openj9:alpine-slim
+    container_name: tms-app
+    restart: unless-stopped
+    working_dir: /opt/app
+    networks:
+      - tms-bridge
+    expose:
+      - 7800
+      - 7801
+    volumes:
+      - ./build/libs:/opt/app
+    env_file:
+      - .env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${PG_DB:-tms-db-dev}
+      - SPRING_DATASOURCE_USERNAME=${PG_USER:-elanza48}
+      - SPRING_DATASOURCE_PASSWORD=${PG_PASSWD:-elanza48}
+    command: ["java", "-jar", "/opt/app/tms-$APP_VERSION.jar"]
+
   nginx:
-    image: nginx:${NGINX_VERSION:-latest}
+    image: nginx:1.21.6-alpine
     container_name: tms-nginx
     restart: always
     networks:
-      - tms-tier
+      - tms-bridge
     ports:
       - 7800:7800
       - 7801:7801
@@ -22,48 +73,9 @@ services:
     depends_on:
       - app
 
-  # Spring-boot app
-  app:
-    image: adoptopenjdk/openjdk11-openj9:${OPENJDK_VERSION:-latest}
-    container_name: tms-app
-    working_dir: /opt/app
-    networks:
-      - tms-tier
-    expose:
-      - "7800"
-      - "7801"
-    volumes:
-      - ./build/libs:/opt/app
-    env_file:
-      - .env
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/${POSTGRES_DATABASE:-tms-db}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME:-elanza48}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-elanza48}
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    command: ["java", "-jar", "/opt/app/TourismManagementSystem-${APP_VERSION}.jar"]
+networks:
+  tms-bridge:
+    driver: bridge
 
-  # postgreSQL
-  postgresql:
-    image: tms-postgresql
-    container_name: tms-postgresql
-    restart: unless-stopped
-#    user: "${UID}:${GID}"
-    build:
-      context: .
-      dockerfile: db.Dockerfile
-    networks:
-      - tms-tier
-    ports:
-      - 5532:5432
-    volumes:
-       - ./postgres-data:/var/lib/postgresql/data
-    env_file:
-      - .env
-    healthcheck:
-          test: ["CMD-SHELL", "pg_isready", "-d", "tms-db", "-U", "elanza48"]
-          interval: 10s
-          timeout: 5s
-          retries: 5
+volumes:
+  tms-pgdata:

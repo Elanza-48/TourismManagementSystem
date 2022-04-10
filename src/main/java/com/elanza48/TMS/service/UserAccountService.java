@@ -83,8 +83,8 @@ public class UserAccountService implements UserDetailsService{
 
 		Optional<UserAccount> userAccount= findUser(email);
 		if(userAccount.isEmpty()) throw new NoSuchElementException();
-		userAccount.get().setName(String.format("Modified %s", userAccount.get().getName()));
-		dtoToModelMapper.userAccountDtoToModel(userAccountDTO, userAccount.get());
+		UserAccount uAcc= dtoToModelMapper.userAccountDtoToModel(userAccountDTO, userAccount.get());
+		log.info(uAcc.toString());
 		return Optional.of(modelDtoToMapper.userAccountModelToDto(
 				userRepo.save(userAccount.get())
 		));

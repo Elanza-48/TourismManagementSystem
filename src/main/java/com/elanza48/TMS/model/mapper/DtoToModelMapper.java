@@ -1,12 +1,14 @@
 package com.elanza48.TMS.model.mapper;
 
-import com.elanza48.TMS.config.JSONIndianStateMapper;
 import com.elanza48.TMS.model.dto.*;
 import com.elanza48.TMS.model.entity.*;
 import com.elanza48.TMS.model.entity.Package;
 import org.mapstruct.*;
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface DtoToModelMapper {
 
     @Mapping(target = "role", ignore = true)

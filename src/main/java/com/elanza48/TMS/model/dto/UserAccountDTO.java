@@ -101,7 +101,7 @@ public class UserAccountDTO extends ContactDTO implements Serializable {
 	@Override
 	public String toString() {
 		return "UserAccountDTO [role=" + role + ", dob=" + dob + ", email=" + email + ", mobileNo=" + mobileNo
-			+ ", address=" + address + ", name=" + name + "gender=" + gender + ", id=" + id + "]";
+			+ ", address=" + address + ", name=" + name + ", gender=" + gender + ", id=" + id + "]";
 	}
 
 }
