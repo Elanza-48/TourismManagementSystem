@@ -38,12 +38,17 @@ public class JWTUtils {
 
   private final ZoneId ZONE= ZoneOffset.UTC;
 
-  @Value("${webtoken.jwt.validity.duration-hours:12}")
-  private int duration;
 
+  private int duration;
   private KeyPair keyPair=null;
   private Algorithm algorithm=null;
   private CipherUtils cipherUtils=null;
+
+
+  @Autowired
+  public void setDuration(@Value("${webtoken.jwt.validity.duration-hours:12}") int duration) {
+    this.duration = duration;
+  }
 
   @Autowired
   public void setCipherUtils(CipherUtils cipherUtils) {

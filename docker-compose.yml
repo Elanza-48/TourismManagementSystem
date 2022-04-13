@@ -1,7 +1,7 @@
 version: "3.9"
 
-# docker-compose down  -v --rmi all
-# UID=$(id -u) GID=$(id -g) docker-compose --env-file ./.env up --build
+# docker-compose up
+# docker-compose down  -v --remove-orphans
 
 services:
   postgres:

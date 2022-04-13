@@ -198,11 +198,11 @@ insert into  main.user_role_privilege_map(role_id, privilege_id) values
 
 
 insert into main.user_account(id, name, gender, dob, district, state, street, zip, email, mobile_no, password, active, suspended, created_at, last_update, role_id) values
-    ((select uuid_generate_v4()),'Rajarshi Kundu',0, to_date('19920316','YYYYMMDD'), 'Paschim Medinipur', 'WB', 'Ward no 22, Konnagar, Ghatal',721214, 'elanza48@outlook.com', 9645520836, '{noop}password_a1', true, false, (select localtimestamp), (select localtimestamp),
+    ((select uuid_generate_v4()),'Rajarshi Kundu',0, to_date('19920316','YYYYMMDD'), 'Kolkata', 'WB', 'BKP road, Nilganj Natun Hat, Barasat',700121, 'elanza48@outlook.com', 9645520836, '{noop}password_a1', true, false, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='ADMIN')),
-    ((select uuid_generate_v4()),'Rishav lahiri',0 , to_date('19950910','YYYYMMDD'),  'Kolkata', 'WB', 'Balaka Apartment',700075, 'rishavlahiri55@gmail.com', 8333690652, '{noop}password_m1', true, false, (select localtimestamp), (select localtimestamp),
+    ((select uuid_generate_v4()),'Jacob Jayson',0 , to_date('19950910','YYYYMMDD'),  'South Goa', 'GA', 'Vagullem, Maina, Curtorim',403709, 'jayjacob23@gmail.com', 8333690652, '{noop}password_m1', true, false, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='MANAGER')),
-    ((select uuid_generate_v4()),'Ronit Chakraborty',0 , to_date('19971022','YYYYMMDD'), 'Kolkata', 'WB', '3rd Jadav Lane',700210, 'rjronit99@gmail.com', 7044945943, '{noop}password_m2', false, false, (select localtimestamp), (select localtimestamp),
+    ((select uuid_generate_v4()),'Miyan Chang',0 , to_date('19971022','YYYYMMDD'), 'Aizawl', 'MZ', 'B-49, Mac Donald Hill, Zarkawt',796007, 'changm71@gmail.com', 7044945943, '{noop}password_m2', false, false, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='MANAGER')),
     ((select uuid_generate_v4()),'Sohaib Akram' ,0 , to_date('19870808','YYYYMMDD'), 'North Delhi', 'DL', 'Khyber Pass, Civil Lines',110054, 'akrams121@yahoo.com', 7304985675, '{noop}password_u1', false, true, (select localtimestamp), (select localtimestamp),
      (select id from main.user_role where title='USER')),
