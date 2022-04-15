@@ -1,0 +1,25 @@
+# config file version
+apiVersion: 1
+
+
+deleteDatasources:
+  - name: TMS-prometheus
+  - name: TMS-postgres
+
+datasources:
+  - name: TMS-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    basicAuth: false
+
+  - name: TMS-postgres
+    type: postgres
+    url: postgres:5432
+    database: tms-db-dev
+    user: elanza48
+    secureJsonData:
+      password: elanza48
+    jsonData:
+      sslmode: "disable"
+      postgresVersion: 10

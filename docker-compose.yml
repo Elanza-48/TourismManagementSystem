@@ -20,9 +20,9 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_DB=${PG_DB:-tms-db-dev}
-      - POSTGRES_USER=${PG_USER:-elanza48}
-      - POSTGRES_PASSWORD=${PG_PASSWD:-elanza48}
+      - POSTGRES_DB=tms-db-dev
+      - POSTGRES_USER=elanza48
+      - POSTGRES_PASSWORD=elanza48
       - PGDATA=/var/lib/postgresql/data/pgdata
 
   pgadmin:
@@ -40,7 +40,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: elanza48
 
   app:
-    image: adoptopenjdk/openjdk11-openj9:alpine-slim
+    image: adoptopenjdk/openjdk11-openj9:alpine-jre
     container_name: tms-app
     restart: unless-stopped
     working_dir: /opt/app
@@ -49,29 +49,69 @@ services:
     expose:
       - 7800
       - 7801
+    ports:
+      - "7800:7800"
+      - "7801:7801"
     volumes:
       - ./build/libs:/opt/app
     env_file:
       - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${PG_DB:-tms-db-dev}
-      - SPRING_DATASOURCE_USERNAME=${PG_USER:-elanza48}
-      - SPRING_DATASOURCE_PASSWORD=${PG_PASSWD:-elanza48}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/tms-db-dev
+      - SPRING_DATASOURCE_USERNAME=elanza48
+      - SPRING_DATASOURCE_PASSWORD=elanza48
+    depends_on:
+      - postgres
     command: ["java", "-jar", "/opt/app/tms-$APP_VERSION.jar"]
 
   nginx:
     image: nginx:1.21.6-alpine
     container_name: tms-nginx
-    restart: always
+    restart: unless-stopped
     networks:
       - tms-bridge
     ports:
-      - 7800:7800
-      - 7801:7801
+      - "7800:7800"
+      - "7801:7801"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - app
+
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    container_name: tms-prometheus
+    restart: unless-stopped
+    networks:
+      - tms-bridge
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:8.4.6
+    container_name: tms-grafana
+    restart: unless-stopped
+    networks:
+      - tms-bridge
+    ports:
+      - "3000:3000"
+    volumes:
+      - tms-grafana:/var/lib/grafana
+      - ./metrics/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources/
+    environment:
+      - GF_INSTALL_PLUGINS=yesoreyeram-boomtable-panel,agenty-flowcharting-panel
+      - GF_SECURITY_ADMIN_USER=elanza48
+      - GF_SECURITY_ADMIN_PASSWORD=elanza48
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_USERS_DEFAULT_THEME=light
+      - GF_LOG_CONSOLE_LEVEL=error
+    depends_on:
+      - prometheus
+
 
 networks:
   tms-bridge:
@@ -79,3 +119,4 @@ networks:
 
 volumes:
   tms-pgdata:
+  tms-grafana:

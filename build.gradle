@@ -9,9 +9,14 @@ plugins {
 group = 'com.elanza48'
 description = 'TourismManagementSystem'
 java.sourceCompatibility = JavaVersion.VERSION_11
+jar.enabled=false
 
-jar {
-    archiveBaseName='tms'
+bootJar{
+    archivesBaseName="tms"
+}
+
+springBoot{
+    buildInfo()
 }
 
 repositories {

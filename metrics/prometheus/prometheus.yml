@@ -12,7 +12,7 @@ scrape_configs:
     metrics_path: '/status/prometheus' # Job to scrape application metrics
     scrape_interval: 5s
     static_configs:
-      - targets: ['localhost:7801']
+      - targets: ['app:7801']
     basic_auth:
       username: 'elanza48@outlook.com'
       password: 'password_a1'
