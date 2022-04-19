@@ -26,9 +26,11 @@ repositories {
 
 ext{
     mapstruct_version='1.4.2.Final'
-    projectlombok_version= '1.18.22'
+    projectlombok_version='1.18.22'
+    mapstruct_binding_version='0.2.0'
     bouncycastle_version='1.70'
-    auth0_jwt_version='3.19.0'
+    auth0_jwt_version='3.19.1'
+    mm_jvm_xtra_version='0.2.2'
 }
 
 dependencies {
@@ -47,6 +49,8 @@ dependencies {
     implementation 'javax.cache:cache-api'
     implementation 'org.ehcache:ehcache'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation "io.github.mweirauch:micrometer-jvm-extras:${mm_jvm_xtra_version}"
+
 
     implementation "com.auth0:java-jwt:${auth0_jwt_version}"
     implementation "org.bouncycastle:bcprov-jdk15on:${bouncycastle_version}"
@@ -62,7 +66,7 @@ dependencies {
 
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
-    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstruct_binding_version}"
 }
 
 configurations {

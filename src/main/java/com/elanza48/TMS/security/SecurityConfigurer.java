@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -27,6 +28,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,21 +38,31 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-	prePostEnabled = true,
-	securedEnabled = true,
-	jsr250Enabled = true
-)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfigurer {
 
-	private String actuatorEndPoint;
+	private String mgmtEndPoint;
+	private int mgmtPort;
+	private int apiPort;
 	private UserDetailsService userDetailsService;
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
-	public void setActuatorEndPoint(@Value("${management.endpoints.web.base-path:/actuator}") String actuatorEndPoint) {
-		this.actuatorEndPoint = actuatorEndPoint.concat("/**");
+	public void setActuatorEndPoint(@Value("${management.endpoints.web.base-path:/actuator}") String mgmtEndPoint) {
+		this.mgmtEndPoint = mgmtEndPoint.concat("/**");
+	}
+
+	@Autowired
+	public void setMgmtPort(@Value("${management.server.port}") int mgmtPort) {
+		this.mgmtPort = mgmtPort;
+	}
+
+	@Autowired
+	public void setApiPort(@Value("${server.port}") int apiPort) {
+		this.apiPort = apiPort;
 	}
 
 	@Autowired
@@ -61,35 +75,11 @@ public class SecurityConfigurer {
 		this.jwtRequestFilter = jwtRequestFilter;
 	}
 
+
 	@Component
 	@Order(1)
-	public class BasicAuthConfigurer extends WebSecurityConfigurerAdapter{
+	public class BasicAuthConfigurer extends WebSecurityConfigurerAdapter {
 
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(userDetailsService);
-        }
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-
-			http.antMatcher(actuatorEndPoint)
-					.csrf()
-						.disable()
-					.authorizeRequests()
-						.anyRequest()
-							.hasAnyRole(
-								UserRole.ROLES.ADMIN.name(),
-								UserRole.ROLES.MANAGER.name()
-							)
-					.and().httpBasic()
-					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		}
-	}
-
-	@Component
-	@Order(2)
-	public class JWTAuthConfigurer extends WebSecurityConfigurerAdapter{
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(userDetailsService);
@@ -98,7 +88,31 @@ public class SecurityConfigurer {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http.antMatcher("/**").csrf().disable()
+			http.requestMatcher(forPortAndPath(mgmtPort, mgmtEndPoint))
+					.csrf()
+					.disable()
+					.authorizeHttpRequests()
+					.anyRequest()
+					.hasAnyRole(
+							UserRole.ROLES.ADMIN.name(),
+							UserRole.ROLES.MANAGER.name())
+					.and().httpBasic()
+					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		}
+	}
+
+	@Component
+	@Order(2)
+	public class JWTAuthConfigurer extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(userDetailsService);
+		}
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+
+			http.requestMatcher(forPortAndPath(apiPort,"/**")).csrf().disable()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 			http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		}
@@ -107,8 +121,7 @@ public class SecurityConfigurer {
 		public void configure(WebSecurity web) throws Exception {
 			web.ignoring().antMatchers(
 					HttpMethod.GET,
-					"/*.json"
-			);
+					"/*.json");
 		}
 
 		@Override
@@ -119,8 +132,16 @@ public class SecurityConfigurer {
 
 	}
 
+	private RequestMatcher forPortAndPath(final int port, @NonNull	 final String pathPattern) {
+    return new AndRequestMatcher(forPort(port), new AntPathRequestMatcher(pathPattern));
+	}
+
+	private RequestMatcher forPort(final int port){
+		return (HttpServletRequest request) -> { return port == request.getLocalPort();};
+	}
+
 	@Bean
-	public CorsFilter corsFilter(){
+	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
@@ -131,26 +152,24 @@ public class SecurityConfigurer {
 		return new CorsFilter(source);
 	}
 
-
 	@Bean
-	public PasswordEncoder delegatePasswordEncoder(){
+	public PasswordEncoder delegatePasswordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	@Bean
-	public RoleHierarchy roleHierarchy(){
+	public RoleHierarchy roleHierarchy() {
 		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
 		roleHierarchy.setHierarchy(
 				Arrays.stream(UserRole.ROLES.values())
-				.map(UserRole.ROLES::getRole)
-				.collect(Collectors.joining(" > "))
-		);
+						.map(UserRole.ROLES::getRole)
+						.collect(Collectors.joining(" > ")));
 		return roleHierarchy;
 	}
 
 	@Bean
-	public SecurityExpressionHandler<FilterInvocation> securityExpressionHandler(){
-		DefaultWebSecurityExpressionHandler expressionHandler= new DefaultWebSecurityExpressionHandler();
+	public SecurityExpressionHandler<FilterInvocation> securityExpressionHandler() {
+		DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
 		expressionHandler.setRoleHierarchy(roleHierarchy());
 		return expressionHandler;
 	}
