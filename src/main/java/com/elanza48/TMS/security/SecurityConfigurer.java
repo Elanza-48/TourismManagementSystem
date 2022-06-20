@@ -3,7 +3,6 @@ package com.elanza48.TMS.security;
 import com.elanza48.TMS.controller.filter.JwtRequestFilter;
 
 import com.elanza48.TMS.model.entity.UserRole;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.web.filter.CorsFilter;

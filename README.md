@@ -1,19 +1,29 @@
-# A Spring boot Application
+# Tourism Management System.
 
 
-This is a project that replicates tourism management system.
-This is a server side REST api provider.
+This is a educational project that replicates tourism management system.
+This is a stand-alone monolithic web app than implements server side REST api provider.
+
+This monolithic system will be decomposed into several microservices in near future.
+
+The Documentation is not ready and the ETA is not decided.
 
 This project uses ```Java Lombok``` for boilerplate generator.
 
 Use appropriate ```Lombok Plugin``` for IDE used accordingly.
 
-The tomcat server uses HTTP2 protocol. So SSL certificate and key value pair must be generated 
-under `resources/keys` directory and specify the file names in the properties file. 
-You can also disable HTTP2 in the properties file.
+## Profiles
 
-Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststore:
-``` shell
+### Production [prod]
+
+For production profile, TLS certificate and and trust store of `pkcs12` type  must be generated
+and the path must be stated by setting the environment variable `SERVER_SSL_KEY-STORE` 
+or specify the file names in the production properties file.
+The tomcat server supports HTTP2 protocol. You can also enable/disable HTTP2 in the  prod properties file.
+
+Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststore: 
+
+``` sh
 # --------- Using Openssl ---------- 
 # Sample RSA-4096 ssl certificate keystore generation using openssl.
 # can provide -days <no of days> argument to set certificate validity.
@@ -40,23 +50,31 @@ $ keytool -genkeypair -alias tms_ssl -keyalg RSA -keysize 4096 \
 # Use -rfc flag to genrate in readable .pem format 
 $ keytool -exportcert -keystore keystore.p12 -storetype PKCS12 \
     -storepass password -alias tms_ssl -file localhost.crt
-``` 
+```
+[java-jwt](https://github.com/auth0/java-jwt) library is used to generate and verity JWT tokens using ECDSA P-512 key value pairs.
 
-The Spring Security uses [java-jwt](https://github.com/auth0/java-jwt) library to generate and verity JWT tokens using ECDSA P-512 key value pairs.
-~~Generate them under `resources` directory and add the file names in the properties file.~~
-``` shell
+
+The ECDSA P-512 key pair has to be generated and the keypair path must be stated by setting an environment variable
+`SECURITY_KEYPAIR_EC512_JWT_PATH` or in the production properties file.
+
+Keypair generation steps:
+
+``` sh
 # Sample ECDSA P-512 Key-value generation using openssl.
-$ openssl ecparam -genkey -name secp521r1 -noout -out private-keypair.pem
+$ openssl ecparam -genkey -name secp521r1 -noout -out keypair.pem
 
 # [Optional] generate public key from private keypair. 
-$ openssl ec -in private-keypair.pem -pubout -out public.pem
+$ openssl ec -in keypair.pem -pubout -out public.pem
 
 # [Optional] convert pkcs#1 to pkcs#8
-$ openssl pkcs8 -topk8 -inform pem -outform pem -in private-keypair.pem -out private.pem -nocrypt
+$ openssl pkcs8 -topk8 -inform pem -outform pem -in keypair.pem -out private.pem -nocrypt
 ```
 
-***note: Now ECDSA P-512 key pair is auto-generated using java [bouncycastle](https://www.bouncycastle.org/java.html) library.*
-
 *sample key-value pairs:* [auth0](https://github.com/auth0/java-jwt/tree/master/lib/src/test/resources)
+
+
+### Development [dev]
+
+For Development profile, TLS certificate is not required and the ECDSA P-512 key pair is auto-generated using java [bouncycastle](https://www.bouncycastle.org/java.html) library.*
 
 __This project is under [MIT](./LICENSE.md) license.__

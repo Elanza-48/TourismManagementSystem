@@ -1,7 +1,7 @@
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.6.6'
+    id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
@@ -25,11 +25,11 @@ repositories {
 }
 
 ext{
-    mapstruct_version='1.4.2.Final'
-    projectlombok_version='1.18.22'
+    mapstruct_version='1.5.2.Final'
+    projectlombok_version='1.18.24'
     mapstruct_binding_version='0.2.0'
     bouncycastle_version='1.70'
-    auth0_jwt_version='3.19.1'
+    auth0_jwt_version='3.19.2'
     mm_jvm_xtra_version='0.2.2'
 }
 

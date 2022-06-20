@@ -59,7 +59,7 @@ services:
     env_file:
       - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/tms-db-dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/tms-dev
       - SPRING_DATASOURCE_USERNAME=elanza48
       - SPRING_DATASOURCE_PASSWORD=elanza48
     depends_on:

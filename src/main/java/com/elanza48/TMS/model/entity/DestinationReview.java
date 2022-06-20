@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "destination_review")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class DestinationReview extends Identity implements Serializable {
 
 	@ManyToOne(cascade = CascadeType.ALL)

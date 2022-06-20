@@ -13,7 +13,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Enquiry extends Identity implements Serializable {
 
 	
