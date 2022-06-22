@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "booking_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Booking  extends Identity implements Serializable {
 	
 	public enum RoomType{
@@ -75,7 +75,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Ticket> tickets;
 	
 	@OneToMany(
@@ -83,7 +83,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<DestinationReview> destinationReviews;
 	
 	@OneToMany(
@@ -91,11 +91,11 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<HotelReview> hotelReviews;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Payment paymentInfo;
 	
 	@OneToMany(
@@ -103,7 +103,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Enquiry> enquiries;
 	
 	public Booking() {}

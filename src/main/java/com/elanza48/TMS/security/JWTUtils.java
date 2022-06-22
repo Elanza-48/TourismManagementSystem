@@ -1,11 +1,14 @@
 package com.elanza48.TMS.security;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.security.KeyPair;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,7 @@ import com.elanza48.TMS.model.entity.UserAccount;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 
@@ -42,7 +46,9 @@ public class JWTUtils {
   private int duration;
   private KeyPair keyPair=null;
   private Algorithm algorithm=null;
-  private CipherUtils cipherUtils=null;
+  private CipherUtilsBase cipherUtils;
+  private Environment environment;
+
 
 
   @Autowired
@@ -50,15 +56,24 @@ public class JWTUtils {
     this.duration = duration;
   }
 
-  @Autowired
-  public void setCipherUtils(CipherUtils cipherUtils) {
+  @Autowired 
+  public void setCipherUtils(CipherUtilsBase cipherUtils) {
     this.cipherUtils = cipherUtils;
   }
+
+  // @Autowired
+  // public void setEnvironment(Environment environment) {
+  //   this.environment = environment;
+
+  // this.keyPair = (Arrays.stream(environment.getActiveProfiles()).anyMatch("dev"::equals))? cipherUtilsDev.getEC512KeyPair(): cipherUtilsProd.getEC512KeyPair();
+
+  // }
 
   private void initUtils(){
     try{
       if(this.keyPair==null){
-        this.keyPair =  cipherUtils.getNewEC512KeyPair();
+        this.keyPair = this.cipherUtils.getEC512KeyPair();
+
       }if(this.algorithm==null){
         this.algorithm = Algorithm.ECDSA512(
                 (ECPublicKey) keyPair.getPublic(),
@@ -70,8 +85,9 @@ public class JWTUtils {
     }
   }
 
-  private String generateJwtId(String data){
-    String id = cipherUtils.hashSHA1(data);
+  private String generateJwtId(String data){  
+    String id = this.cipherUtils.hashSHA256(data);
+        
     if(id==null) throw new NullPointerException("JWT-ID couldn't be generated !");
     return id;
   }

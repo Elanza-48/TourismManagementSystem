@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_privilege")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))
@@ -30,7 +30,7 @@ public class UserPrivilege extends IdentityName implements Serializable {
           mappedBy = "privileges",
           fetch = FetchType.EAGER
   )
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   private Set<UserRole> roles;
 
 

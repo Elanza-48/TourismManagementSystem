@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 //@EnableCaching
-public class TourismManagementSystemApplication {
+public class TMSApplication {
 
 	@Bean
 	public MeterBinder processMemoryMetrics() {
@@ -22,6 +22,6 @@ public class TourismManagementSystemApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(TourismManagementSystemApplication.class, args);
+		SpringApplication.run(TMSApplication.class, args);
 	}
 }

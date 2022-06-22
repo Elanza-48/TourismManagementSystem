@@ -55,7 +55,7 @@ public class UserAccountService implements UserDetailsService{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 
 		Optional<UserAccount> userAccount= findUser(email);

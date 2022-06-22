@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_role")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))
@@ -41,7 +41,7 @@ public class UserRole extends IdentityName implements Serializable {
     joinColumns = {@JoinColumn(name = "role_id") }, 
     inverseJoinColumns = { @JoinColumn(name = "privilege_id") }
   )
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   Set<UserPrivilege> privileges;
 
   @OneToMany(cascade = {
@@ -52,7 +52,7 @@ public class UserRole extends IdentityName implements Serializable {
           mappedBy = "role",
           fetch = FetchType.EAGER
   )
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
   private Set<UserAccount> users;
 
 
