@@ -1,12 +1,16 @@
 package com.elanza48.TMS;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TourismManagementSystemApplicationTests {
+class TMSApplicationTests {
 
 	@Test
-	public void contextLoads(){}
+	void contextLoads(){
+		assertTrue(true, () -> "true");
+	}
 
 }

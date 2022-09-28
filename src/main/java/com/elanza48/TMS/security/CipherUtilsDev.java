@@ -2,61 +2,91 @@ package com.elanza48.TMS.security;
 
 
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
-import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
-import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.openssl.jcajce.JcaPKCS8Generator;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import lombok.extern.log4j.Log4j2;
 
-import java.security.KeyFactory;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.ECGenParameterSpec;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Profile("dev")
+@Log4j2
 public class CipherUtilsDev extends CipherUtilsBase {
+
+    private JcaPKCS8Generator jcaPKCS8Generator = null;
+
+    CipherUtilsDev(){
+        super();
+    }
 
     /**
      * Generates new ECDSA P-512 Keypair.
      * @return {@link AsymmetricCipherKeyPair}
      */
-    private AsymmetricCipherKeyPair generateEC512KeyPair(){
-        this.addBouncyCastleProvider();
+    private KeyPair generateEC512KeyPair(){
+        KeyPairGenerator generator =null;
+        ECGenParameterSpec curve= new ECGenParameterSpec("secp521r1");
 
-        ECNamedCurveParameterSpec ecNamedCurveParameterSpec =
-                ECNamedCurveTable.getParameterSpec("secp521r1");
-        ECDomainParameters domainParameters = new ECDomainParameters(
-                ecNamedCurveParameterSpec.getCurve(),
-                ecNamedCurveParameterSpec.getG(),
-                ecNamedCurveParameterSpec.getN(),
-                ecNamedCurveParameterSpec.getH(),
-                ecNamedCurveParameterSpec.getSeed()
-        );
-
-        ECKeyPairGenerator generator = new ECKeyPairGenerator();
-        generator.init(new ECKeyGenerationParameters(domainParameters , new SecureRandom()));
-        return generator.generateKeyPair();
-    }
-
-    private KeyPair BcToJsKeyPairConverter(AsymmetricCipherKeyPair bcKeyPair, String signatureScheme) throws Exception{
-        byte[] pkcs8Encoded = PrivateKeyInfoFactory.createPrivateKeyInfo(bcKeyPair.getPrivate()).getEncoded();
-        PKCS8EncodedKeySpec pkcs8KeySpec= new PKCS8EncodedKeySpec(pkcs8Encoded);
-
-        byte[] spkiEncoded = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(bcKeyPair.getPublic()).getEncoded();
-        X509EncodedKeySpec spkiKeySpec= new X509EncodedKeySpec(spkiEncoded);
-
-        KeyFactory factory = KeyFactory.getInstance(signatureScheme);
-        return new KeyPair(factory.generatePublic(spkiKeySpec), factory.generatePrivate(pkcs8KeySpec));
+        try{
+            generator = KeyPairGenerator.getInstance("EC",
+                BouncyCastleProvider.PROVIDER_NAME);
+            generator.initialize(curve, SecureRandom.getInstanceStrong());
+        }catch(NoSuchAlgorithmException e){
+            log.error(e.getMessage());
+        }catch(NoSuchProviderException e){
+            log.error(e.getMessage());
+        }catch(InvalidAlgorithmParameterException e){
+            log.error(e.getMessage());
+        }
+        return generator.genKeyPair();
     }
 
     @Override
     public KeyPair getEC512KeyPair() throws Exception{
-        return BcToJsKeyPairConverter(generateEC512KeyPair(), "EC");
+       return generateEC512KeyPair();
+    }
+
+    /**
+     * <div>Converts EC Keypair to PKCS8 PEM format.</div> 
+     * @return {@value String}
+     */
+    public Map<String, String> keyPairToPEM(KeyPair keyPair) throws IOException{
+
+        StringWriter stringWriter = new StringWriter();
+        JcaPEMWriter jcaPEMWriter = new JcaPEMWriter(stringWriter);
+        Map<String, String> pemKeyPairs= new HashMap<>();
+          
+        try{
+            if(jcaPKCS8Generator==null){
+                jcaPKCS8Generator = new JcaPKCS8Generator(keyPair.getPrivate(), null);
+            }
+
+            jcaPEMWriter.writeObject(keyPair.getPublic());
+            jcaPEMWriter.flush();
+            pemKeyPairs.put("public", stringWriter.toString());
+            stringWriter.getBuffer().setLength(0);
+
+            jcaPEMWriter.writeObject(jcaPKCS8Generator.generate());
+            jcaPEMWriter.flush();
+            pemKeyPairs.put("private", stringWriter.toString());
+            stringWriter.getBuffer().setLength(0);
+
+        }finally{
+            jcaPEMWriter.close();
+        }
+        return pemKeyPairs;
     }
 }

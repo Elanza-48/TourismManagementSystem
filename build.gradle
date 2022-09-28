@@ -1,8 +1,8 @@
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.0'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 }
 
 
@@ -28,7 +28,7 @@ ext{
     mapstruct_version='1.5.2.Final'
     projectlombok_version='1.18.24'
     mapstruct_binding_version='0.2.0'
-    bouncycastle_version='1.70'
+    bouncycastle_version='1.71.1'
     auth0_jwt_version='3.19.2'
     mm_jvm_xtra_version='0.2.2'
 }
@@ -53,11 +53,12 @@ dependencies {
 
 
     implementation "com.auth0:java-jwt:${auth0_jwt_version}"
-    implementation "org.bouncycastle:bcprov-jdk15on:${bouncycastle_version}"
-    implementation "org.bouncycastle:bcpkix-jdk15on:${bouncycastle_version}"
+    implementation "org.bouncycastle:bcprov-jdk18on:${bouncycastle_version}"
+    implementation "org.bouncycastle:bcpkix-jdk18on:${bouncycastle_version}"
+    implementation "org.bouncycastle:bcutil-jdk18on:${bouncycastle_version}"
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
 }
 
 dependencies {

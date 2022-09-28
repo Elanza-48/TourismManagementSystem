@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,6 +22,10 @@ import java.security.KeyPair;
 @Service
 @Profile("prod")
 public class CipherUtilsProd extends CipherUtilsBase{
+
+    CipherUtilsProd(){
+        super();
+    }
 
     /**
      * Parse ECDSA P-512 Key from external file in `pem` format.
@@ -38,12 +43,11 @@ public class CipherUtilsProd extends CipherUtilsBase{
     }
 
     @Override
-    public KeyPair getEC512KeyPair() throws IOException {
+    public KeyPair getEC512KeyPair() throws FileNotFoundException {
         return generateECKeyPairFromFile(new FileInputStream(new File(KeyPairPath)));
     }
 
     private KeyPair generateECKeyPairFromFile(InputStream pemInput){
-        this.addBouncyCastleProvider();
 
         try{
             PEMParser pemParser = new PEMParser(new InputStreamReader(pemInput));
