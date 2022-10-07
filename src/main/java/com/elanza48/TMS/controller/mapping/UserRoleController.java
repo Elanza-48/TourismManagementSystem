@@ -1,6 +1,5 @@
 package com.elanza48.TMS.controller.mapping;
 
-import com.elanza48.TMS.model.entity.UserAccount;
 import com.elanza48.TMS.model.entity.UserRole;
 import com.elanza48.TMS.model.mapper.DtoToModelMapper;
 import com.elanza48.TMS.model.mapper.ModelDtoToMapper;

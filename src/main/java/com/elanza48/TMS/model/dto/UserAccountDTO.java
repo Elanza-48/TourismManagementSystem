@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserAccountDTO extends ContactDTO implements Serializable {
+public class UserAccountDTO extends ContactDTO {
 
 	private UserGender gender;
 	@JsonSerialize(using = com.elanza48.TMS.config.JSONDateFormatter.class)

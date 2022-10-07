@@ -27,10 +27,7 @@ import java.util.Map;
 public class CipherUtilsDev extends CipherUtilsBase {
 
     private JcaPKCS8Generator jcaPKCS8Generator = null;
-
-    CipherUtilsDev(){
-        super();
-    }
+    CipherUtilsDev(){super();}
 
     /**
      * Generates new ECDSA P-512 Keypair.
@@ -51,7 +48,7 @@ public class CipherUtilsDev extends CipherUtilsBase {
         }catch(InvalidAlgorithmParameterException e){
             log.error(e.getMessage());
         }
-        return generator.genKeyPair();
+        return generator==null?null:generator.genKeyPair();
     }
 
     @Override

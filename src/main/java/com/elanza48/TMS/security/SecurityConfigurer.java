@@ -69,6 +69,7 @@ public class SecurityConfigurer {
 	@Bean
 	@Order(1)
 	public SecurityFilterChain BasicSecurityFilter(HttpSecurity http) throws Exception {
+		
 		return http.requestMatcher(forPortAndPath(mgmtPort, mgmtEndPoint))
 		.csrf()
 		.disable()

@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.dto;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelReviewDTO extends IdentityDTO implements Serializable {
+public class HotelReviewDTO extends IdentityDTO {
 	
 	private HotelDTO hotelId;
 	private BookingDTO bookingId;

@@ -4,13 +4,10 @@ import com.elanza48.TMS.config.JSONIndianStateMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-import java.io.Serializable;
 import java.util.Map;
 
-@Log4j2
 @NoArgsConstructor
-public class DestinationDTO extends IdentityNameDTO implements Serializable {
+public class DestinationDTO extends IdentityNameDTO {
 
 	@Getter private String province;
 	@Getter @Setter private String description;
