@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.entity;
 
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
@@ -15,8 +14,8 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "booking_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Booking  extends Identity implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Booking  extends Identity {
 	
 	public enum RoomType{
 		STANDARD,
@@ -75,7 +74,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	
 	@OneToMany(
@@ -83,7 +82,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<DestinationReview> destinationReviews;
 	
 	@OneToMany(
@@ -91,11 +90,11 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> hotelReviews;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "bookingId")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Payment paymentInfo;
 	
 	@OneToMany(
@@ -103,7 +102,7 @@ public class Booking  extends Identity implements Serializable {
 			mappedBy = "bookingId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Enquiry> enquiries;
 	
 	public Booking() {}

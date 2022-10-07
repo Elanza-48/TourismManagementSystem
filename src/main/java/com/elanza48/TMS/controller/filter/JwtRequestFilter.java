@@ -13,6 +13,7 @@ import com.elanza48.TMS.service.UserAccountService;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
   private JWTUtils jwtUtils;
 
   @Autowired
-  public void setUserAccountService(UserAccountService userAccountService) {
+  public void setUserAccountService(@Lazy UserAccountService userAccountService) {
       this.userAccountService = userAccountService;
   }
   @Autowired

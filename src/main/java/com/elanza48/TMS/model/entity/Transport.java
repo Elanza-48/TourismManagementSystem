@@ -2,7 +2,6 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -12,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "transport_info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Transport extends IdentityName implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Transport extends IdentityName {
 	
 	public enum TransportMode{
 		BUS,
@@ -45,7 +44,7 @@ public class Transport extends IdentityName implements Serializable {
 			mappedBy = "transports",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Package> packages;
 	
 	@OneToMany(
@@ -53,7 +52,7 @@ public class Transport extends IdentityName implements Serializable {
 			mappedBy = "transportId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Ticket> tickets;
 	
 	public Transport() {}

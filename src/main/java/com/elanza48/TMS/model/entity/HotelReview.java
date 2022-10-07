@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.entity;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
@@ -14,8 +13,8 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Table(name = "hotel_review")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class HotelReview extends Identity implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class HotelReview extends Identity {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id", referencedColumnName = "id")

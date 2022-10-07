@@ -2,7 +2,6 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -12,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "hotel_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Hotel extends Contact implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Hotel extends Contact {
 	
 	public enum HotelType{
 		STANDARD,
@@ -43,7 +42,7 @@ public class Hotel extends Contact implements Serializable {
 			mappedBy = "hotelId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<HotelReview> reviews;
 	
 	public Hotel(){}

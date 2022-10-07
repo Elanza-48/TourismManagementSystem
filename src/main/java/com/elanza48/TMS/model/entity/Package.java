@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.entity;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -12,8 +11,8 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "tour_Package")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Package extends IdentityName implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Package extends IdentityName {
 	
 	@Column
 	@Type(type = "text")
@@ -41,7 +40,7 @@ public class Package extends IdentityName implements Serializable {
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="dest_id")}
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Destination> destinations;
 	
 	@ManyToMany(
@@ -52,7 +51,7 @@ public class Package extends IdentityName implements Serializable {
 		joinColumns = {@JoinColumn(name="pkg_id")},
 		inverseJoinColumns = {@JoinColumn(name="transport_id")}
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Transport> transports;
 	
 	@OneToMany(
@@ -60,7 +59,7 @@ public class Package extends IdentityName implements Serializable {
 			mappedBy = "packageId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Booking> bookings;
 	
 	public Package() {}

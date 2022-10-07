@@ -2,7 +2,6 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,9 +12,9 @@ import javax.validation.constraints.Past;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "user_Account")
-public class UserAccount extends Contact implements Serializable {
+public class UserAccount extends Contact {
 
 	public enum UserGender{
 		MALE, FEMALE, TRANS
@@ -61,7 +60,7 @@ public class UserAccount extends Contact implements Serializable {
 			mappedBy = "userId",
 			fetch = FetchType.EAGER
 	)
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	Set<Booking> bookings;
 	
 

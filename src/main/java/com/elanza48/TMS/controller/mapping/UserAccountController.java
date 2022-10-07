@@ -13,10 +13,11 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import com.elanza48.TMS.model.entity.Booking;
@@ -61,7 +62,9 @@ public class UserAccountController {
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<?> createUser(@RequestBody UserAccountDTO userAccountDTO) {
 		return ResponseEntity.accepted().body(modelDtoToMapper.userAccountModelToDto(
-			userService.createUser(dtoToModelMapper.userAccountDtoToModel(userAccountDTO, new UserAccount()))));
+			userService.createUser(dtoToModelMapper.userAccountDtoToModel(
+				userAccountDTO, new UserAccount()),
+				userAccountDTO.getPassword())));
 	}
 
 	@Caching(
@@ -105,6 +108,36 @@ public class UserAccountController {
 		return ResponseEntity.accepted().body(userService.updateUser(userAccountDTO, email).get());
 	}
 
+	@GetMapping("/email/{email}/change-password")
+	public ResponseEntity<?> changePassword() {
+		return ResponseEntity.accepted().body(
+				Map.of("current","string", "new", "string")
+		);
+	}
+
+	@PostMapping("/email/{email}/change-password")
+	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
+	public ResponseEntity<?> changePassword(@PathVariable String email,
+		@RequestBody Map<String, String> credentials) {
+
+		try{
+			boolean successful=userService.updateUserPassword(email, credentials.get("current"),
+				credentials.get("new"));
+
+			if(successful) return ResponseEntity.accepted().body(
+					Map.of("message","Password changed successfully. "));
+		}catch(BadCredentialsException e){
+			return ResponseEntity.badRequest().body(
+				Map.of("message", e.getLocalizedMessage())
+			);
+		}
+
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
+			Map.of("message","Password change unsuccessfull !")
+		);
+
+	}
+
 	@DeleteMapping("/email/{email}")
 	@PreAuthorize("#email == authentication.name or hasAnyRole('ADMIN', 'MANAGER')")
 	public ResponseEntity<?> deleteUserByEmail(@PathVariable String email){
@@ -123,6 +156,9 @@ public class UserAccountController {
 
 	private List<Link> getHyperLinks(){
 		List<Link> links = new LinkedList<>();
+		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+				UserAccountController.class).changePassword(null,null))
+				.withRel("user_change_password"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
 				UserAccountController.class).getUserBooking(null)).withRel("user_booking"));
 		links.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(

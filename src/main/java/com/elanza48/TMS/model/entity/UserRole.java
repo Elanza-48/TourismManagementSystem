@@ -2,7 +2,6 @@ package com.elanza48.TMS.model.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "user_role")
 @AttributeOverride(name = "name", 
   column = @Column(name = "title", unique = true))
-public class UserRole extends IdentityName implements Serializable {
+public class UserRole extends IdentityName {
 
   public enum ROLES {
     ADMIN, MANAGER, USER, ALL;
