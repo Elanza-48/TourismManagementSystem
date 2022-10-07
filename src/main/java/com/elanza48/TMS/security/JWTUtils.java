@@ -1,7 +1,5 @@
 package com.elanza48.TMS.security;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.security.KeyPair;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
@@ -11,6 +9,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,15 +39,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class JWTUtils {
 
-  private final ZoneId ZONE= ZoneOffset.UTC;
-
+  private static final ZoneId ZONE= ZoneOffset.UTC;
 
   private int duration;
   private KeyPair keyPair=null;
   private Algorithm algorithm=null;
-  private CipherUtilsBase cipherUtils;
-  private Environment environment;
-
+  private CipherUtilsBase cipherUtils=null;
+  private Environment environment=null;
 
 
   @Autowired
@@ -61,13 +58,10 @@ public class JWTUtils {
     this.cipherUtils = cipherUtils;
   }
 
-  // @Autowired
-  // public void setEnvironment(Environment environment) {
-  //   this.environment = environment;
-
-  // this.keyPair = (Arrays.stream(environment.getActiveProfiles()).anyMatch("dev"::equals))? cipherUtilsDev.getEC512KeyPair(): cipherUtilsProd.getEC512KeyPair();
-
-  // }
+  @Autowired
+  public void setEnvironment(Environment environment) {
+    this.environment = environment;
+  }
 
   private void initUtils(){
     try{
@@ -115,7 +109,7 @@ public class JWTUtils {
          .withIssuedAt(Date.from(issuedTime.atZone(ZONE).toInstant()))
          .withExpiresAt(Date.from(expirationTime.atZone(ZONE).toInstant()))
          .withSubject(subject)
-         .withIssuer("elanza48").sign(this.algorithm);
+         .withIssuer("auth0").sign(this.algorithm);
 
     }catch(JWTCreationException e){
       log.error("JWT: [status: error, user:{}, message: {}]",payload.get("email") ,e.getLocalizedMessage());
@@ -156,8 +150,14 @@ public class JWTUtils {
       return JWT.decode(jwt).getClaims();
     }catch(JWTDecodeException e){
       log.error("JWT: [status: error, message: {}]",e.getLocalizedMessage());
-      return null;
+      return new LinkedHashMap<>();
     }
+  }
+
+  public KeyPair getJWTSignatureKeyPair(){
+    initUtils();
+    boolean isDevProfile=Arrays.stream(environment.getActiveProfiles()).anyMatch("dev"::equals);
+    return isDevProfile?this.keyPair:null;
   }
 
 }

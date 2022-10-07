@@ -16,4 +16,5 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, UUID> 
 	@QueryHints(@QueryHint(name = org.hibernate.annotations.QueryHints.CACHEABLE, value = "true"))
 	public Optional<UserAccount> findById(UUID id);
 	public Optional<UserAccount> findByEmailEquals(String email);
+	public boolean existsByEmail(String email);
 }

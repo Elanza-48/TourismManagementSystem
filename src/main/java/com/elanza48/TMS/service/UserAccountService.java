@@ -5,14 +5,18 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.EntityExistsException;
+
 import com.elanza48.TMS.model.dao.UserRoleRepository;
 import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.UserRole;
 import com.elanza48.TMS.model.mapper.DtoToModelMapper;
 import com.elanza48.TMS.model.mapper.ModelDtoToMapper;
+
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -65,22 +69,27 @@ public class UserAccountService implements UserDetailsService{
 	};
 
 	@Transactional
-	public UserAccount createUser(UserAccount user) {
-		user.setPassword(encoder.encode(user.getPassword()));
+	public UserAccount createUser(UserAccount user, String password) {
+		if(userRepo.existsByEmail(user.getEmail())){
+			throw new EntityExistsException("User already exists !");
+		}
+		user.setPassword(encoder.encode(password));
 		user.setRole(userRoleRepo.findByName(UserRole.ROLES.USER.name()).get());
 		return userRepo.save(user);
 	}
 
+	@Transactional
+	public Optional<UserAccount> findUser(UUID id) {
+		return userRepo.findById(id);
+	}
 
 	@Transactional
 	public  Optional<UserAccount> findUser(String email) {
 		return userRepo.findByEmailEquals(email);
-
 	}
-
-
+	
+	@Transactional
 	public Optional<UserAccountDTO> updateUser(UserAccountDTO userAccountDTO, String email){
-
 		Optional<UserAccount> userAccount= findUser(email);
 		if(userAccount.isEmpty()) throw new NoSuchElementException();
 		UserAccount uAcc= dtoToModelMapper.userAccountDtoToModel(userAccountDTO, userAccount.get());
@@ -91,9 +100,24 @@ public class UserAccountService implements UserDetailsService{
 	}
 
 	@Transactional
-	public Optional<UserAccount> findUser(UUID id) {
-		return userRepo.findById(id);
+	public boolean updateUserPassword(String email, String current_pass, String new_pass) throws
+		BadCredentialsException{
+		Optional<UserAccount> userAccount= findUser(email);
+		if(userAccount.isEmpty()) throw new NoSuchElementException();
+		if(!encoder.matches(current_pass, userAccount.get().getPassword())){
+			throw new BadCredentialsException("Incorrect password !");
+		}
+
+		userAccount.get().setPassword(encoder.encode(new_pass));
+		UserAccount userAcc=null;
+		userAcc=userRepo.save(userAccount.get());
+		if(userAcc!=null){
+			log.info("password updated [email: "+email+"]");
+			return true;
+		}
+		return false;
 	}
+
 
 	@Transactional
 	public void deleteUser(UUID id) {

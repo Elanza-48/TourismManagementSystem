@@ -4,13 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserPrivilegeDTO extends IdentityNameDTO implements Serializable {
+public class UserPrivilegeDTO extends IdentityNameDTO {
 
   private String description;
 

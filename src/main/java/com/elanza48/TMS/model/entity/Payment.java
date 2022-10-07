@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.entity;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
@@ -14,9 +13,9 @@ import org.hibernate.annotations.Check;
 @Entity
 @Table(name = "payment_Info")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Check( constraints = "gst < net_charge")
-public class Payment extends Identity implements Serializable {
+public class Payment extends Identity {
 	
 	public enum PaymentMode{
 		CARD,
@@ -34,7 +33,7 @@ public class Payment extends Identity implements Serializable {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "booking_id", referencedColumnName = "id")
-	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Booking bookingId;
 	
 	@Column

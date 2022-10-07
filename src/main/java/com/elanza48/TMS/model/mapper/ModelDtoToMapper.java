@@ -2,14 +2,12 @@ package com.elanza48.TMS.model.mapper;
 
 import java.util.List;
 
-import com.elanza48.TMS.config.JSONIndianStateMapper;
 import com.elanza48.TMS.model.dto.*;
 import com.elanza48.TMS.model.entity.*;
 
 import com.elanza48.TMS.model.entity.Package;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 @Mapper
 public interface ModelDtoToMapper {

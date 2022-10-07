@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.dto;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PackageDTO extends IdentityNameDTO implements Serializable {
+public class PackageDTO extends IdentityNameDTO {
 	
 	private String description;
 	private String activities;

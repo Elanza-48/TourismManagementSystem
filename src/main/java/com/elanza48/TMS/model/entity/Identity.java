@@ -37,7 +37,7 @@ abstract class Identity implements Serializable {
 }
 
 @MappedSuperclass
-abstract class IdentityName extends Identity implements Serializable{
+abstract class IdentityName extends Identity {
 	
 	@Column
 	@NotNull

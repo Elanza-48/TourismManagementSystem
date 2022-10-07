@@ -6,12 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class HotelDTO extends ContactDTO implements Serializable {
+public class HotelDTO extends ContactDTO {
 
 	private HotelType type = HotelType.STANDARD;
 	private int basePrice;

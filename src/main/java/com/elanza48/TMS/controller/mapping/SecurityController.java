@@ -67,7 +67,7 @@ public class SecurityController {
   @GetMapping(value="/authenticate")
   public ResponseEntity<?> authBodyFormat(){
     return ResponseEntity.ok(Map.of(
-            "email", "null", "password", "null"
+            "email", "string", "password", "string"
     ));
   }
 

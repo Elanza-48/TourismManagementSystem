@@ -1,6 +1,5 @@
 package com.elanza48.TMS.model.entity;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
@@ -13,8 +12,8 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Enquiry extends Identity implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Enquiry extends Identity {
 
 	
 	@ManyToOne(cascade = CascadeType.ALL)

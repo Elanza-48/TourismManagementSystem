@@ -13,10 +13,11 @@ import java.security.*;
  *
  * @author Elanza-48
  */
-abstract class CipherUtilsBase {
+public abstract class CipherUtilsBase {
 
     private BouncyCastleProvider bcProvider=null;
-    protected final void addBouncyCastleProvider(){
+
+    CipherUtilsBase(){
         if(Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null){
             if(this.bcProvider==null){
                 this.bcProvider=new BouncyCastleProvider();
@@ -33,7 +34,6 @@ abstract class CipherUtilsBase {
      */
 
     public String hashSHA256(String message){
-        this.addBouncyCastleProvider();
 
         SHA256Digest digester = new SHA256Digest();
         byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);

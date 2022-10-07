@@ -22,19 +22,19 @@ public class ResponseEntityErrorHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-            HttpRequestMethodNotSupportedException ex,
+            HttpRequestMethodNotSupportedException e,
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append(ex.getMethod());
-        builder.append(
-                " Supported method(s) are ");
-        ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
+        builder.append(" Supported method(s) are ");
+        if(e.getSupportedHttpMethods()!=null){
+            e.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
+        }
 
         ErrorResponse apiError = new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED,
-                ex.getLocalizedMessage(), builder.toString());
+                e.getLocalizedMessage(), builder.toString());
         return new ResponseEntity<>( apiError, new HttpHeaders(), apiError.getStatus());
     }
 
