@@ -8,7 +8,7 @@ plugins {
 
 group = 'com.elanza48'
 description = 'TourismManagementSystem'
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
 jar.enabled=false
 
 bootJar{
@@ -26,7 +26,6 @@ repositories {
 
 ext{
     mapstruct_version='1.5.2.Final'
-    projectlombok_version='1.18.24'
     mapstruct_binding_version='0.2.0'
     bouncycastle_version='1.71.1'
     auth0_jwt_version='3.19.2'
@@ -43,7 +42,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'org.hibernate:hibernate-jcache'
     implementation 'javax.cache:cache-api'
@@ -62,15 +61,20 @@ dependencies {
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:${projectlombok_version}"
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    compileOnly "org.projectlombok:lombok"
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
 
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
-    annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
+    annotationProcessor "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstruct_binding_version}"
 }
 
 configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
     all{
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }

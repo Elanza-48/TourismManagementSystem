@@ -1,8 +1,8 @@
 # Tourism Management System.
 
 
-This is a educational project that replicates tourism management system.
-This is a stand-alone monolithic web app than implements server side REST api provider.
+This is an educational project that replicates tourism management system.
+This is a stand-alone monolithic web app that implements server side REST api provider.
 
 This monolithic system will be decomposed into several microservices in near future.
 
@@ -16,9 +16,9 @@ Use appropriate ```Lombok Plugin``` for IDE used accordingly.
 
 ### Production [prod]
 
-For production profile, TLS certificate and and trust store of `pkcs12` type  must be generated
+For production profile, TLS certificate and trust store of `pkcs12` type  must be generated
 and the path must be stated by setting the environment variable `SERVER_SSL_KEY-STORE` 
-or specify the file names in the production properties file.
+or by specifying the file names in the production properties file.
 The tomcat server supports HTTP2 protocol. You can also enable/disable HTTP2 in the  prod properties file.
 
 Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststore: 
@@ -51,7 +51,7 @@ $ keytool -genkeypair -alias tms_ssl -keyalg RSA -keysize 4096 \
 $ keytool -exportcert -keystore keystore.p12 -storetype PKCS12 \
     -storepass password -alias tms_ssl -file localhost.crt
 ```
-[java-jwt](https://github.com/auth0/java-jwt) library is used to generate and verity JWT tokens using ECDSA P-512 key value pairs.
+[java-jwt](https://github.com/auth0/java-jwt) library is used to generate and verify JWT tokens using ECDSA P-512 key value pairs.
 
 
 The ECDSA P-512 key pair has to be generated and the keypair path must be stated by setting an environment variable
