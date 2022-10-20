@@ -72,6 +72,10 @@ dependencies {
 }
 
 configurations {
+    developmentOnly
+    runtimeClasspath {
+		extendsFrom developmentOnly
+	}
     compileOnly {
         extendsFrom annotationProcessor
     }

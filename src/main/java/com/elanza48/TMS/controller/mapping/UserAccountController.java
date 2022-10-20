@@ -2,6 +2,8 @@ package com.elanza48.TMS.controller.mapping;
 
 import java.util.*;
 
+import javax.persistence.EntityExistsException;
+
 import com.elanza48.TMS.model.dto.UserAccountDTO;
 import com.elanza48.TMS.model.entity.UserAccount;
 import com.elanza48.TMS.model.mapper.DtoToModelMapper;
@@ -61,10 +63,17 @@ public class UserAccountController {
 	@PostMapping("/register")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<?> createUser(@RequestBody UserAccountDTO userAccountDTO) {
-		return ResponseEntity.accepted().body(modelDtoToMapper.userAccountModelToDto(
-			userService.createUser(dtoToModelMapper.userAccountDtoToModel(
-				userAccountDTO, new UserAccount()),
-				userAccountDTO.getPassword())));
+		try{
+			return ResponseEntity.accepted().body(modelDtoToMapper.userAccountModelToDto(
+				userService.createUser(dtoToModelMapper.userAccountDtoToModel(
+					userAccountDTO, new UserAccount()),
+					userAccountDTO.getPassword())));
+		}catch(EntityExistsException e){
+			return ResponseEntity.ok().body(
+				Map.of("message",e.getLocalizedMessage())
+			);
+		}
+		
 	}
 
 	@Caching(
