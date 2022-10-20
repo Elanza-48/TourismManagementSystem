@@ -23,7 +23,7 @@ The tomcat server supports HTTP2 protocol. You can also enable/disable HTTP2 in 
 
 Use either __Keytools__ or __Openssl__ to generate certificate keystore/truststore: 
 
-``` sh
+```bash
 # --------- Using Openssl ---------- 
 # Sample RSA-4096 ssl certificate keystore generation using openssl.
 # can provide -days <no of days> argument to set certificate validity.
@@ -59,7 +59,7 @@ The ECDSA P-512 key pair has to be generated and the keypair path must be stated
 
 Keypair generation steps:
 
-``` sh
+```bash
 # Sample ECDSA P-512 Key-value generation using openssl.
 $ openssl ecparam -genkey -name secp521r1 -noout -out keypair.pem
 
@@ -77,4 +77,15 @@ $ openssl pkcs8 -topk8 -inform pem -outform pem -in keypair.pem -out private.pem
 
 For Development profile, TLS certificate is not required and the ECDSA P-512 key pair is auto-generated using java security API with [bouncycastle](https://www.bouncycastle.org/java.html) module provider.*
 
-__This project is under [MIT](./LICENSE.md) license.__
+#### For Spring dev-tool auto-restart:
+Terminal-1:
+```bash
+$ ./gradlew build --continuous
+```
+
+Terminal-2:
+```bash
+$ ./gradlew bootRun
+```
+___
+*This project is under [MIT](./LICENSE.md) license.*

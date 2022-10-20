@@ -69,7 +69,7 @@ public class UserAccountService implements UserDetailsService{
 	};
 
 	@Transactional
-	public UserAccount createUser(UserAccount user, String password) {
+	public UserAccount createUser(UserAccount user, String password) throws EntityExistsException {
 		if(userRepo.existsByEmail(user.getEmail())){
 			throw new EntityExistsException("User already exists !");
 		}
