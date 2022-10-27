@@ -12,7 +12,7 @@ version: "3.9"
 
 services:
   postgres:
-    image: tms-postgres-img
+    image: tms-postgres:latest
     container_name: tms-postgres
     restart: unless-stopped
     build:
@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_DB=tms-db-dev
+      - POSTGRES_DB=tms-dev
       - POSTGRES_USER=elanza48
       - POSTGRES_PASSWORD=elanza48
       - PGDATA=/var/lib/postgresql/data/pgdata
@@ -36,6 +36,9 @@ services:
     image: dpage/pgadmin4:6.8
     container_name: tms-pgadmin4
     restart: unless-stopped
+    build:
+      context: .
+      dockerfile: app.Dockerfile
     networks:
       - tms-bridge
     ports:
@@ -45,17 +48,14 @@ services:
       PGADMIN_DEFAULT_PASSWORD: elanza48
 
   app:
-    image: adoptopenjdk/openjdk11-openj9:alpine-jre
+    image: tms-app:latest
     container_name: tms-app
     restart: unless-stopped
-    working_dir: /opt/app
     networks:
       - tms-bridge
     ports:
       - "8090:8090"
       - "8091:8091"
-    volumes:
-      - ./build/libs:/opt/app
     env_file:
       - .env
     environment:
@@ -64,7 +64,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=elanza48
     depends_on:
       - postgres
-    command: ["java", "-jar", "/opt/app/tms-$APP_VERSION.jar"]
 
   nginx:
     image: nginx:1.21.6-alpine

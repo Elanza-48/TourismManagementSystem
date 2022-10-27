@@ -25,50 +25,72 @@ repositories {
 }
 
 ext{
-    mapstruct_version='1.5.2.Final'
-    mapstruct_binding_version='0.2.0'
-    bouncycastle_version='1.71.1'
-    auth0_jwt_version='3.19.2'
-    mm_jvm_xtra_version='0.2.2'
+    mapstruct_v='1.5.2.Final'
+    mapstruct_binding_v='0.2.0'
+    bouncycastle_v='1.71.1'
+    auth0_jwt_v='3.19.2'
+    mm_jvm_xtra_v='0.2.2'
+    openapi_v='1.6.12'
+    radison_hibernate_v='3.17.7'
 }
 
+// ---- Spring Dependencies ----
 dependencies {
-    implementation 'org.springframework:spring-context-support'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation(
+        [group:'org.springframework', name:'spring-context-support'],
 
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.hibernate.validator:hibernate-validator'
-    implementation 'org.hibernate:hibernate-jcache'
-    implementation 'javax.cache:cache-api'
-    implementation 'org.ehcache:ehcache'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
-    implementation "io.github.mweirauch:micrometer-jvm-extras:${mm_jvm_xtra_version}"
+        [group:'org.springframework.boot', name:'spring-boot-starter-web'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-hateoas'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-data-jpa'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-security'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-cache'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-log4j2'],
+        [group:'org.springframework.boot', name:'spring-boot-starter-actuator']
+    )
 
+    testImplementation(
+        [group:'org.springframework.boot', name:'spring-boot-starter-test'],
+        [group:'org.springframework.security', name:'spring-security-test']
+    )
 
-    implementation "com.auth0:java-jwt:${auth0_jwt_version}"
-    implementation "org.bouncycastle:bcprov-jdk18on:${bouncycastle_version}"
-    implementation "org.bouncycastle:bcpkix-jdk18on:${bouncycastle_version}"
-    implementation "org.bouncycastle:bcutil-jdk18on:${bouncycastle_version}"
-
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.springframework.security:spring-security-test"
+    developmentOnly group:'org.springframework.boot', name:'spring-boot-devtools'
 }
 
+// ---- Other dependencies ----
 dependencies {
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly(
+        [group:'org.postgresql', name:'postgresql']
+    )
 
-    compileOnly "org.projectlombok:lombok"
-    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+    compileOnly(
+        [group:'org.redisson', name:'redisson-hibernate-53', version:"${radison_hibernate_v}"],
+        [group:'org.projectlombok', name:'lombok']
+    )
 
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
-    annotationProcessor "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstruct_binding_version}"
+    implementation(
+        [group:'org.hibernate.validator', name:'hibernate-validator'],
+        [group:'org.hibernate', name:'hibernate-jcache'],
+
+        [group:'javax.cache', name:'cache-api'],
+        [group:'org.ehcache', name:'ehcache'],
+
+        [group:'io.micrometer', name:'micrometer-registry-prometheus'],
+        [group:'io.github.mweirauch', name:'micrometer-jvm-extras', version:"${mm_jvm_xtra_v}"],
+
+        [group:'com.auth0', name:'java-jwt', version:"${auth0_jwt_v}"],
+
+        [group:'org.bouncycastle', name:'bcprov-jdk18on', version:"${bouncycastle_v}"],
+        [group:'org.bouncycastle', name:'bcpkix-jdk18on', version:"${bouncycastle_v}"],
+        [group:'org.bouncycastle', name:'bcutil-jdk18on', version:"${bouncycastle_v}"],
+
+        [group:'org.mapstruct', name:'mapstruct', version:"${mapstruct_v}"]
+    )
+
+    annotationProcessor(
+        [group:'org.mapstruct', name:'mapstruct-processor', version:"${mapstruct_v}"],
+        [group:'org.projectlombok', name:'lombok'],
+        [group:'org.projectlombok', name:'lombok-mapstruct-binding', version:"${mapstruct_binding_v}"]
+    )
 }
 
 configurations {
@@ -89,6 +111,13 @@ tasks.withType(JavaCompile) {
     options.compilerArgs =[
             '-Amapstruct.defaultComponentModel=spring'
     ]
+}
+
+tasks.named("bootJar") {
+    layered {
+		enabled = true
+        includeLayerTools = true
+	}
 }
 
 test{
