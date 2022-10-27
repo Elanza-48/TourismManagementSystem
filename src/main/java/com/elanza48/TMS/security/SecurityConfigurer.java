@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfigurer {
 
-	private String mgmtEndPoint;
+	private String mgmtEndPoint="";
 	private int mgmtPort;
 	private int apiPort;
 	private JwtRequestFilter jwtRequestFilter;

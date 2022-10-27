@@ -1,11 +1,12 @@
 package com.elanza48.TMS;
 
-import io.github.mweirauch.micrometer.jvm.extras.*;
-import io.micrometer.core.instrument.binder.MeterBinder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+
+import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
+import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
+import io.micrometer.core.instrument.binder.MeterBinder;
 
 @SpringBootApplication
 //@EnableCaching

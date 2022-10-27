@@ -3,6 +3,7 @@ package com.elanza48.TMS.controller.handler;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -29,9 +31,8 @@ public class ResponseEntityErrorHandler extends ResponseEntityExceptionHandler {
 
         StringBuilder builder = new StringBuilder();
         builder.append(" Supported method(s) are ");
-        if(e.getSupportedHttpMethods()!=null){
-            e.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
-        }
+        Set<HttpMethod> supportedMethods= e.getSupportedHttpMethods();
+        if(supportedMethods!=null) supportedMethods.forEach(t -> builder.append(t + " "));
 
         ErrorResponse apiError = new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED,
                 e.getLocalizedMessage(), builder.toString());
