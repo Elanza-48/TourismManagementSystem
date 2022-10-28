@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping(value = "/tourPackages")
+@RequestMapping("/tourPackages")
 public class PackageController {
 
   private PackageService packageService;

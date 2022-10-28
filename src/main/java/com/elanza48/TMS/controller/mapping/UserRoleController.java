@@ -11,7 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value="/user", produces = {"application/hal+json"})
+@RequestMapping("/user")
 public class UserRoleController {
 
     private UserRoleService userRoleService;

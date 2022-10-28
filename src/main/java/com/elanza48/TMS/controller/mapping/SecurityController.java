@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping(produces = {"application/hal+json"})
+@RequestMapping
 @PreAuthorize("permitAll()")
 public class SecurityController {
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -26,6 +27,8 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
+import org.springframework.security.web.firewall.RequestRejectedHandler;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -156,6 +159,11 @@ public class SecurityConfigurer {
 		DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
 		expressionHandler.setRoleHierarchy(roleHierarchy());
 		return expressionHandler;
+	}
+
+	@Bean
+	RequestRejectedHandler requestRejectedHandler() {
+		return new HttpStatusRequestRejectedHandler(HttpStatus.BAD_REQUEST.value());
 	}
 
 }

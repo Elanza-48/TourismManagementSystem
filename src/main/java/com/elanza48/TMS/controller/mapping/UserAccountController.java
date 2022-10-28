@@ -27,7 +27,7 @@ import com.elanza48.TMS.service.UserAccountService;
 
 
 @RestController
-@RequestMapping(value = "/user", produces = {"application/hal+json"})
+@RequestMapping("/user")
 public class UserAccountController {
 
 	private UserAccountService userService;
