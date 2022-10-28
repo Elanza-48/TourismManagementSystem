@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.4.0'
 }
 
 
@@ -78,6 +79,11 @@ dependencies {
         [group:'io.github.mweirauch', name:'micrometer-jvm-extras', version:"${mm_jvm_xtra_v}"],
 
         [group:'com.auth0', name:'java-jwt', version:"${auth0_jwt_v}"],
+
+        [group: 'org.springdoc', name: 'springdoc-openapi-ui', version: "${openapi_v}"],
+        [group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: "${openapi_v}"],
+        [group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: "${openapi_v}"],
+        [group: 'org.springdoc', name: 'springdoc-openapi-security', version: "${openapi_v}"],
 
         [group:'org.bouncycastle', name:'bcprov-jdk18on', version:"${bouncycastle_v}"],
         [group:'org.bouncycastle', name:'bcpkix-jdk18on', version:"${bouncycastle_v}"],

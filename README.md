@@ -77,6 +77,10 @@ $ openssl pkcs8 -topk8 -inform pem -outform pem -in keypair.pem -out private.pem
 
 For Development profile, TLS certificate is not required and the ECDSA P-512 key pair is auto-generated using java security API with [bouncycastle](https://www.bouncycastle.org/java.html) module provider.*
 
+#### Swagger OpenAPI-3 urls:
+http://host:port/swagger-ui
+http://host:port/v3/api-docs
+
 #### For Spring dev-tool auto-restart:
 Terminal-1:
 ```bash
